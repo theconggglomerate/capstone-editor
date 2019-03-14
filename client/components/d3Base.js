@@ -26,26 +26,6 @@ class MyApp extends React.Component {
   render() {
     if (this.state.elements) {
       const elements = this.state.elements
-      // const elements = [
-      //   {data: {id: 'one', label: 'Node 1'}, position: {x: 0, y: 0}},
-      //   {data: {id: 'two', label: 'Node 2'}, position: {x: 100, y: 50}},
-      //   {data: {id: 'three', label: 'Node 3'}, position: {x: 200, y: 0}},
-      //   {data: {source: 'one', target: 'two', label: 'Edge from Node1 to Node2'}},
-      //   {
-      //     data: {
-      //       source: 'one',
-      //       target: 'three',
-      //       label: 'Edge from node 1 to node 3'
-      //     }
-      //   },
-      //   {
-      //     data: {
-      //       source: 'three',
-      //       target: 'two',
-      //       label: 'Edge from node 3 to node 2'
-      //     }
-      //   }
-      // ]
 
       return (
         <CytoscapeComponent
@@ -95,34 +75,50 @@ class MyApp extends React.Component {
                 }
               ]
             })
-
+            cy.nodes().style({
+              'font-size': function(node) {
+                if (node._private.edges.length === 0) return 20
+                else {
+                  return 20 * node._private.edges.length
+                }
+              },
+              width: function(node) {
+                if (node._private.edges.length === 0) return 50
+                else {
+                  return 50 * node._private.edges.length
+                }
+              },
+              height: function(node) {
+                if (node._private.edges.length === 0) return 50
+                else {
+                  return 50 * node._private.edges.length
+                }
+              },
+              'text-valign': 'center'
+            })
             cy
               .layout({
                 name: 'cola',
                 nodeSpacing: function(node) {
-                  return 20
+                  if (node._private.edges.length === 0) return 200
+                  else {
+                    return node._private.edges.length * 15
+                  }
                 },
-                nodeDimensionsIncludeLabels: true,
+                nodeDimensionsIncludeLabels: false,
                 nodeRepulsion: 10000,
                 fit: true,
                 edgeLength: function(edge) {
-                  return 300
+                  return 600
                 }
-                // name: 'cose-bilkent',
-                // animate: 'end',
-                // animationEasing: 'ease-out',
-                // animationDuration: 1000,
-                // randomize:false, fit: true, idealEdgeLength: 200, nodeRepulsion: 80000, gravity: 1, nestingFactor: 0.5,
-                // name: 'cose-bilkent',
-                // padding: 100,
-                // nodeOverlap: 10,
-                // nestingFactor: 1.2,
-                // initialTemp: 1000,
-                // coolingFactor: 0.99,
-                // minTemp: 1.0,
-                // gravity:1.4
               })
               .run()
+            cy.on('tap', 'node', evt => {
+              console.log(evt)
+              evt.target.connectedEdges().animate({
+                style: {lineColor: 'red'}
+              })
+            })
           }}
         />
       )
