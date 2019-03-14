@@ -1,6 +1,6 @@
 'use strict'
 
-const db = require('../server/db')
+const {db} = require('../server/db')
 const {User, Notes} = require('../server/db/models')
 
 async function seed() {
@@ -21,7 +21,9 @@ async function seed() {
   ])
 
   const seedData = require('./seedData.json')
-  await Notes.bulkCreate(seedData)
+  await Notes.bulkCreate(seedData, {
+    returning: true
+  })
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
