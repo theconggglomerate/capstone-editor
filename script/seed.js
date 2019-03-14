@@ -21,8 +21,9 @@ async function seed() {
   ])
 
   const seedData = require('./seedData.json')
-  await Notes.bulkCreate(seedData)
+  const notes = await Notes.bulkCreate(seedData)
 
+  console.log(`seeded ${notes.length} notes`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
