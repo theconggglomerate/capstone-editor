@@ -1,23 +1,19 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-
+import {DataSearch} from '@appbaseio/reactivesearch'
 class AllNotes extends Component {
   render() {
     const {allNotes} = this.props
     return allNotes && allNotes.length ? (
       <div>
-        {allNotes.map(note => (
-          <li key={note.id}>
-            <button
-              type="button"
-              onClick={() => this.props.history.push(`/notes/${note.id}`)}
-              key={note.id}
-            >
-              {note.title}
-            </button>
-          </li>
-        ))}
+        <DataSearch
+          componentId="noteSearch"
+          dataField={['title']}
+          onValueSelected={(value, cause, source) =>
+            this.props.history.push(`/notes/${source.id}`)
+          }
+        />
       </div>
     ) : (
       ''
