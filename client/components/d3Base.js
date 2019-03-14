@@ -5,9 +5,11 @@ import Axios from 'axios'
 import cytoscape from 'cytoscape'
 import cxtmenu from 'cytoscape-cxtmenu'
 import coseBilkent from 'cytoscape-cose-bilkent'
+import cola from 'cytoscape-cola'
 
 let cy = cytoscape.use(cxtmenu)
 cy.use(coseBilkent)
+cy.use(cola)
 
 class MyApp extends React.Component {
   constructor(props) {
@@ -48,7 +50,7 @@ class MyApp extends React.Component {
       return (
         <CytoscapeComponent
           elements={CytoscapeComponent.normalizeElements(elements)}
-          style={{width: '1000px', height: '1000px'}}
+          style={{width: '1900px', height: '750px'}}
           cy={cy => {
             this.cy = cy
 
@@ -93,13 +95,32 @@ class MyApp extends React.Component {
                 }
               ]
             })
+
             cy
               .layout({
-                name: 'cose-bilkent',
-                animate: 'end',
-                animationEasing: 'ease-out',
-                animationDuration: 1000,
-                randomize: true
+                name: 'cola',
+                nodeSpacing: function(node) {
+                  return 20
+                },
+                nodeDimensionsIncludeLabels: true,
+                nodeRepulsion: 10000,
+                fit: true,
+                edgeLength: function(edge) {
+                  return 300
+                }
+                // name: 'cose-bilkent',
+                // animate: 'end',
+                // animationEasing: 'ease-out',
+                // animationDuration: 1000,
+                // randomize:false, fit: true, idealEdgeLength: 200, nodeRepulsion: 80000, gravity: 1, nestingFactor: 0.5,
+                // name: 'cose-bilkent',
+                // padding: 100,
+                // nodeOverlap: 10,
+                // nestingFactor: 1.2,
+                // initialTemp: 1000,
+                // coolingFactor: 0.99,
+                // minTemp: 1.0,
+                // gravity:1.4
               })
               .run()
           }}

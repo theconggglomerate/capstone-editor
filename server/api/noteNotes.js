@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
           data: {source: target.noteNotes.sourceId, target: target.id}
         })
       })
-      return {data: {id: note.id, name: note.title}}
+      return {data: {id: note.id, label: note.title.slice(0, 10)}}
     })
     res.send({nodes, edges})
   } catch (err) {
