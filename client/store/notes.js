@@ -2,11 +2,17 @@ import Axios from 'axios'
 
 // Action Types
 const GET_NOTES = 'GET_NOTES'
+const SELECT_NOTE = 'SELECT_NOTES'
 
 // Action Creators
 const getNotes = notes => ({
   type: GET_NOTES,
   notes
+})
+
+const pickNote = note => ({
+  type: SELECT_NOTE,
+  note
 })
 
 // Thunks
@@ -19,11 +25,26 @@ export const fetchNotes = () => async dispatch => {
   }
 }
 
+export const selectNote = noteId => async dispatch => {
+  try {
+    const {data: note} = await Axios.get(`/api/notes/${noteId}`)
+    dispatch(pickNote(note))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // Reducer
-const initialState = []
+const initialState = {
+  allNotes: [],
+  selectedNote: []
+}
 
 const dispatchers = {
-  [GET_NOTES]: (state, action) => action.notes
+  [GET_NOTES]: (state, action) => ({
+    ...state,
+    allNotes: action.notes
+  })
 }
 
 export default (state = initialState, action) => {
