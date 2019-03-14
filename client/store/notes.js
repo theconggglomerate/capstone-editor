@@ -37,13 +37,17 @@ export const selectNote = noteId => async dispatch => {
 // Reducer
 const initialState = {
   allNotes: [],
-  selectedNote: []
+  selectedNote: {}
 }
 
 const dispatchers = {
   [GET_NOTES]: (state, action) => ({
     ...state,
     allNotes: action.notes
+  }),
+  [SELECT_NOTE]: (state, action) => ({
+    ...state,
+    selectedNote: action.note
   })
 }
 
