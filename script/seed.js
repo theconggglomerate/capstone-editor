@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Notes} = require('../server/db/models')
+const {User, Notes, noteNotes} = require('../server/db/models')
 
 async function seed() {
   await db.sync({
@@ -23,6 +23,28 @@ async function seed() {
   const seedData = require('./seedData.json')
   const notes = await Notes.bulkCreate(seedData)
 
+  const noteNoteData = require('./noteNoteData.json')
+
+  const filterFunc = function(dataArr) {
+    let tracker = {}
+    let returnArr = []
+    for (let i in dataArr) {
+      if (dataArr[i].sourceId === dataArr[i].targetId) continue
+      else if (!tracker[dataArr[i].sourceId]) {
+          tracker[dataArr[i].sourceId] = [dataArr[i].targetId]
+        } else if (tracker[dataArr[i].sourceId].includes(dataArr[i].targetId)) {
+          continue
+        } else {
+          tracker[dataArr[i].sourceId].push(dataArr[i].targetId)
+          returnArr.push(dataArr[i])
+        }
+    }
+    return returnArr
+  }
+
+  const associations = await noteNotes.bulkCreate(filterFunc(noteNoteData))
+
+  console.log(`seeded ${associations.length} associations between notes`)
   console.log(`seeded ${notes.length} notes`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
