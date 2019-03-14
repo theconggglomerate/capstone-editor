@@ -23,6 +23,13 @@ class MyApp extends React.Component {
     console.log(elements.data)
   }
 
+  nodeClick = async event => {
+    event.preventDefault()
+    const id = event.target._private.data.id
+    const singleWeb = await Axios.get(`/api/noteNotes/${id}`)
+    this.setState({elements: singleWeb.data})
+  }
+
   render() {
     if (this.state.elements) {
       const elements = this.state.elements
@@ -58,23 +65,23 @@ class MyApp extends React.Component {
                 }
               ]
             })
-            cy.cxtmenu({
-              selector: 'core',
-              commands: [
-                {
-                  content: 'bg1',
-                  select: function() {
-                    console.log('bg1')
-                  }
-                },
-                {
-                  content: 'bg2',
-                  select: function() {
-                    console.log('bg2')
-                  }
-                }
-              ]
-            })
+            // cy.cxtmenu({
+            //   selector: 'core',
+            //   commands: [
+            //     {
+            //       content: 'bg1',
+            //       select: function() {
+            //         console.log('bg1')
+            //       }
+            //     },
+            //     {
+            //       content: 'bg2',
+            //       select: function() {
+            //         console.log('bg2')
+            //       }
+            //     }
+            //   ]
+            // })
             cy.nodes().style({
               'font-size': function(node) {
                 if (node._private.edges.length === 0) return 20
@@ -114,11 +121,8 @@ class MyApp extends React.Component {
                 }
               })
               .run()
-            cy.on('tap', 'node', evt => {
-              console.log(evt)
-              evt.target.connectedEdges().animate({
-                style: {lineColor: 'red'}
-              })
+            cy.one('tap', 'node', event => {
+              this.nodeClick(event)
             })
           }}
         />

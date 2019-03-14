@@ -21,3 +21,35 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const noteId = req.params.id
+    const noteSource = await Notes.findOne({
+      where: {id: noteId},
+      include: [{model: Notes, as: 'source', attributes: ['id', 'title']}]
+    })
+    const noteTarget = await Notes.findOne({
+      where: {id: noteId},
+      include: [{model: Notes, as: 'target', attributes: ['id', 'title']}]
+    })
+    const sourceArr = noteSource.source.concat(noteTarget.target)
+    noteSource.source = sourceArr
+    const note = noteSource
+
+    let noteArray = [{data: {id: noteId, label: note.title.slice(0, 10)}}]
+    let edges = note.source.map(target => {
+      noteArray.push({data: {id: target.id, label: target.title.slice(0, 10)}})
+      return {
+        data: {
+          source: target.noteNotes.sourceId,
+          target: target.noteNotes.targetId
+        }
+      }
+    })
+    const noteObject = {nodes: noteArray, edges}
+    res.send(noteObject)
+  } catch (err) {
+    next(err)
+  }
+})
