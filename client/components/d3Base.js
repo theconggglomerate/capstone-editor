@@ -99,6 +99,7 @@ class MyApp extends React.Component {
             cy
               .layout({
                 name: 'cola',
+                refresh: 7,
                 nodeSpacing: function(node) {
                   if (node._private.edges.length === 0) return 200
                   else {
@@ -109,7 +110,7 @@ class MyApp extends React.Component {
                 nodeRepulsion: 10000,
                 fit: true,
                 edgeLength: function(edge) {
-                  return 600
+                  return edge._private.source.edges.length * 600
                 }
               })
               .run()
