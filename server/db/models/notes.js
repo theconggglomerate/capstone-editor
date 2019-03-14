@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = require('../db')
+const {db} = require('../db')
 
 const Notes = db.define('notes', {
   title: {
@@ -7,8 +7,8 @@ const Notes = db.define('notes', {
     defaultValue: 'Untitled Note'
   },
   content: {
-    type: Sequelize.JSON,
-  },
+    type: Sequelize.JSON
+  }
 })
 
 module.exports = Notes
