@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = require('../db')
+const {es, db} = require('../db')
 
 const Notes = db.define('notes', {
   title: {
@@ -7,8 +7,24 @@ const Notes = db.define('notes', {
     defaultValue: 'Untitled Note'
   },
   content: {
-    type: Sequelize.JSON,
-  },
+    type: Sequelize.JSON
+  }
 })
+
+const indexForES = instances => {
+  instances.forEach(async instance => {
+    try {
+      const body = instance.dataValues
+      await es.index({
+        index: 'notes',
+        body
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  })
+}
+
+Notes.beforeBulkCreate(instances => indexForES(instances))
 
 module.exports = Notes
