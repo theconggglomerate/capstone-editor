@@ -12,7 +12,8 @@ import {
   selectNote,
   makeCodeBlock,
   makeMarkdownBlock,
-  editBlock
+  editBlock,
+  saveProjects
 } from './../store'
 
 export class editor extends Component {
@@ -28,6 +29,13 @@ export class editor extends Component {
     }
   }
 
+  save = () => {
+    this.props.saveProject(
+      this.state.title,
+      this.props.editor,
+      this.props.history
+    )
+  }
   handleTitle = event => {
     event.preventDefault()
     const title = event.target.value
@@ -67,6 +75,7 @@ export class editor extends Component {
           <div>
             <button onClick={this.newCode}>New Code Block</button>
             <button onClick={this.newMarkdown}> New Markdown Block </button>
+            <button onClick={this.save}> Save Note</button>
             <input
               type="text"
               onChange={this.handleTitle}
@@ -169,6 +178,9 @@ const mapDispatchToProps = dispatch => {
     },
     editBlock: (content, index) => {
       dispatch(editBlock(content, index))
+    },
+    saveProject: (title, content, history) => {
+      dispatch(saveProjects(title, content, history))
     }
   }
 }

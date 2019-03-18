@@ -30,3 +30,14 @@ router.get('/:noteId', (req, res, next) => {
     next(error)
   }
 })
+
+router.post('/', async (req, res, next) => {
+  try {
+    console.log('body', req.body)
+    const note = await Notes.create(req.body)
+    console.log(note.id)
+    res.status(200).send({id: note.id})
+  } catch (err) {
+    next(err)
+  }
+})

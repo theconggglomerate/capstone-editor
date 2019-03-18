@@ -24,6 +24,17 @@ export const editBlock = (content, index) => ({
 
 //Thunks
 
+export const saveProjects = (title, content, history) => {
+  return async function(dispatch) {
+    const note = {title, content: {cells: content}}
+    const id = await Axios.post('/api/notes/', note)
+    console.log(id.data.id)
+    if (history) {
+      history.push(`/notes/${id.data.id}`)
+    }
+  }
+}
+
 //Reducer
 
 const initialState = []
