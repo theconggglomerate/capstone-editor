@@ -1,9 +1,5 @@
 import React from 'react'
-import CytoscapeComponent from 'react-cytoscapejs'
 import Axios from 'axios'
-import cytoscape from 'cytoscape'
-import cxtmenu from 'cytoscape-cxtmenu'
-import cola from 'cytoscape-cola'
 import Visual from './Visual'
 
 class MyApp extends React.Component {
@@ -41,7 +37,7 @@ class MyApp extends React.Component {
         </React.Fragment>
       )
     } else {
-      return 'No elements!'
+      return ''
     }
   }
 }
