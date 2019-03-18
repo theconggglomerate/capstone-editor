@@ -3,8 +3,6 @@ import {connect} from 'react-redux'
 import {selectNote} from './../store'
 import ReactMarkdown from 'react-markdown'
 import {Code} from './../components/'
-// import Embed from 'react-runkit'
-// import LoadingOverlay from 'react-loading-overlay'
 class SingleNote extends Component {
   componentDidMount() {
     this.props.selectNote()
