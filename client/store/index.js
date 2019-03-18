@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import notes from './notes'
+import {editor} from './editorBlocks'
 
 const reducer = combineReducers({
   notes,
-  user
+  user,
+  editor
 })
 const middleware = composeWithDevTools(
   applyMiddleware(
@@ -22,3 +24,4 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './notes'
+export * from './editorBlocks'

@@ -8,7 +8,8 @@ import {
   UserHome,
   SingleNote,
   CodeEditor,
-  MarkdownEditor
+  MarkdownEditor,
+  editor
 } from './components'
 import {fetchNotes, me} from './store'
 
@@ -38,6 +39,7 @@ class Routes extends Component {
             <Route path="/notes/:noteId" component={SingleNote} />
             <Route path="/code-editor" component={CodeEditor} />
             <Route path="/markdown-editor" component={MarkdownEditor} />
+            <Route path="/editor" component={editor} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

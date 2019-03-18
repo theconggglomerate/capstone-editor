@@ -7,6 +7,7 @@ class Code extends Component {
     this.state = {
       loaded: false
     }
+    this.toggleLoadedStatus = this.toggleLoadedStatus.bind(this)
   }
 
   toggleLoadedStatus() {
@@ -19,6 +20,9 @@ class Code extends Component {
         <Embed
           source={this.props.source}
           onLoad={() => this.toggleLoadedStatus()}
+          onEvaluate={() => console.log('please stop')}
+          onURLChanged={() => console.log('on change url')}
+          getSource={() => console.log('sourcecChanged')}
         />
       </LoadingOverlay>
     )
