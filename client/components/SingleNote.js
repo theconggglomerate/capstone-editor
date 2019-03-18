@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {selectNote} from './../store'
-
+import ReactMarkdown from 'react-markdown'
+import {Code} from './../components/'
 class SingleNote extends Component {
   componentDidMount() {
     this.props.selectNote()
@@ -14,20 +15,10 @@ class SingleNote extends Component {
         <h1>{selectedNote.title}</h1>
         {selectedNote.content.cells.map((cell, idx) => {
           if (cell.type === 'markdown') {
-            return (
-              <div key={idx}>
-                <h4>Markdown Cell</h4>
-                {cell.content}
-              </div>
-            )
+            return <ReactMarkdown key={idx} source={cell.content} />
           }
           if (cell.type === 'code') {
-            return (
-              <div key={idx}>
-                <h4>Code Cell</h4>
-                {cell.content}
-              </div>
-            )
+            return <Code key={idx} source={cell.content} />
           }
         })}
       </div>

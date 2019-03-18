@@ -2,7 +2,14 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, SingleNote} from './components'
+import {
+  Login,
+  Signup,
+  UserHome,
+  SingleNote,
+  CodeEditor,
+  MarkdownEditor
+} from './components'
 import {fetchNotes, me} from './store'
 
 import MyApp from './components/d3Base'
@@ -29,6 +36,8 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/notes/:noteId" component={SingleNote} />
+            <Route path="/code-editor" component={CodeEditor} />
+            <Route path="/markdown-editor" component={MarkdownEditor} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
