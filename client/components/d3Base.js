@@ -1,5 +1,4 @@
 import React from 'react'
-import Axios from 'axios'
 import Visual from './Visual'
 import {connect} from 'react-redux'
 import {fetchElements} from '../store/elements'
@@ -38,7 +37,7 @@ class MyApp extends React.Component {
         </React.Fragment>
       )
     } else {
-      return 'No elements!'
+      return ''
     }
   }
 }

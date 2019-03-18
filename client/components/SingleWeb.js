@@ -1,15 +1,8 @@
 import React from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
-import {withRouter} from 'react-router'
-import Axios from 'axios'
-import cytoscape from 'cytoscape'
-import cxtmenu from 'cytoscape-cxtmenu'
-import cola from 'cytoscape-cola'
 import Visual from './Visual'
 import {connect} from 'react-redux'
 import {fetchSingleWeb} from '../store/elements'
-
-cytoscape.use(cola)
 
 export class SingleWeb extends React.Component {
   constructor(props) {
@@ -53,7 +46,7 @@ export class SingleWeb extends React.Component {
         </React.Fragment>
       )
     } else {
-      return 'No elements!'
+      return ''
     }
   }
 }
