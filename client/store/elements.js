@@ -34,14 +34,6 @@ export const fetchSingleWeb = id => async dispatch => {
   }
 }
 
-// export const createAssociation = (sourceId, targetId) => async dispatch => {
-//   try {
-//     await Axios.post(`/api/noteNotes/newAssociation`, sourceId, targetId)
-//     dispatch(getSingleWeb(elements))
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 
 const initialState = {
   allElements: {},
