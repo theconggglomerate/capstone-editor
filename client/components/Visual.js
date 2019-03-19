@@ -24,15 +24,12 @@ export class Visual extends React.Component {
       <React.Fragment>
         <CytoscapeComponent
           elements={CytoscapeComponent.normalizeElements(this.props.elements)}
-          style={{
-            width: '78em',
-            height: '40em'
-          }}
+          style={{width: '78em', height: '40em'}}
           stylesheet={[
             {
-              selector: 'node[title]',
+              selector: 'node[label]',
               style: {
-                content: 'data(title)'
+                content: 'data(label)'
               }
             },
             {
@@ -111,8 +108,8 @@ export class Visual extends React.Component {
                   select: function(ele) {
                     const id = ele.id()
                     // props.expandClick(id)
-                    // const outgoers = cy.getElementById(`${id}`)
-                    // console.log(outgoers)
+                    const outgoers = cy.getElementById(`${id}`)
+                    console.log(outgoers)
                   }
                   // enabled: () => {
                   //   // should return true if single web, should return false if full web. we don't want to exapand the full web.
