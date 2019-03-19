@@ -7,6 +7,7 @@ class Code extends Component {
     this.state = {
       loaded: false
     }
+    this.toggleLoadedStatus = this.toggleLoadedStatus.bind(this)
   }
 
   toggleLoadedStatus() {
