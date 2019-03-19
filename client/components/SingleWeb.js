@@ -9,6 +9,7 @@ export class SingleWeb extends React.Component {
     super(props)
     this.webClick = this.webClick.bind(this)
     this.editClick = this.editClick.bind(this)
+    this.expandClick = this.expandClick.bind(this)
   }
 
   componentDidMount = () => {
@@ -32,6 +33,14 @@ export class SingleWeb extends React.Component {
     this.props.history.push(`/notes/${id}`)
   }
 
+  expandClick = id => {
+    // console.log('NODE LIST', this.props.singleWebElements.nodes)
+    // this.props.getSingleWeb(id)
+
+    this.props.singleWebElements.nodes.push()
+    this.props.singleWebElements.edges.push()
+  }
+
   render() {
     if (this.props.singleWebElements) {
       const elements = this.props.singleWebElements
@@ -42,6 +51,7 @@ export class SingleWeb extends React.Component {
             elements={CytoscapeComponent.normalizeElements(elements)}
             webClick={this.webClick}
             editClick={this.editClick}
+            expandClick={this.expandClick}
           />
         </React.Fragment>
       )
