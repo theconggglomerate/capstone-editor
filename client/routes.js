@@ -13,6 +13,7 @@ import {
 import {fetchNotes, me} from './store'
 
 import MyApp from './components/d3Base'
+import SearchResults from './components/SearchResults'
 
 /**
  * COMPONENT
@@ -36,6 +37,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/notes/:noteId" component={SingleNote} />
+            <Route path="/search/" component={SearchResults} />
             <Route path="/code-editor" component={CodeEditor} />
             <Route path="/markdown-editor" component={MarkdownEditor} />
           </Switch>

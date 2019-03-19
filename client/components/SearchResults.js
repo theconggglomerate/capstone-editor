@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
+import {ReactiveBase, DataSearch, ResultList} from '@appbaseio/reactivesearch'
 import {withRouter} from 'react-router'
-import {ReactiveBase, DataSearch} from '@appbaseio/reactivesearch'
-class AllNotes extends Component {
+
+class SearchResults extends Component {
   render() {
-    const {allNotes} = this.props
-    return allNotes && allNotes.length ? (
-      <div>
+    return (
+      <React.Fragment>
         <ReactiveBase app="notes" url="http://localhost:9200">
           <DataSearch
             componentId="q"
@@ -39,23 +38,28 @@ class AllNotes extends Component {
                 source: suggestion._source
               }
             }}
+            URLParams={true}
             onValueSelected={(value, cause, source) => {
               if (cause === 'SUGGESTION_SELECT')
                 this.props.history.push(`/notes/${source.id}`)
-              if (cause === 'ENTER_PRESS')
+              if (cause === 'ENTER_PRESS') {
                 this.props.history.push(`/search?q="${value}"`)
+              }
+            }}
+          />
+          <ResultList
+            componentId="searchResults"
+            dataField="title"
+            URLParams={true}
+            onData={res => ({title: res.title})}
+            react={{
+              and: 'q'
             }}
           />
         </ReactiveBase>
-      </div>
-    ) : (
-      ''
+      </React.Fragment>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  allNotes: state.notes.allNotes
-})
-
-export default withRouter(connect(mapStateToProps)(AllNotes))
+export default withRouter(SearchResults)
