@@ -8,11 +8,13 @@ import {editor} from './editorBlocks'
 import {persistStore, persistReducer} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
+import elements from './elements'
 
 const reducer = combineReducers({
   notes,
   user,
-  editor
+  editor,
+  elements
 })
 
 const middleware = composeWithDevTools(
