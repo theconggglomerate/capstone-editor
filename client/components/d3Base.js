@@ -1,23 +1,17 @@
 import React from 'react'
-import CytoscapeComponent from 'react-cytoscapejs'
-import Axios from 'axios'
-import cytoscape from 'cytoscape'
-import cxtmenu from 'cytoscape-cxtmenu'
-import cola from 'cytoscape-cola'
 import Visual from './Visual'
+import {connect} from 'react-redux'
+import {fetchElements} from '../store/elements'
 
 class MyApp extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
     this.webClick = this.webClick.bind(this)
     this.editClick = this.editClick.bind(this)
   }
 
-  componentDidMount = async () => {
-    const elements = await Axios.get('/api/noteNotes')
-    this.setState({elements: elements.data})
-    console.log(elements.data)
+  componentDidMount = () => {
+    this.props.getElements()
   }
 
   webClick = id => {
@@ -28,8 +22,10 @@ class MyApp extends React.Component {
     this.props.history.push(`/notes/${id}`)
   }
   render() {
-    if (this.state.elements) {
-      const elements = this.state.elements
+    // console.log('THIS.PROPS', this.props)
+
+    if (this.props.allElements) {
+      const elements = this.props.allElements
 
       return (
         <React.Fragment>
@@ -41,9 +37,18 @@ class MyApp extends React.Component {
         </React.Fragment>
       )
     } else {
-      return 'No elements!'
+      return ''
     }
   }
 }
 
-export default MyApp
+const mapStateToProps = state => ({
+  allElements: state.elements.allElements
+})
+
+const mapDispatchToProps = dispatch => ({
+  getElements: () => {
+    dispatch(fetchElements())
+  }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(MyApp)

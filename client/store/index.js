@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import notes from './notes'
+import elements from './elements'
 
 const reducer = combineReducers({
   notes,
-  user
+  user,
+  elements
 })
 const middleware = composeWithDevTools(
   applyMiddleware(
