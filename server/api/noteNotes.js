@@ -53,3 +53,17 @@ router.get('/:id', async (req, res, next) => {
     next(err)
   }
 })
+
+router.post('/newAssociation', (req, res, next) => {
+  try {
+    const sourceId = req.body.sourceId
+    const targetId = req.body.targetId
+
+    noteNotes.create({
+      sourceId,
+      targetId
+    })
+  } catch (err) {
+    next(err)
+  }
+})
