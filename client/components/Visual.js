@@ -24,7 +24,73 @@ export class Visual extends React.Component {
       <React.Fragment>
         <CytoscapeComponent
           elements={CytoscapeComponent.normalizeElements(this.props.elements)}
-          style={{width: '78em', height: '40em'}}
+          style={{
+            width: '78em',
+            height: '40em'
+          }}
+          stylesheet={[
+            {
+              selector: 'node[title]',
+              style: {
+                content: 'data(title)'
+              }
+            },
+            {
+              selector: 'edge',
+              style: {
+                'curve-style': 'bezier',
+                'target-arrow-shape': 'triangle'
+              }
+            },
+            // some style for the extension
+            {
+              selector: '.eh-handle',
+              style: {
+                'background-color': 'red',
+                width: 12,
+                height: 12,
+                shape: 'ellipse',
+                'overlay-opacity': 0,
+                'border-width': 12, // makes the handle easier to hit
+                'border-opacity': 0
+              }
+            },
+            {
+              selector: '.eh-hover',
+              style: {
+                'background-color': 'red'
+              }
+            },
+            {
+              selector: '.eh-source',
+              style: {
+                'border-width': 2,
+                'border-color': 'red'
+              }
+            },
+            {
+              selector: '.eh-target',
+              style: {
+                'border-width': 2,
+                'border-color': 'red'
+              }
+            },
+            {
+              selector: '.eh-preview, .eh-ghost-edge',
+              style: {
+                'background-color': 'red',
+                'line-color': 'red',
+                'target-arrow-color': 'red',
+                'source-arrow-color': 'red'
+              }
+            },
+            {
+              selector: '.eh-ghost-edge.eh-preview-active',
+              style: {
+                opacity: 0
+              }
+            }
+          ]}
           cy={cy => {
             const webClick = this.props.webClick
             const editClick = this.props.editClick
@@ -45,8 +111,8 @@ export class Visual extends React.Component {
                   select: function(ele) {
                     const id = ele.id()
                     // props.expandClick(id)
-                    const outgoers = cy.getElementById(`${id}`)
-                    console.log(outgoers)
+                    // const outgoers = cy.getElementById(`${id}`)
+                    // console.log(outgoers)
                   }
                   // enabled: () => {
                   //   // should return true if single web, should return false if full web. we don't want to exapand the full web.
