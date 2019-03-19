@@ -33,14 +33,18 @@ class Routes extends Component {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/visual" component={MyApp} />
-        <Route path="/visual/:id" component={SingleWeb} />
+        <Route
+          path="/visual/:id"
+          render={props => <SingleWeb {...props} key={props.match.params.id} />}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/home" component={UserHome} />
             <Route path="/notes/:noteId" component={SingleNote} />
 
-            <Route path="/editor" component={editor} />
+            <Route exact path="/editor" component={editor} />
+            <Route path="/editor/:noteId" component={editor} />
             <Route exact path="/code-editor" component={CodeEditor} />
             <Route exact path="/markdown-editor" component={MarkdownEditor} />
           </Switch>

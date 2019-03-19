@@ -13,7 +13,9 @@ import {
   makeCodeBlock,
   makeMarkdownBlock,
   editBlock,
-  saveProjects
+  getProject,
+  createProject,
+  saveProject
 } from './../store'
 
 export class editor extends Component {
@@ -29,12 +31,28 @@ export class editor extends Component {
     }
   }
 
+  componentDidMount = () => {
+    const noteId = this.props.match.params.noteId
+    if (noteId) {
+      this.props.getProject(noteId)
+      this.props.selectNote(noteId)
+    }
+  }
+
   save = () => {
-    this.props.saveProject(
-      this.state.title,
-      this.props.editor,
-      this.props.history
-    )
+    if (this.props.match.params.noteId) {
+      this.props.saveProject(
+        this.props.match.params.noteId,
+        this.state.title || this.props.selectedNote.title,
+        this.props.editor
+      )
+    } else {
+      this.props.createProject(
+        this.state.title,
+        this.props.editor,
+        this.props.history
+      )
+    }
   }
   handleTitle = event => {
     event.preventDefault()
@@ -64,9 +82,17 @@ export class editor extends Component {
   }
 
   render() {
-    const selectedNote = {
-      title: this.state.title,
-      content: {cells: this.props.editor}
+    let selectedNote = {}
+    if (this.props.selectedNote && this.props.match.params.noteId) {
+      selectedNote = {
+        title: this.props.selectedNote.title,
+        content: {cells: this.props.editor}
+      }
+    } else {
+      selectedNote = {
+        title: this.state.title,
+        content: {cells: this.props.editor}
+      }
     }
 
     return (
@@ -164,7 +190,8 @@ export class editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    editor: state.editor
+    editor: state.editor,
+    selectedNote: state.notes.selectedNote
   }
 }
 
@@ -179,8 +206,17 @@ const mapDispatchToProps = dispatch => {
     editBlock: (content, index) => {
       dispatch(editBlock(content, index))
     },
-    saveProject: (title, content, history) => {
-      dispatch(saveProjects(title, content, history))
+    createProject: (title, content, history) => {
+      dispatch(createProject(title, content, history))
+    },
+    getProject: id => {
+      dispatch(getProject(id))
+    },
+    selectNote: id => {
+      dispatch(selectNote(id))
+    },
+    saveProject: (id, title, content) => {
+      dispatch(saveProject(id, title, content))
     }
   }
 }

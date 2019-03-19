@@ -41,3 +41,14 @@ router.post('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/:noteId', async (req, res, next) => {
+  try {
+    if (req.note) {
+      const note = await req.note.update(req.body)
+      res.status(200).send(note)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
