@@ -25,6 +25,6 @@ const indexForES = instances => {
   })
 }
 
-Notes.beforeBulkCreate(instances => indexForES(instances))
+Notes.afterBulkCreate(instances => indexForES(instances))
 
 module.exports = Notes
