@@ -15,7 +15,9 @@ import {
   editBlock,
   getProject,
   createProject,
-  saveProject
+  saveProject,
+  editTitle,
+  clearEditor
 } from './../store'
 
 export class editor extends Component {
@@ -31,25 +33,45 @@ export class editor extends Component {
     }
   }
 
-  componentDidMount = () => {
+  refresh = () => {
     const noteId = this.props.match.params.noteId
-    if (noteId) {
+
+    if (noteId === 'new') {
+      this.props.clearEditor()
+    } else if (noteId) {
       this.props.getProject(noteId)
-      this.props.selectNote(noteId)
     }
   }
 
+  componentDidMount = () => {
+    this.refresh()
+  }
+
+  componentDidUpdate = prevProps => {
+    if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
+      this.refresh()
+    }
+  }
+
+  new = () => {
+    this.props.history.push('/editor/new')
+  }
+
   save = () => {
-    if (this.props.match.params.noteId) {
+    if (
+      (this.props.match.params.noteId &&
+        this.props.match.params.noteId !== 'new') ||
+      this.props.editor.id
+    ) {
       this.props.saveProject(
-        this.props.match.params.noteId,
-        this.state.title || this.props.selectedNote.title,
-        this.props.editor
+        this.props.match.params.noteId || this.props.editor.id,
+        this.props.editor.title,
+        this.props.editor.cells
       )
     } else {
       this.props.createProject(
-        this.state.title,
-        this.props.editor,
+        this.props.editor.title,
+        this.props.editor.cells,
         this.props.history
       )
     }
@@ -57,44 +79,21 @@ export class editor extends Component {
   handleTitle = event => {
     event.preventDefault()
     const title = event.target.value
-    this.setState({...this.state, title})
+    this.props.editTitle(title)
   }
   handleChange = (newValue, idx) => {
     this.props.editBlock(newValue, idx)
-    // event.preventDefault()
-    // const blockCells = this.state.cells.slice()
-    // blockCells[idx].content = newValue
-    // this.setState({...this.state, cells: blockCells})
   }
 
   newCode = () => {
     this.props.makeNewCodeBlock()
-    // const blockCells = this.state.cells.slice()
-    // blockCells.push({type: 'code', content: ''})
-    // this.setState({...this.state, cells: blockCells})
   }
 
   newMarkdown = () => {
     this.props.makeNewMarkdownBlock()
-    //     const blockCells = this.state.cells.slice()
-    //     blockCells.push({type: 'markdown', content: ''})
-    //     this.setState({...this.state, cells: blockCells})
   }
 
   render() {
-    let selectedNote = {}
-    if (this.props.selectedNote && this.props.match.params.noteId) {
-      selectedNote = {
-        title: this.props.selectedNote.title,
-        content: {cells: this.props.editor}
-      }
-    } else {
-      selectedNote = {
-        title: this.state.title,
-        content: {cells: this.props.editor}
-      }
-    }
-
     return (
       <div>
         <div className="split left">
@@ -102,17 +101,18 @@ export class editor extends Component {
             <button onClick={this.newCode}>New Code Block</button>
             <button onClick={this.newMarkdown}> New Markdown Block </button>
             <button onClick={this.save}> Save Note</button>
+            <button onClick={this.new}> New Note</button>
             <input
               type="text"
               onChange={this.handleTitle}
-              value={this.state.value}
+              value={this.props.editor.title}
               placeholder="Enter title here"
             />
           </div>
 
           <div>
-            {this.props.editor
-              ? this.props.editor.map((cell, idx) => {
+            {this.props.editor.cells
+              ? this.props.editor.cells.map((cell, idx) => {
                   return cell.type === 'code' ? (
                     <div>
                       <AceEditor
@@ -121,7 +121,7 @@ export class editor extends Component {
                         name="CodeEditor"
                         onChange={value => this.handleChange(value, idx)}
                         key={idx + 'edcd'}
-                        value={this.props.editor[idx].content}
+                        value={this.props.editor.cells[idx].content}
                         fontSize={this.state.fontSize}
                         showPrintMargin={true}
                         showGutter={true}
@@ -146,7 +146,7 @@ export class editor extends Component {
                         name="MarkdownEditor"
                         onChange={value => this.handleChange(value, idx)}
                         key={idx + 'edmd'}
-                        value={this.props.editor[idx].content}
+                        value={this.props.editor.cells[idx].content}
                         fontSize={this.state.fontSize}
                         showPrintMargin={true}
                         showGutter={true}
@@ -168,10 +168,10 @@ export class editor extends Component {
               : ''}
           </div>
         </div>
-        {this.props.editor ? (
+        {this.props.editor.cells ? (
           <div className="split right">
-            <h1>{selectedNote.title}</h1>
-            {selectedNote.content.cells.map((cell, idx) => {
+            <h1>{this.props.editor.title}</h1>
+            {this.props.editor.cells.map((cell, idx) => {
               if (cell.type === 'markdown') {
                 return <ReactMarkdown key={idx + 'md'} source={cell.content} />
               }
@@ -190,8 +190,7 @@ export class editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    editor: state.editor,
-    selectedNote: state.notes.selectedNote
+    editor: state.editor
   }
 }
 
@@ -217,6 +216,12 @@ const mapDispatchToProps = dispatch => {
     },
     saveProject: (id, title, content) => {
       dispatch(saveProject(id, title, content))
+    },
+    editTitle: title => {
+      dispatch(editTitle(title))
+    },
+    clearEditor: () => {
+      dispatch(clearEditor())
     }
   }
 }

@@ -6,8 +6,15 @@ const NEW_CODE_BLOCK = 'NEW_CODE_BLOCK'
 const NEW_MARKDOWN_BLOCK = 'NEW_MARKDOWN_BLOCK'
 const EDIT_BLOCK = 'EDIT_BLOCK'
 const SET_EDITOR = 'SET_EDITOR'
+const CLEAR_EDITOR = 'CLEAR_EDITOR'
+const EDIT_TITLE = 'EDIT_TITLE'
 
 //Action Creators
+
+export const editTitle = title => ({
+  type: EDIT_TITLE,
+  title
+})
 
 export const makeCodeBlock = () => ({
   type: NEW_CODE_BLOCK
@@ -23,9 +30,15 @@ export const editBlock = (content, index) => ({
   content
 })
 
-export const setEditor = cells => ({
+export const setEditor = (cells, title, id) => ({
   type: SET_EDITOR,
-  cells
+  cells,
+  title,
+  id
+})
+
+export const clearEditor = () => ({
+  type: CLEAR_EDITOR
 })
 
 //Thunks
@@ -45,7 +58,7 @@ export const getProject = id => {
   return async function(dispatch) {
     const note = await Axios.get(`/api/notes/${id}`)
     console.log(note.data)
-    dispatch(setEditor(note.data.content.cells))
+    dispatch(setEditor(note.data.content.cells, note.data.title, note.data.id))
   }
 }
 
@@ -59,20 +72,31 @@ export const saveProject = (id, title, content) => {
 
 //Reducer
 
-const initialState = []
+const initialState = {title: '', cells: []}
 
 export const editor = (state = initialState, action) => {
   switch (action.type) {
     case NEW_CODE_BLOCK:
-      return [...state, {type: 'code', content: ''}]
+      return {
+        ...state,
+        cells: [...state.cells, {type: 'code', content: ''}]
+      }
     case NEW_MARKDOWN_BLOCK:
-      return [...state, {type: 'markdown', content: ''}]
+      return {
+        ...state,
+        cells: [...state.cells, {type: 'markdown', content: ''}]
+      }
     case EDIT_BLOCK:
-      const blockArr = [...state]
+      const blockArr = [...state.cells]
       blockArr[action.index].content = action.content
-      return [...blockArr]
+      return {...state, cells: [...blockArr]}
     case SET_EDITOR:
-      return [...action.cells]
+      return {id: action.id, title: action.title, cells: [...action.cells]}
+    case EDIT_TITLE:
+      return {...state, title: action.title}
+
+    case CLEAR_EDITOR:
+      return {title: '', cells: [], id: null}
     default:
       return state
   }
