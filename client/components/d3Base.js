@@ -1,136 +1,54 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import CytoscapeComponent from 'react-cytoscapejs'
-import Axios from 'axios'
-import cytoscape from 'cytoscape'
-import cxtmenu from 'cytoscape-cxtmenu'
-import coseBilkent from 'cytoscape-cose-bilkent'
-import cola from 'cytoscape-cola'
-
-let cy = cytoscape.use(cxtmenu)
-cy.use(coseBilkent)
-cy.use(cola)
+import Visual from './Visual'
+import {connect} from 'react-redux'
+import {fetchElements} from '../store/elements'
 
 class MyApp extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.webClick = this.webClick.bind(this)
+    this.editClick = this.editClick.bind(this)
   }
 
-  componentDidMount = async () => {
-    const elements = await Axios.get('/api/noteNotes')
-    this.setState({elements: elements.data})
-    console.log(elements.data)
+  componentDidMount = () => {
+    this.props.getElements()
   }
 
-  nodeClick = async event => {
-    event.preventDefault()
-    const id = event.target._private.data.id
-    const singleWeb = await Axios.get(`/api/noteNotes/${id}`)
-    this.setState({elements: singleWeb.data})
+  webClick = id => {
+    this.props.history.push(`/visual/${id}`)
   }
 
+  editClick = id => {
+    this.props.history.push(`/notes/${id}`)
+  }
   render() {
-    if (this.state.elements) {
-      const elements = this.state.elements
+    // console.log('THIS.PROPS', this.props)
+
+    if (this.props.allElements) {
+      const elements = this.props.allElements
 
       return (
-        <CytoscapeComponent
-          elements={CytoscapeComponent.normalizeElements(elements)}
-          style={{width: '1900px', height: '750px'}}
-          cy={cy => {
-            this.cy = cy
-
-            cy.cxtmenu({
-              selector: 'node, edge',
-              commands: [
-                {
-                  content: '<span class="fa fa-flash fa-2x"></span>',
-                  select: function(ele) {
-                    console.log(ele.id())
-                  }
-                },
-                {
-                  content: '<span class="fa fa-star fa-2x"></span>',
-                  select: function(ele) {
-                    console.log(ele.data('name'))
-                  },
-                  enabled: false
-                },
-                {
-                  content: 'Text',
-                  select: function(ele) {
-                    console.log(ele.position())
-                  }
-                }
-              ]
-            })
-            // cy.cxtmenu({
-            //   selector: 'core',
-            //   commands: [
-            //     {
-            //       content: 'bg1',
-            //       select: function() {
-            //         console.log('bg1')
-            //       }
-            //     },
-            //     {
-            //       content: 'bg2',
-            //       select: function() {
-            //         console.log('bg2')
-            //       }
-            //     }
-            //   ]
-            // })
-            cy.nodes().style({
-              'font-size': function(node) {
-                if (node._private.edges.length === 0) return 20
-                else {
-                  return 20 * node._private.edges.length
-                }
-              },
-              width: function(node) {
-                if (node._private.edges.length === 0) return 50
-                else {
-                  return 50 * node._private.edges.length
-                }
-              },
-              height: function(node) {
-                if (node._private.edges.length === 0) return 50
-                else {
-                  return 50 * node._private.edges.length
-                }
-              },
-              'text-valign': 'center'
-            })
-            cy
-              .layout({
-                name: 'cola',
-                refresh: 7,
-                nodeSpacing: function(node) {
-                  if (node._private.edges.length === 0) return 200
-                  else {
-                    return node._private.edges.length * 15
-                  }
-                },
-                nodeDimensionsIncludeLabels: false,
-                nodeRepulsion: 10000,
-                fit: true,
-                edgeLength: function(edge) {
-                  return edge._private.source.edges.length * 600
-                }
-              })
-              .run()
-            cy.one('tap', 'node', event => {
-              this.nodeClick(event)
-            })
-          }}
-        />
+        <React.Fragment>
+          <Visual
+            elements={elements}
+            webClick={this.webClick}
+            editClick={this.editClick}
+          />
+        </React.Fragment>
       )
     } else {
-      return 'No elements!'
+      return ''
     }
   }
 }
 
-export default MyApp
+const mapStateToProps = state => ({
+  allElements: state.elements.allElements
+})
+
+const mapDispatchToProps = dispatch => ({
+  getElements: () => {
+    dispatch(fetchElements())
+  }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(MyApp)
