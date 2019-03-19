@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {AllNotes} from './../components'
+import {SearchBar} from './../components'
+import {ReactiveBase} from '@appbaseio/reactivesearch'
 
 /**
  * COMPONENT
@@ -12,7 +13,9 @@ export const UserHome = props => {
   return (
     <div>
       <h3> Welcome, {email} </h3>
-      <AllNotes />
+      <ReactiveBase app="notes" url="http://localhost:9200">
+        <SearchBar />
+      </ReactiveBase>
     </div>
   )
 }

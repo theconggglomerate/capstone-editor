@@ -9,11 +9,13 @@ import {
   SingleNote,
   CodeEditor,
   MarkdownEditor,
+  Editor,
   SingleWeb
 } from './components'
 import {fetchNotes, me} from './store'
 
 import MyApp from './components/d3Base'
+import SearchResults from './components/SearchResults'
 
 /**
  * COMPONENT
@@ -32,12 +34,18 @@ class Routes extends Component {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/visual" component={MyApp} />
-        <Route path="/visual/:id" component={SingleWeb} />
+        <Route
+          path="/visual/:id"
+          render={props => <SingleWeb {...props} key={props.match.params.id} />}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route exact path="/home" component={UserHome} />
             <Route path="/notes/:noteId" component={SingleNote} />
+            <Route path="/search/" component={SearchResults} />
+            <Route exact path="/editor" component={Editor} />
+            <Route path="/editor/:noteId" component={Editor} />
             <Route exact path="/code-editor" component={CodeEditor} />
             <Route exact path="/markdown-editor" component={MarkdownEditor} />
           </Switch>

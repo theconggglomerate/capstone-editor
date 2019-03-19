@@ -30,3 +30,25 @@ router.get('/:noteId', (req, res, next) => {
     next(error)
   }
 })
+
+router.post('/', async (req, res, next) => {
+  try {
+    console.log('body', req.body)
+    const note = await Notes.create(req.body)
+    console.log(note.id)
+    res.status(200).send({id: note.id})
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:noteId', async (req, res, next) => {
+  try {
+    if (req.note) {
+      const note = await req.note.update(req.body)
+      res.status(200).send(note)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
