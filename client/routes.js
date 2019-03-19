@@ -9,7 +9,7 @@ import {
   SingleNote,
   CodeEditor,
   MarkdownEditor,
-  editor,
+  Editor,
   SingleWeb
 } from './components'
 import {fetchNotes, me} from './store'
@@ -43,8 +43,8 @@ class Routes extends Component {
             <Route exact path="/home" component={UserHome} />
             <Route path="/notes/:noteId" component={SingleNote} />
 
-            <Route exact path="/editor" component={editor} />
-            <Route path="/editor/:noteId" component={editor} />
+            <Route exact path="/editor" component={Editor} />
+            <Route path="/editor/:noteId" component={Editor} />
             <Route exact path="/code-editor" component={CodeEditor} />
             <Route exact path="/markdown-editor" component={MarkdownEditor} />
           </Switch>

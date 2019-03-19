@@ -20,7 +20,7 @@ import {
   clearEditor
 } from './../store'
 
-export class editor extends Component {
+export class Editor extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -226,4 +226,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(editor)
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

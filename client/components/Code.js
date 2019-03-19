@@ -20,9 +20,6 @@ class Code extends Component {
         <Embed
           source={this.props.source}
           onLoad={() => this.toggleLoadedStatus()}
-          onEvaluate={() => console.log('please stop')}
-          onURLChanged={() => console.log('on change url')}
-          getSource={() => console.log('sourcecChanged')}
         />
       </LoadingOverlay>
     )

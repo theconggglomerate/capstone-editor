@@ -66,7 +66,13 @@ export const saveProject = (id, title, content) => {
   return async function(dispatch) {
     const note = {title, content: {cells: content}}
     const updatedNote = await Axios.put(`/api/notes/${id}`, note)
-    dispatch(setEditor(updatedNote.data.content.cells))
+    dispatch(
+      setEditor(
+        updatedNote.data.content.cells,
+        updatedNote.data.title,
+        updatedNote.data.id
+      )
+    )
   }
 }
 
