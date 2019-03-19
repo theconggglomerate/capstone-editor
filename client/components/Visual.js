@@ -3,9 +3,11 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import cytoscape from 'cytoscape'
 import cxtmenu from 'cytoscape-cxtmenu'
 import cola from 'cytoscape-cola'
+import edgehandles from 'cytoscape-edgehandles'
 
 let cy = cytoscape.use(cxtmenu)
 cy.use(cola)
+cy.use(edgehandles)
 
 const Visual = props => {
   return (
@@ -22,14 +24,21 @@ const Visual = props => {
                 select: function(ele) {
                   const id = ele.id()
                   props.editClick(id)
+                  // console.log(ele.data('name'))
                 }
               },
               {
-                content: '<span class="fa fa-star fa-2x"></span>',
+                content: 'Expand',
                 select: function(ele) {
-                  console.log(ele.data('name'))
-                },
-                enabled: false
+                  const id = ele.id()
+                  // props.expandClick(id)
+                  const outgoers = cy.getElementById(`${id}`)
+                  console.log(outgoers)
+                }
+                // enabled: () => {
+                //   // should return true if single web, should return false if full web. we don't want to exapand the full web.
+                //   return props.elements.length
+                // }
               },
               {
                 content: 'Web',
@@ -99,6 +108,14 @@ const Visual = props => {
           // cy.one('tap', 'node', event => {
           //   this.nodeClick(event)
           // })
+
+          cy.edgehandles({
+            snap: true,
+            complete: function(sourceNode, targetNode, addedEles) {
+              console.log('sourceNode', sourceNode._private.data.id)
+              console.log('targetNode', targetNode._private.data.id)
+            }
+          })
         }}
       />
     </React.Fragment>

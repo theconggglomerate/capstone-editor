@@ -22,8 +22,6 @@ class MyApp extends React.Component {
     this.props.history.push(`/notes/${id}`)
   }
   render() {
-    // console.log('THIS.PROPS', this.props)
-
     if (this.props.allElements) {
       const elements = this.props.allElements
 
