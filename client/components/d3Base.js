@@ -2,6 +2,7 @@ import React from 'react'
 import Visual from './Visual'
 import {connect} from 'react-redux'
 import {fetchElements} from '../store/elements'
+import {getModal, turnOffModal} from '../store'
 
 class MyApp extends React.Component {
   constructor(props) {
@@ -31,6 +32,9 @@ class MyApp extends React.Component {
             elements={elements}
             webClick={this.webClick}
             editClick={this.editClick}
+            getModal={this.props.getModal}
+            modal={this.props.modal}
+            closeModal={this.props.closeModal}
           />
         </React.Fragment>
       )
@@ -41,12 +45,19 @@ class MyApp extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  allElements: state.elements.allElements
+  allElements: state.elements.allElements,
+  modal: state.modal
 })
 
 const mapDispatchToProps = dispatch => ({
   getElements: () => {
     dispatch(fetchElements())
+  },
+  getModal: id => {
+    dispatch(getModal(id))
+  },
+  closeModal: () => {
+    dispatch(turnOffModal())
   }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(MyApp)
