@@ -30,7 +30,7 @@ export class SingleWeb extends React.Component {
   }
 
   editClick = id => {
-    this.props.history.push(`/notes/${id}`)
+    this.props.history.push(`/editor/${id}`)
   }
 
   expandClick = id => {

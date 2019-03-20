@@ -19,7 +19,7 @@ class MyApp extends React.Component {
   }
 
   editClick = id => {
-    this.props.history.push(`/notes/${id}`)
+    this.props.history.push(`/editor/${id}`)
   }
   render() {
     if (this.props.allElements) {

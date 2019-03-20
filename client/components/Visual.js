@@ -5,6 +5,8 @@ import cytoscape from 'cytoscape'
 import cxtmenu from 'cytoscape-cxtmenu'
 import cola from 'cytoscape-cola'
 import edgehandles from 'cytoscape-edgehandles'
+import {Modal} from 'semantic-ui-react'
+import {SingleNote} from './index'
 
 let cy = cytoscape.use(cxtmenu)
 cy.use(cola)
@@ -14,10 +16,28 @@ export class Visual extends React.Component {
   constructor(props) {
     super()
     this.addAssociation = this.addAssociation.bind(this)
+    this.state = {show: false, id: null, called: true, renders: 0}
   }
 
   addAssociation = async (sourceId, targetId) => {
     await Axios.post(`/api/noteNotes/newAssociation`, {sourceId, targetId})
+  }
+  toggleModal = (event, cy) => {
+    setTimeout(100, this.setState({...this.state, called: true}))
+    if (this.state.called) {
+      console.log(event)
+      this.setState({...this.state, called: false})
+    }
+
+    // this.setState({show: !this.state.show, id
+    // })
+  }
+
+  countRender = () => {
+    let renders = this.state.renders
+    renders++
+    console.log(renders)
+    this.setState({...this.state, renders})
   }
   render() {
     return (
@@ -89,59 +109,61 @@ export class Visual extends React.Component {
             }
           ]}
           cy={cy => {
-            const webClick = this.props.webClick
-            const editClick = this.props.editClick
-            const addAssociation = this.addAssociation
-            cy.cxtmenu({
-              selector: 'node, edge',
-              commands: [
-                {
-                  content: 'Edit',
-                  select: function(ele) {
-                    const id = ele.id()
-                    editClick(id)
-                    // console.log(ele.data('name'))
+            cy.on('layoutstop', () => {
+              console.log('done')
+              const webClick = this.props.webClick
+              const editClick = this.props.editClick
+              const addAssociation = this.addAssociation
+              cy.cxtmenu({
+                selector: 'node, edge',
+                commands: [
+                  {
+                    content: 'Edit',
+                    select: function(ele) {
+                      const id = ele.id()
+                      editClick(id)
+                    }
+                  },
+                  {
+                    content: 'Expand',
+                    select: function(ele) {
+                      const id = ele.id()
+
+                      const outgoers = cy.getElementById(`${id}`)
+                      console.log(outgoers)
+                    }
+                  },
+                  {
+                    content: 'Web',
+                    select: function(ele) {
+                      const id = ele.id()
+                      webClick(id)
+                    }
                   }
-                },
-                {
-                  content: 'Expand',
-                  select: function(ele) {
-                    const id = ele.id()
-                    // props.expandClick(id)
-                    const outgoers = cy.getElementById(`${id}`)
-                    console.log(outgoers)
-                  }
-                  // enabled: () => {
-                  //   // should return true if single web, should return false if full web. we don't want to exapand the full web.
-                  //   return props.elements.length
-                  // }
-                },
-                {
-                  content: 'Web',
-                  select: function(ele) {
-                    const id = ele.id()
-                    webClick(id)
-                  }
-                }
-              ]
+                ]
+              })
+
+              cy.on('click', 'node', () => console.log('clicked'))
             })
-            // cy.cxtmenu({
-            //   selector: 'core',
-            //   commands: [
-            //     {
-            //       content: 'bg1',
-            //       select: function() {
-            //         console.log('bg1')
-            //       }
-            //     },
-            //     {
-            //       content: 'bg2',
-            //       select: function() {
-            //         console.log('bg2')
-            //       }
-            //     }
-            //   ]
-            // })
+
+            cy
+              .layout({
+                name: 'cola',
+
+                nodeSpacing: function(node) {
+                  if (node._private.edges.length === 0) return 200
+                  else {
+                    return node._private.edges.length * 15
+                  }
+                },
+                nodeDimensionsIncludeLabels: false,
+                nodeRepulsion: 10000,
+                fit: true,
+                edgeLength: function(edge) {
+                  return edge._private.source.edges.length * 600
+                }
+              })
+              .run()
             cy.nodes().style({
               'font-size': function(node) {
                 if (node._private.edges.length === 0) return 20
@@ -163,28 +185,6 @@ export class Visual extends React.Component {
               },
               'text-valign': 'center'
             })
-            cy
-              .layout({
-                name: 'cola',
-                refresh: 4,
-                nodeSpacing: function(node) {
-                  if (node._private.edges.length === 0) return 200
-                  else {
-                    return node._private.edges.length * 15
-                  }
-                },
-                nodeDimensionsIncludeLabels: false,
-                nodeRepulsion: 10000,
-                fit: true,
-                edgeLength: function(edge) {
-                  return edge._private.source.edges.length * 600
-                }
-              })
-              .run()
-            // cy.one('tap', 'node', event => {
-            //   this.nodeClick(event)
-            // })
-
             cy.edgehandles({
               snap: true,
               complete: function(sourceNode, targetNode, addedEles) {
@@ -198,6 +198,7 @@ export class Visual extends React.Component {
             })
           }}
         />
+        <Modal />
       </React.Fragment>
     )
   }

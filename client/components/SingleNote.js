@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   selectNote: () => {
-    const noteId = ownProps.match.params.noteId
+    const noteId = ownProps.match.params.noteId || ownProps.noteId
     dispatch(selectNote(noteId))
   }
 })
