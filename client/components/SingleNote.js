@@ -10,6 +10,12 @@ class SingleNote extends Component {
 
   render() {
     const {selectedNote} = this.props
+    let associations = []
+    if (selectedNote.id) {
+      associations = selectedNote.source
+        .concat(selectedNote.target)
+        .map(link => `[${link.title}](/notes/${link.id})`)
+    }
     return selectedNote.id ? (
       <div>
         <h1>{selectedNote.title}</h1>
@@ -21,6 +27,7 @@ class SingleNote extends Component {
             return <Code key={idx} source={cell.content} />
           }
         })}
+        <ReactMarkdown key="links" source={associations.join('\n')} />
       </div>
     ) : (
       ''
