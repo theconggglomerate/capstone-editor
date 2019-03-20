@@ -1,9 +1,18 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {selectNote} from './../store'
+import {Link} from 'react-router-dom'
 
 class GeneralLinks extends Component {
-  render() {}
+  render() {
+    console.log(this.props.selectedNote)
+    return (
+      <div>
+        <h3>Search Bar!</h3>
+        <Link to="/home">Home</Link>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => ({

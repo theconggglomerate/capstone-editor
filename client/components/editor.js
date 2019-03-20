@@ -19,6 +19,7 @@ import {
   editTitle,
   clearEditor
 } from './../store'
+import GeneralLinks from './GeneralLinks'
 
 export class Editor extends Component {
   constructor(props) {
@@ -183,6 +184,7 @@ export class Editor extends Component {
         ) : (
           ''
         )}
+        <GeneralLinks />
       </div>
     )
   }
