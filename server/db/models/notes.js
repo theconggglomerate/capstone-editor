@@ -21,7 +21,7 @@ const indexForES = async instances => {
         }
       })
       indexArr.push({
-        body: instance.dataValues
+        ...instance.dataValues
       })
     })
     await es.bulk({
