@@ -189,7 +189,7 @@ export class Editor extends Component {
           )}
         </div>
         <div>
-          <GeneralLinks />
+          <GeneralLinks noteId={this.props.match.params.noteId} />
         </div>
       </div>
     )
