@@ -9,7 +9,11 @@ class SearchResults extends Component {
   render() {
     return (
       <React.Fragment>
-        <ReactiveBase app="notes" url="http://localhost:9200">
+
+        <ReactiveBase
+          app="notes"
+          url={process.env.BONSAI_URL || 'http://localhost:9200'}
+        >
           <SearchBar />
           <ReactiveList
             componentId="searchResults"

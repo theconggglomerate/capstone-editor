@@ -3,7 +3,7 @@ const pkg = require('../../package.json')
 
 const {Client} = require('@elastic/elasticsearch')
 const es = new Client({
-  node: 'http://localhost:9200'
+  node: process.env.BONSAI_URL || 'http://localhost:9200'
 })
 
 const databaseName = pkg.name + (process.env.NODE_ENV === 'test' ? '-test' : '')

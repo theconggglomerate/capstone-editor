@@ -4,7 +4,12 @@ module.exports = router
 
 router.param('noteId', async (req, res, next, id) => {
   try {
-    const note = await Notes.findByPk(id)
+    const note = await Notes.findByPk(id, {
+      include: [
+        {model: Notes, as: 'source', attributes: ['id', 'title']},
+        {model: Notes, as: 'target', attributes: ['id', 'title']}
+      ]
+    })
     if (note) {
       req.note = note
       next()
