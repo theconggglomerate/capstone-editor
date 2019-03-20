@@ -188,9 +188,6 @@ export class Visual extends React.Component {
             cy.edgehandles({
               snap: true,
               complete: function(sourceNode, targetNode, addedEles) {
-                //send id
-                console.log('sourceNode', sourceNode._private.data.id)
-                console.log('targetNode', targetNode._private.data.id)
                 const sourceNodeId = sourceNode._private.data.id
                 const targetNodeId = targetNode._private.data.id
                 addAssociation(sourceNodeId, targetNodeId)
