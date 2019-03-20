@@ -96,95 +96,101 @@ export class Editor extends Component {
 
   render() {
     return (
-      <div>
-        <div className="split left">
-          <div>
-            <button onClick={this.newCode}>New Code Block</button>
-            <button onClick={this.newMarkdown}> New Markdown Block </button>
-            <button onClick={this.save}> Save Note</button>
-            <button onClick={this.new}> New Note</button>
-            <input
-              type="text"
-              onChange={this.handleTitle}
-              value={this.props.editor.title}
-              placeholder="Enter title here"
-            />
-          </div>
+      <div id="editorContainer">
+        <div>
+          <div className="split left">
+            <div>
+              <button onClick={this.newCode}>New Code Block</button>
+              <button onClick={this.newMarkdown}> New Markdown Block </button>
+              <button onClick={this.save}> Save Note</button>
+              <button onClick={this.new}> New Note</button>
+              <input
+                type="text"
+                onChange={this.handleTitle}
+                value={this.props.editor.title}
+                placeholder="Enter title here"
+              />
+            </div>
 
-          <div>
-            {this.props.editor.cells
-              ? this.props.editor.cells.map((cell, idx) => {
-                  return cell.type === 'code' ? (
-                    <div>
-                      <AceEditor
-                        mode="javascript"
-                        theme={this.state.theme}
-                        name="CodeEditor"
-                        onChange={value => this.handleChange(value, idx)}
-                        key={idx + 'edcd'}
-                        value={this.props.editor.cells[idx].content}
-                        fontSize={this.state.fontSize}
-                        showPrintMargin={true}
-                        showGutter={true}
-                        highlightActiveLine={true}
-                        setOptions={{
-                          enableBasicAutocompletion: true,
-                          enableLiveAutocompletion: this.state
-                            .enableLiveAutocompletion,
-                          enableSnippets: true,
-                          showLineNumbers: true,
-                          tabSize: 2,
-                          maxLines: 100,
-                          minLines: 3
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <AceEditor
-                        mode="markdown"
-                        theme="tomorrow"
-                        name="MarkdownEditor"
-                        onChange={value => this.handleChange(value, idx)}
-                        key={idx + 'edmd'}
-                        value={this.props.editor.cells[idx].content}
-                        fontSize={this.state.fontSize}
-                        showPrintMargin={true}
-                        showGutter={true}
-                        highlightActiveLine={true}
-                        setOptions={{
-                          enableBasicAutocompletion: true,
-                          enableLiveAutocompletion: this.state
-                            .enableLiveAutocompletion,
-                          enableSnippets: true,
-                          showLineNumbers: true,
-                          tabSize: 2,
-                          maxLines: 100,
-                          minLines: 3
-                        }}
-                      />
-                    </div>
+            <div>
+              {this.props.editor.cells
+                ? this.props.editor.cells.map((cell, idx) => {
+                    return cell.type === 'code' ? (
+                      <div className="code">
+                        <AceEditor
+                          mode="javascript"
+                          theme={this.state.theme}
+                          name="CodeEditor"
+                          onChange={value => this.handleChange(value, idx)}
+                          key={idx + 'edcd'}
+                          value={this.props.editor.cells[idx].content}
+                          fontSize={this.state.fontSize}
+                          showPrintMargin={true}
+                          showGutter={true}
+                          highlightActiveLine={true}
+                          setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: this.state
+                              .enableLiveAutocompletion,
+                            enableSnippets: true,
+                            showLineNumbers: true,
+                            tabSize: 2,
+                            maxLines: 100,
+                            minLines: 3
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="markdown">
+                        <AceEditor
+                          mode="markdown"
+                          theme="tomorrow"
+                          name="MarkdownEditor"
+                          onChange={value => this.handleChange(value, idx)}
+                          key={idx + 'edmd'}
+                          value={this.props.editor.cells[idx].content}
+                          fontSize={this.state.fontSize}
+                          showPrintMargin={true}
+                          showGutter={true}
+                          highlightActiveLine={true}
+                          setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: this.state
+                              .enableLiveAutocompletion,
+                            enableSnippets: true,
+                            showLineNumbers: true,
+                            tabSize: 2,
+                            maxLines: 100,
+                            minLines: 3
+                          }}
+                        />
+                      </div>
+                    )
+                  })
+                : ''}
+            </div>
+          </div>
+          {this.props.editor.cells ? (
+            <div className="split right">
+              <h1>{this.props.editor.title}</h1>
+              {this.props.editor.cells.map((cell, idx) => {
+                if (cell.type === 'markdown') {
+                  return (
+                    <ReactMarkdown key={idx + 'md'} source={cell.content} />
                   )
-                })
-              : ''}
-          </div>
+                }
+                if (cell.type === 'code') {
+                  return <Code key={idx + 'cd'} source={cell.content} />
+                }
+              })}
+            </div>
+          ) : (
+            ''
+          )}
         </div>
-        {this.props.editor.cells ? (
-          <div className="split right">
-            <h1>{this.props.editor.title}</h1>
-            {this.props.editor.cells.map((cell, idx) => {
-              if (cell.type === 'markdown') {
-                return <ReactMarkdown key={idx + 'md'} source={cell.content} />
-              }
-              if (cell.type === 'code') {
-                return <Code key={idx + 'cd'} source={cell.content} />
-              }
-            })}
-          </div>
-        ) : (
-          ''
-        )}
-        <GeneralLinks />
+        <div>
+          <GeneralLinks />
+        </div>
       </div>
     )
   }
