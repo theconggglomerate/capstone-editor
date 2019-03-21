@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {selectNote} from './../store'
+import {selectNote, deleteAssociation} from './../store'
 import {Link} from 'react-router-dom'
-import {Button} from 'semantic-ui-react'
+import {Button, Grid, List} from 'semantic-ui-react'
 
 class GeneralLinks extends Component {
   constructor(props) {
@@ -11,6 +11,12 @@ class GeneralLinks extends Component {
   componentDidMount() {
     const noteId = this.props.noteId
     this.props.selectNote(noteId)
+  }
+
+  deleteAssociation(targetId) {
+    const noteId = this.props.noteId
+    console.log(noteId)
+    this.props.deleteAssociation(noteId, targetId)
   }
   render() {
     const {selectedNote} = this.props
@@ -21,19 +27,36 @@ class GeneralLinks extends Component {
 
     console.log('ASSOCIATIONS', associations)
     return (
-      <div>
-        <h3>Search Bar!</h3>
-        {associations.length
-          ? associations.map(link => (
-              <span>
-                <Link key={link.id} to={`/notes/${link.id}`}>
-                  {link.title}
-                </Link>
-                <br />
-              </span>
-            ))
-          : ''}
-      </div>
+      <Grid>
+        <Grid.Row columns="1">
+          <Grid.Column>
+            <h3>Associated Notes</h3>
+            <List>
+              {associations.length
+                ? associations.map(link => (
+                    <List.Item key={link.id}>
+                      {' '}
+                      <Link to={`/notes/${link.id}`}>{link.title}</Link>{' '}
+                      <Button.Group>
+                        <Button
+                          negative
+                          onClick={() => this.deleteAssociation(link.id)}
+                        >
+                          {' '}
+                          Delete association
+                        </Button>{' '}
+                        <Button.Or />{' '}
+                        <Button positive as="a" href={`/editor/${link.id}`}>
+                          Edit this note
+                        </Button>
+                      </Button.Group>
+                    </List.Item>
+                  ))
+                : ''}
+            </List>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }
@@ -45,6 +68,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   selectNote: noteId => {
     dispatch(selectNote(noteId))
+  },
+  deleteAssociation: (sourceId, targetId) => {
+    dispatch(deleteAssociation(sourceId, targetId))
   }
 })
 

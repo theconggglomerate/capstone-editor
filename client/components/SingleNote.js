@@ -8,6 +8,11 @@ class SingleNote extends Component {
   componentDidMount() {
     this.props.selectNote()
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
+      this.props.selectNote()
+    }
+  }
 
   render() {
     const {selectedNote} = this.props

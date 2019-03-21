@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import {runInNewContext} from 'vm'
 
 // Action Types
 const GET_NOTES = 'GET_NOTES'
@@ -31,6 +32,17 @@ export const selectNote = noteId => async dispatch => {
     dispatch(pickNote(note))
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const deleteAssociation = (sourceId, targetId) => async dispatch => {
+  try {
+    const note = await Axios.delete('/api/noteNotes/association', {
+      data: {sourceId, targetId}
+    })
+    dispatch(pickNote(note.data))
+  } catch (err) {
+    console.log(err)
   }
 }
 

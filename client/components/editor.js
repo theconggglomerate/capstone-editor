@@ -20,6 +20,7 @@ import {
   clearEditor
 } from './../store'
 import GeneralLinks from './GeneralLinks'
+import {Grid} from 'semantic-ui-react'
 
 export class Editor extends Component {
   constructor(props) {
@@ -97,22 +98,22 @@ export class Editor extends Component {
   render() {
     return (
       <div id="editorContainer">
-        <div>
-          <div className="split left">
-            <div>
-              <button onClick={this.newCode}>New Code Block</button>
-              <button onClick={this.newMarkdown}> New Markdown Block </button>
-              <button onClick={this.save}> Save Note</button>
-              <button onClick={this.new}> New Note</button>
-              <input
-                type="text"
-                onChange={this.handleTitle}
-                value={this.props.editor.title}
-                placeholder="Enter title here"
-              />
-            </div>
+        <Grid divided="vertically">
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <div>
+                <button onClick={this.newCode}>New Code Block</button>
+                <button onClick={this.newMarkdown}> New Markdown Block </button>
+                <button onClick={this.save}> Save Note</button>
+                <button onClick={this.new}> New Note</button>
+                <input
+                  type="text"
+                  onChange={this.handleTitle}
+                  value={this.props.editor.title}
+                  placeholder="Enter title here"
+                />
+              </div>
 
-            <div>
               {this.props.editor.cells
                 ? this.props.editor.cells.map((cell, idx) => {
                     return cell.type === 'code' ? (
@@ -128,6 +129,7 @@ export class Editor extends Component {
                           showPrintMargin={true}
                           showGutter={true}
                           highlightActiveLine={true}
+                          width="100%"
                           setOptions={{
                             enableBasicAutocompletion: true,
                             enableLiveAutocompletion: this.state
@@ -136,7 +138,8 @@ export class Editor extends Component {
                             showLineNumbers: true,
                             tabSize: 2,
                             maxLines: 100,
-                            minLines: 3
+                            minLines: 3,
+                            wrap: true
                           }}
                         />
                       </div>
@@ -153,6 +156,7 @@ export class Editor extends Component {
                           showPrintMargin={true}
                           showGutter={true}
                           highlightActiveLine={true}
+                          width="100%"
                           setOptions={{
                             enableBasicAutocompletion: true,
                             enableLiveAutocompletion: this.state
@@ -161,36 +165,37 @@ export class Editor extends Component {
                             showLineNumbers: true,
                             tabSize: 2,
                             maxLines: 100,
-                            minLines: 3
+                            minLines: 3,
+                            wrap: true
                           }}
                         />
                       </div>
                     )
                   })
                 : ''}
-            </div>
-          </div>
-          {this.props.editor.cells ? (
-            <div className="split right">
-              <h1>{this.props.editor.title}</h1>
-              {this.props.editor.cells.map((cell, idx) => {
-                if (cell.type === 'markdown') {
-                  return (
-                    <ReactMarkdown key={idx + 'md'} source={cell.content} />
-                  )
-                }
-                if (cell.type === 'code') {
-                  return <Code key={idx + 'cd'} source={cell.content} />
-                }
-              })}
-            </div>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          <GeneralLinks noteId={this.props.match.params.noteId} />
-        </div>
+            </Grid.Column>
+            <Grid.Column>
+              {this.props.editor.cells ? (
+                <div>
+                  <h1>{this.props.editor.title}</h1>
+                  {this.props.editor.cells.map((cell, idx) => {
+                    if (cell.type === 'markdown') {
+                      return (
+                        <ReactMarkdown key={idx + 'md'} source={cell.content} />
+                      )
+                    }
+                    if (cell.type === 'code') {
+                      return <Code key={idx + 'cd'} source={cell.content} />
+                    }
+                  })}
+                </div>
+              ) : (
+                ''
+              )}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <GeneralLinks noteId={this.props.match.params.noteId} />
       </div>
     )
   }
