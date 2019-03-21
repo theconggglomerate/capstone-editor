@@ -16,8 +16,8 @@ router.use(
 )
 
 router.use((req, res) => {
-  res.set('Allow', 'GET')
-  res.status(405).send("Method Not Allowed: Use 'GET'")
+  res.set('Allow', 'GET, POST')
+  res.status(405).send("Method Not Allowed: Use 'GET' or 'POST'")
 })
 
 module.exports = router
