@@ -8,6 +8,8 @@ import edgehandles from 'cytoscape-edgehandles'
 import {Button, Modal} from 'semantic-ui-react'
 import {SingleNote} from './index'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {deletePopup, deleteNote} from '../store'
 
 cytoscape.use(cxtmenu)
 cytoscape.use(cola)
@@ -37,6 +39,15 @@ export class Visual extends React.Component {
       cy.one('tap', 'node', event => this.toggleModal(event, cy))
     }
   }
+  deleteNote = cy => {
+    this.props.deleteNote(this.props.modal.deleteId)
+
+    cy.remove(`node[id="${this.props.modal.deleteId}"]`)
+  }
+
+  deletePopup = id => {
+    this.props.deletePopup(id)
+  }
 
   componentDidMount() {
     if (this.props.loadPage) {
@@ -54,7 +65,7 @@ export class Visual extends React.Component {
     this.setState({...this.state, renders})
   }
   render() {
-    const cyObj = this.cy
+    var cyObj
     if (this.props.elements.nodes) {
       console.log('elements', this.props.elements)
       return (
@@ -126,6 +137,7 @@ export class Visual extends React.Component {
               }
             ]}
             cy={cy => {
+              cyObj = cy
               this.cy = cy
               this.cyto = cy
               let render
@@ -153,6 +165,7 @@ export class Visual extends React.Component {
                 const webClick = this.props.webClick
                 const editClick = this.props.editClick
                 const addAssociation = this.addAssociation
+                const deletePopup = this.deletePopup
                 cy.cxtmenu({
                   selector: 'node, edge',
                   commands: [
@@ -173,10 +186,17 @@ export class Visual extends React.Component {
                       }
                     },
                     {
-                      content: 'Web',
+                      content: 'See Web',
                       select: function(ele) {
                         const id = ele.id()
                         webClick(id)
+                      }
+                    },
+                    {
+                      content: 'Delete',
+                      select: function(ele) {
+                        const id = ele.id()
+                        deletePopup(id)
                       }
                     }
                   ]
@@ -237,6 +257,7 @@ export class Visual extends React.Component {
                     }
                   })
                   .run()
+
                 // } else if (
                 //   cy &&
                 //   cy._private.emitter.listeners[33].event === 'free'
@@ -294,6 +315,11 @@ export class Visual extends React.Component {
             <Button onClick={this.closeModal}>Close Preview</Button>
             <SingleNote noteId={this.props.modal.id} />
           </Modal>
+          <Modal open={this.props.modal.warning}>
+            <h1>WARNING: Do you want to delete this note?</h1>
+            <Button onClick={this.closeModal}> Cancel </Button>
+            <Button onClick={() => this.deleteNote(cyObj)}> Delete </Button>
+          </Modal>
         </React.Fragment>
       )
     } else {
@@ -302,4 +328,13 @@ export class Visual extends React.Component {
   }
 }
 
-export default withRouter(Visual)
+const mapDispatchToProps = dispatch => ({
+  deletePopup: id => {
+    dispatch(deletePopup(id))
+  },
+  deleteNote: id => {
+    dispatch(deleteNote(id))
+  }
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(Visual))
