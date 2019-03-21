@@ -13,10 +13,7 @@ export const UserHome = props => {
   return (
     <div>
       <h3> Welcome, {email} </h3>
-      <ReactiveBase
-        app="notes"
-        url={process.env.BONSAI_URL || 'http://localhost:9200'}
-      >
+      <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
         <SearchBar />
       </ReactiveBase>
     </div>
