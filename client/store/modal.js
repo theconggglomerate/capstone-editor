@@ -4,6 +4,7 @@ import Axios from 'axios'
 
 const TURN_ON_MODAL = 'MODAL_ON'
 const TURN_OFF_MODAL = 'MODAL_OFF'
+const LOAD_PAGE = 'LOAD_PAGE'
 
 // Action Creators
 
@@ -13,6 +14,10 @@ export const getModal = id => ({
 })
 export const turnOffModal = () => ({
   type: TURN_OFF_MODAL
+})
+
+export const loadPage = () => ({
+  type: LOAD_PAGE
 })
 
 //THUNKS
@@ -26,14 +31,16 @@ export const turnOffModal = () => ({
 
 //Reducer
 
-const initialState = {modal: false, id: null}
+const initialState = {modal: false, id: null, loaded: false}
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case TURN_ON_MODAL:
-      return {modal: true, id: action.id}
+      return {...state, modal: true, id: action.id}
     case TURN_OFF_MODAL:
-      return {modal: false, id: null}
+      return {...state, modal: false, id: null, loaded: true}
+    case LOAD_PAGE:
+      return {...state, modal: false, loaded: false}
     default:
       return state
   }

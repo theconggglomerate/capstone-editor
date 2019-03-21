@@ -29,15 +29,20 @@ export class Visual extends React.Component {
     console.log('closing modal')
     this.props.closeModal()
   }
-  toggleModal = event => {
+  toggleModal = (event, cy) => {
     const id = event.target._private.data.id
     console.log('modal open', id)
     if (id.length < 10) this.props.getModal(id)
+    else {
+      cy.one('tap', 'node', event => this.toggleModal(event, cy))
+    }
   }
 
-  // componentDidMount() {
-  //   if (this.cy) this.cy.destroy()
-  // }
+  componentDidMount() {
+    if (this.props.loadPage) {
+      this.props.loadPage()
+    }
+  }
   // componentWillUnmount(){
   //   if(this.cy)     this.cy.destroy()
   // }
@@ -123,10 +128,28 @@ export class Visual extends React.Component {
             cy={cy => {
               this.cy = cy
               this.cyto = cy
-              console.log('this.cy at cy', this.cy)
-              console.log('listeners', cy._private.emitter.listeners[33])
-              if (cy && !cy._private.emitter.listeners[33]) {
-                console.log('done', cy._private.emitter.listeners[33])
+              let render
+              console.log('loaded?', this.props.modal.loaded)
+              if (cy && cy._private.emitter.listeners) {
+                render = cy._private.emitter.listeners.reduce(
+                  (accum, element) => {
+                    if (accum) return accum
+                    else if (
+                      element.event === 'click' &&
+                      element.callback.length === 1
+                    )
+                      return true
+                    else {
+                      return false
+                    }
+                  },
+                  false
+                )
+                console.log('render', render)
+              }
+
+              if (cy && !render && !this.props.modal.loaded) {
+                console.log('first render type', cy._private.emitter)
                 const webClick = this.props.webClick
                 const editClick = this.props.editClick
                 const addAssociation = this.addAssociation
@@ -159,7 +182,7 @@ export class Visual extends React.Component {
                   ]
                 })
 
-                cy.one('click', 'node', this.toggleModal)
+                cy.one('click', 'node', event => this.toggleModal(event, cy))
 
                 cy.nodes().style({
                   'font-size': function(node) {
@@ -214,12 +237,14 @@ export class Visual extends React.Component {
                     }
                   })
                   .run()
-              } else if (
-                cy &&
-                cy._private.emitter.listeners[33].event === 'free'
-              ) {
-                cy.one('click', 'node', this.toggleModal)
-              } else if (cy) {
+                // } else if (
+                //   cy &&
+                //   cy._private.emitter.listeners[33].event === 'free'
+                // ) {
+                //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
+                //
+              } else if (cy && render && !this.props.modal.loaded) {
+                console.log('second render type', cy._private.emitter.listeners)
                 cy
                   .layout({
                     name: 'cola',
@@ -259,6 +284,9 @@ export class Visual extends React.Component {
                   },
                   'text-valign': 'center'
                 })
+              } else if (cy && !render && this.props.modal.loaded) {
+                console.log('just adding the listener')
+                cy.one('click', 'node', event => this.toggleModal(event, cy))
               }
             }}
           />

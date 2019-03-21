@@ -3,7 +3,7 @@ import CytoscapeComponent from 'react-cytoscapejs'
 import Visual from './Visual'
 import {connect} from 'react-redux'
 import {fetchSingleWeb} from '../store/elements'
-import {getModal, turnOffModal} from '../store'
+import {getModal, turnOffModal, loadPage} from '../store'
 
 export class SingleWeb extends React.Component {
   constructor(props) {
@@ -56,6 +56,7 @@ export class SingleWeb extends React.Component {
             getModal={this.props.getModal}
             modal={this.props.modal}
             closeModal={this.props.closeModal}
+            loadPage={this.props.loadPage}
           />
         </React.Fragment>
       )
@@ -79,6 +80,9 @@ const mapDispatchToProps = dispatch => ({
   },
   closeModal: () => {
     dispatch(turnOffModal())
+  },
+  loadPage: () => {
+    dispatch(loadPage())
   }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(SingleWeb)
