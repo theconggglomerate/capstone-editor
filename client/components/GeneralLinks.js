@@ -25,9 +25,12 @@ class GeneralLinks extends Component {
         <h3>Search Bar!</h3>
         {associations.length
           ? associations.map(link => (
-              <Link key={link.id} to={`/notes/${link.id}`}>
-                {link.title}
-              </Link>
+              <span>
+                <Link key={link.id} to={`/notes/${link.id}`}>
+                  {link.title}
+                </Link>
+                <br />
+              </span>
             ))
           : ''}
       </div>
