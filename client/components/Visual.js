@@ -124,6 +124,7 @@ export class Visual extends React.Component {
               this.cy = cy
               this.cyto = cy
               console.log('this.cy at cy', this.cy)
+              console.log('listeners', cy._private.emitter.listeners[33])
               if (cy && !cy._private.emitter.listeners[33]) {
                 console.log('done', cy._private.emitter.listeners[33])
                 const webClick = this.props.webClick
@@ -158,7 +159,7 @@ export class Visual extends React.Component {
                   ]
                 })
 
-                cy.on('click', 'node', this.toggleModal)
+                cy.one('click', 'node', this.toggleModal)
 
                 cy.nodes().style({
                   'font-size': function(node) {
@@ -213,6 +214,11 @@ export class Visual extends React.Component {
                     }
                   })
                   .run()
+              } else if (
+                cy &&
+                cy._private.emitter.listeners[33].event === 'free'
+              ) {
+                cy.one('click', 'node', this.toggleModal)
               } else if (cy) {
                 cy
                   .layout({
