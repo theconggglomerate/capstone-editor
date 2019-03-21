@@ -5,18 +5,35 @@ module.exports = router
 router.get('/', async (req, res, next) => {
   try {
     const associations = await Notes.findAll({
-      include: [{model: Notes, as: 'source', attributes: ['id', 'title']}]
+      include: [
+        {
+          model: Notes,
+          as: 'source',
+          attributes: ['id', 'title']
+        }
+      ]
     })
     let edges = []
     const nodes = associations.map(note => {
       note.source.forEach(target => {
         edges.push({
-          data: {source: target.noteNotes.sourceId, target: target.id}
+          data: {
+            source: target.noteNotes.sourceId,
+            target: target.id
+          }
         })
       })
-      return {data: {id: note.id, label: note.title.slice(0, 10)}}
+      return {
+        data: {
+          id: note.id,
+          label: note.title.slice(0, 10)
+        }
+      }
     })
-    res.send({nodes, edges})
+    res.send({
+      nodes,
+      edges
+    })
   } catch (err) {
     next(err)
   }
@@ -26,20 +43,48 @@ router.get('/:id', async (req, res, next) => {
   try {
     const noteId = req.params.id
     const noteSource = await Notes.findOne({
-      where: {id: noteId},
-      include: [{model: Notes, as: 'source', attributes: ['id', 'title']}]
+      where: {
+        id: noteId
+      },
+      include: [
+        {
+          model: Notes,
+          as: 'source',
+          attributes: ['id', 'title']
+        }
+      ]
     })
     const noteTarget = await Notes.findOne({
-      where: {id: noteId},
-      include: [{model: Notes, as: 'target', attributes: ['id', 'title']}]
+      where: {
+        id: noteId
+      },
+      include: [
+        {
+          model: Notes,
+          as: 'target',
+          attributes: ['id', 'title']
+        }
+      ]
     })
     const sourceArr = noteSource.source.concat(noteTarget.target)
     noteSource.source = sourceArr
     const note = noteSource
 
-    let noteArray = [{data: {id: noteId, label: note.title.slice(0, 10)}}]
+    let noteArray = [
+      {
+        data: {
+          id: noteId,
+          label: note.title.slice(0, 10)
+        }
+      }
+    ]
     let edges = note.source.map(target => {
-      noteArray.push({data: {id: target.id, label: target.title.slice(0, 10)}})
+      noteArray.push({
+        data: {
+          id: target.id,
+          label: target.title.slice(0, 10)
+        }
+      })
       return {
         data: {
           source: target.noteNotes.sourceId,
@@ -47,7 +92,10 @@ router.get('/:id', async (req, res, next) => {
         }
       }
     })
-    const noteObject = {nodes: noteArray, edges}
+    const noteObject = {
+      nodes: noteArray,
+      edges
+    }
     res.send(noteObject)
   } catch (err) {
     next(err)
@@ -64,6 +112,14 @@ router.post('/newAssociation', async (req, res, next) => {
       targetId,
       type: 'general'
     })
+    const note = await Notes.findByPk(sourceId, {
+      include: [
+        {model: Notes, as: 'source', attributes: ['id', 'title']},
+        {model: Notes, as: 'target', attributes: ['id', 'title']}
+      ]
+    })
+
+    res.status(200).send(note)
   } catch (err) {
     next(err)
   }

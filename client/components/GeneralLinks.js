@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {selectNote, deleteAssociation} from './../store'
+import {selectNote, deleteAssociation, makeAssociation} from './../store'
 import {Link} from 'react-router-dom'
 import {Button, Grid, List} from 'semantic-ui-react'
+import AssocSearch from './AssocSearch'
+import {ReactiveBase} from '@appbaseio/reactivesearch'
 
 class GeneralLinks extends Component {
   constructor(props) {
@@ -11,6 +13,9 @@ class GeneralLinks extends Component {
   componentDidMount() {
     const noteId = this.props.noteId
     this.props.selectNote(noteId)
+  }
+  createAssociation = targetId => {
+    this.props.makeAssociation(this.props.noteId, targetId)
   }
 
   deleteAssociation(targetId) {
@@ -30,6 +35,13 @@ class GeneralLinks extends Component {
       <Grid>
         <Grid.Row columns="1">
           <Grid.Column>
+            <h3> Add Associations</h3>
+            <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
+              <AssocSearch
+                noteId={this.props.noteId}
+                makeAssociation={this.createAssociation}
+              />
+            </ReactiveBase>
             <h3>Associated Notes</h3>
             <List>
               {associations.length
@@ -71,6 +83,9 @@ const mapDispatchToProps = dispatch => ({
   },
   deleteAssociation: (sourceId, targetId) => {
     dispatch(deleteAssociation(sourceId, targetId))
+  },
+  makeAssociation: (sourceId, targetId) => {
+    dispatch(makeAssociation(sourceId, targetId))
   }
 })
 

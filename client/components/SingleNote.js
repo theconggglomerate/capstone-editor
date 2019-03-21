@@ -9,13 +9,20 @@ class SingleNote extends Component {
     this.props.selectNote()
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
-      this.props.selectNote()
+    if (this.props.match) {
+      if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
+        this.props.selectNote()
+      }
+    } else if (this.props.noteId) {
+      if (prevProps.noteId !== this.props.noteId) {
+        this.props.selectNote()
+      }
     }
   }
 
   render() {
     const {selectedNote} = this.props
+    const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
       <div>
         <h1>{selectedNote.title}</h1>
@@ -27,7 +34,7 @@ class SingleNote extends Component {
             return <Code key={idx} source={cell.content} />
           }
         })}
-        <GeneralLinks noteId={this.props.match.params.noteId} />
+        <GeneralLinks noteId={noteId} />
       </div>
     ) : (
       ''
@@ -41,7 +48,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   selectNote: () => {
-    const noteId = ownProps.match.params.noteId
+    const noteId = ownProps.noteId || ownProps.match.params.noteId
     dispatch(selectNote(noteId))
   }
 })
