@@ -5,6 +5,7 @@ class SearchBar extends Component {
   render() {
     return (
       <DataSearch
+        style={{width: '40%'}}
         componentId="q"
         dataField={['title', 'content.cells.content']}
         highlight={true}

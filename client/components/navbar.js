@@ -2,7 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {logout} from '../store'
+import {SearchBar} from './../components'
+import {withRouter} from 'react-router'
+import {logout} from '../store/user'
+import {ReactiveBase} from '@appbaseio/reactivesearch'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
@@ -10,10 +13,20 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
+          <Link to="/home">Account</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
+          <Link to="/visual">Visual</Link>
+          <Link to="/editor/new">New Note</Link>
+          <div className="search-container">
+            <ReactiveBase
+              app="notes"
+              url={process.env.BONSAI_URL || 'http://localhost:9200'}
+            >
+              <SearchBar />
+            </ReactiveBase>
+          </div>
         </div>
       ) : (
         <div>
@@ -43,7 +56,7 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withRouter(connect(mapState, mapDispatch)(Navbar))
 
 /**
  * PROP TYPES

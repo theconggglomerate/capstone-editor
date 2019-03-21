@@ -66,3 +66,9 @@ form div {
 .generalLinks {
   position: relative;
 }
+
+.search-container {
+  position: absolute;
+  right: 0;
+  top: 0.5em;
+}
