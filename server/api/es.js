@@ -7,7 +7,7 @@ router.use(
     target: process.env.BONSAI_URL || 'http://localhost:9200',
     changeOrigin: true,
     ws: true,
-    pathRewrite: {'^/api/es': ''}
+    pathRewrite: {'^/api/es': process.env.BONSAI_URL || 'http://localhost:9200'}
   })
 )
 
