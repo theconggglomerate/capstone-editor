@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {selectNote} from './../store'
 import ReactMarkdown from 'react-markdown'
 import {Code} from './../components/'
+import CodeDisplay from './CodeDisplay'
 import GeneralLinks from './GeneralLinks'
 class SingleNote extends Component {
   componentDidMount() {
@@ -31,7 +32,7 @@ class SingleNote extends Component {
             return <ReactMarkdown key={idx} source={cell.content} />
           }
           if (cell.type === 'code') {
-            return <Code key={idx} source={cell.content} />
+            return <CodeDisplay key={idx} source={cell.content} />
           }
         })}
         <GeneralLinks noteId={noteId} />
