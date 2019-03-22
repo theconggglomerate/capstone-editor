@@ -9,7 +9,7 @@ import {ReactiveBase} from '@appbaseio/reactivesearch'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <nav>
+    <nav className="nav">
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}

@@ -110,3 +110,8 @@ form div {
 .ace_content {
   width: 100%;
 }
+
+.nav,
+.visual {
+  background-color: #0f2027;
+}
