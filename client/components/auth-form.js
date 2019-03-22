@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {Form, Button} from 'semantic-ui-react'
 
 /**
  * COMPONENT
@@ -10,26 +11,35 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
+    <div style={{backgroundColor: '#0F2027', padding: '5em', height: '100vh'}}>
+      <Form onSubmit={handleSubmit} name={name}>
+        <Form.Field style={{margin: '0.5em'}}>
+          <div>
+            <label htmlFor="email" />
+            <input placeholder="email" required name="email" type="text" />
+          </div>
+        </Form.Field>
+
+        <Form.Field style={{margin: '0.5em'}}>
+          <div>
+            <label htmlFor="password" />
+            <input
+              placeholder="password"
+              required
+              name="password"
+              type="password"
+            />
+          </div>
+        </Form.Field>
+
+        <Form.Button type="submit" style={{margin: '1em'}}>
+          {displayName}
+        </Form.Button>
+        {error && error.response && <div>{error.response.data}</div>}
+      </Form>
+      <a href="/auth/google" style={{marginLeft: '1.5em'}}>
+        {displayName} with Google
+      </a>
     </div>
   )
 }
