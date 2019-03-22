@@ -4,6 +4,7 @@ import {runInNewContext} from 'vm'
 // Action Types
 const GET_NOTES = 'GET_NOTES'
 const SELECT_NOTE = 'SELECT_NOTES'
+const CLEAR_NOTE = 'CLEAR_NOTE'
 
 // Action Creators
 const getNotes = notes => ({
@@ -14,6 +15,10 @@ const getNotes = notes => ({
 const pickNote = note => ({
   type: SELECT_NOTE,
   note
+})
+
+export const clearNote = () => ({
+  type: CLEAR_NOTE
 })
 
 // Thunks
@@ -72,6 +77,10 @@ const dispatchers = {
   [SELECT_NOTE]: (state, action) => ({
     ...state,
     selectedNote: action.note
+  }),
+  [CLEAR_NOTE]: (state, action) => ({
+    ...state,
+    selectedNote: null
   })
 }
 

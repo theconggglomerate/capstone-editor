@@ -17,7 +17,8 @@ import {
   createProject,
   saveProject,
   editTitle,
-  clearEditor
+  clearEditor,
+  clearNote
 } from './../store'
 import GeneralLinks from './GeneralLinks'
 import {Grid} from 'semantic-ui-react'
@@ -40,8 +41,10 @@ export class Editor extends Component {
 
     if (noteId === 'new') {
       this.props.clearEditor()
+      this.props.clearNote()
     } else if (noteId) {
       this.props.getProject(noteId)
+      this.props.selectNote(noteId)
     }
   }
 
@@ -153,9 +156,9 @@ export class Editor extends Component {
                           key={idx + 'edmd'}
                           value={this.props.editor.cells[idx].content}
                           fontSize={this.state.fontSize}
-                          showPrintMargin={true}
-                          showGutter={true}
-                          highlightActiveLine={true}
+                          showPrintMargin={false}
+                          showGutter={false}
+                          highlightActiveLine={false}
                           width="100%"
                           setOptions={{
                             enableBasicAutocompletion: true,
@@ -235,6 +238,9 @@ const mapDispatchToProps = dispatch => {
     },
     clearEditor: () => {
       dispatch(clearEditor())
+    },
+    clearNote: () => {
+      dispatch(clearNote())
     }
   }
 }
