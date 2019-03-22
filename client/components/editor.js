@@ -87,7 +87,7 @@ export class Editor extends Component {
     }
   }
 
-  autosave = debounce(this.save, 400, {trailing: true})
+  autosave = debounce(this.save, 1000, {trailing: true})
 
   handleTitle = event => {
     event.preventDefault()
@@ -153,6 +153,7 @@ export class Editor extends Component {
                                 showGutter={true}
                                 highlightActiveLine={true}
                                 width="100%"
+                                editorProps={{$blockScrolling: Infinity}}
                                 setOptions={{
                                   enableBasicAutocompletion: true,
                                   enableLiveAutocompletion: this.state
@@ -180,7 +181,9 @@ export class Editor extends Component {
                                 showPrintMargin={false}
                                 showGutter={false}
                                 highlightActiveLine={false}
+                                highlightActiveWord={true}
                                 width="100%"
+                                editorProps={{$blockScrolling: Infinity}}
                                 setOptions={{
                                   enableBasicAutocompletion: true,
                                   enableLiveAutocompletion: this.state

@@ -39,6 +39,7 @@ class CodeDisplay extends Component {
           showPrintMargin={true}
           showGutter={true}
           highlightActiveLine={true}
+          editorProps={{$blockScrolling: Infinity}}
           width="100%"
           setOptions={{
             enableBasicAutocompletion: true,

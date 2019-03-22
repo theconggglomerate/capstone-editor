@@ -17,6 +17,7 @@ class Code extends Component {
     const lines = this.props.source.split(/\r\n|\r|\n/).length
     console.log('source', lines)
     const height = lines * 21 + 'px'
+    console.log('refs', this.refs.embed)
     this.setState({...this.state, loaded: true, height})
   }
   runCode = () => {
