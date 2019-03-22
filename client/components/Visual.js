@@ -410,8 +410,17 @@ export class Visual extends React.Component {
                 }
               }}
             />
-            <Modal open={this.props.modal.modal} closeOnDocumentClick={true}>
-              <Button onClick={this.closeModal}>Close Preview</Button>
+            <Modal
+              open={this.props.modal.modal}
+              closeOnDocumentClick={true}
+              style={{padding: '3em'}}
+            >
+              <div style={{textAlign: 'right'}}>
+                <Button color="red" onClick={this.closeModal}>
+                  Close Preview
+                </Button>
+              </div>
+
               <SingleNote noteId={this.props.modal.id} />
             </Modal>
             <Modal open={this.props.modal.warning}>

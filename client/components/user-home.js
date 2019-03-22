@@ -11,7 +11,14 @@ export const UserHome = props => {
   const {email} = props
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: '#0F2027',
+        height: '100vh',
+        color: '#4182C4',
+        padding: '5em'
+      }}
+    >
       <h3> Welcome, {email} </h3>
       <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
         <SearchBar />
