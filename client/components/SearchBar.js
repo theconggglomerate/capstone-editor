@@ -32,7 +32,7 @@ class SearchBar extends Component {
                 ? `: ${suggestion.highlight['content.cells.content']}`
                 : ''
             }`,
-            value: suggestion,
+            value: suggestion._source.title,
             source: suggestion._source
           }
         }}
