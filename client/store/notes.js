@@ -1,8 +1,10 @@
 import Axios from 'axios'
+import {runInNewContext} from 'vm'
 
 // Action Types
 const GET_NOTES = 'GET_NOTES'
 const SELECT_NOTE = 'SELECT_NOTES'
+const CLEAR_NOTE = 'CLEAR_NOTE'
 
 // Action Creators
 const getNotes = notes => ({
@@ -13,6 +15,10 @@ const getNotes = notes => ({
 const pickNote = note => ({
   type: SELECT_NOTE,
   note
+})
+
+export const clearNote = () => ({
+  type: CLEAR_NOTE
 })
 
 // Thunks
@@ -34,6 +40,29 @@ export const selectNote = noteId => async dispatch => {
   }
 }
 
+export const makeAssociation = (sourceId, targetId) => async dispatch => {
+  try {
+    const note = await Axios.post('/api/noteNotes/newAssociation', {
+      sourceId,
+      targetId
+    })
+    dispatch(pickNote(note.data))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deleteAssociation = (sourceId, targetId) => async dispatch => {
+  try {
+    const note = await Axios.delete('/api/noteNotes/association', {
+      data: {sourceId, targetId}
+    })
+    dispatch(pickNote(note.data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 // Reducer
 const initialState = {
   allNotes: [],
@@ -48,6 +77,10 @@ const dispatchers = {
   [SELECT_NOTE]: (state, action) => ({
     ...state,
     selectedNote: action.note
+  }),
+  [CLEAR_NOTE]: (state, action) => ({
+    ...state,
+    selectedNote: null
   })
 }
 

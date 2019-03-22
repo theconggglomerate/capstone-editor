@@ -57,3 +57,14 @@ router.put('/:noteId', async (req, res, next) => {
     next(err)
   }
 })
+
+router.delete('/:noteId', async (req, res, next) => {
+  try {
+    if (req.note) {
+      const note = await req.note.destroy()
+      res.sendStatus(200)
+    }
+  } catch (err) {
+    next(err)
+  }
+})

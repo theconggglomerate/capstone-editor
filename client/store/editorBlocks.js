@@ -47,7 +47,6 @@ export const createProject = (title, content, history) => {
   return async function(dispatch) {
     const note = {title, content: {cells: content}}
     const id = await Axios.post('/api/notes/', note)
-    console.log(id.data.id)
     if (history) {
       history.push(`/editor/${id.data.id}`)
     }
@@ -57,7 +56,6 @@ export const createProject = (title, content, history) => {
 export const getProject = id => {
   return async function(dispatch) {
     const note = await Axios.get(`/api/notes/${id}`)
-    console.log(note.data)
     dispatch(setEditor(note.data.content.cells, note.data.title, note.data.id))
   }
 }

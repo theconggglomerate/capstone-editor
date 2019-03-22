@@ -9,12 +9,14 @@ import {persistStore, persistReducer} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import elements from './elements'
+import modal from './modal'
 
 const reducer = combineReducers({
   notes,
   user,
   editor,
-  elements
+  elements,
+  modal
 })
 
 const middleware = composeWithDevTools(
@@ -42,3 +44,4 @@ export default store
 export * from './user'
 export * from './notes'
 export * from './editorBlocks'
+export * from './modal'

@@ -102,16 +102,64 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/newAssociation', (req, res, next) => {
+router.post('/newAssociation', async (req, res, next) => {
   try {
     const sourceId = req.body.sourceId
     const targetId = req.body.targetId
 
-    noteNotes.create({
+    await noteNotes.create({
       sourceId,
       targetId,
       type: 'general'
     })
+    const note = await Notes.findByPk(sourceId, {
+      include: [
+        {model: Notes, as: 'source', attributes: ['id', 'title']},
+        {model: Notes, as: 'target', attributes: ['id', 'title']}
+      ]
+    })
+
+    res.status(200).send(note)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.delete('/association', async (req, res, next) => {
+  try {
+    const sourceId = parseInt(req.body.sourceId, 10)
+    const targetId = parseInt(req.body.targetId, 10)
+    console.log(req.body)
+    console.log('sourceId:', sourceId)
+    console.log('targetId:', targetId)
+    const note = await Notes.findByPk(sourceId, {
+      include: [
+        {model: Notes, as: 'source', attributes: ['id', 'title']},
+        {model: Notes, as: 'target', attributes: ['id', 'title']}
+      ]
+    })
+
+    const assocTry1 = await noteNotes.findOne({
+      where: {sourceId: sourceId, targetId: targetId}
+    })
+    const assocTry2 = await noteNotes.findOne({
+      where: {sourceId: targetId, targetId: sourceId}
+    })
+
+    const success = assocTry1 || assocTry2
+    if (success) {
+      await note.removeSource(targetId)
+      await note.removeTarget(targetId)
+      const updated = await Notes.findByPk(sourceId, {
+        include: [
+          {model: Notes, as: 'source', attributes: ['id', 'title']},
+          {model: Notes, as: 'target', attributes: ['id', 'title']}
+        ]
+      })
+      res.send(updated)
+    } else {
+      res.sendStatus(500)
+    }
   } catch (err) {
     next(err)
   }

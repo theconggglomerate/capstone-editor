@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import {DataSearch} from '@appbaseio/reactivesearch'
-class SearchBar extends Component {
+class AssocSearch extends Component {
   render() {
     return (
       <DataSearch
@@ -38,13 +38,13 @@ class SearchBar extends Component {
         }}
         onValueSelected={(value, cause, source) => {
           if (cause === 'SUGGESTION_SELECT')
-            this.props.history.push(`/notes/${source.id}`)
-          if (cause === 'ENTER_PRESS')
-            this.props.history.push(`/search?q="${value}"`)
+            this.props.makeAssociation(source.id)
+          //   if (cause === 'ENTER_PRESS')
+          //     return;
         }}
       />
     )
   }
 }
 
-export default withRouter(SearchBar)
+export default AssocSearch
