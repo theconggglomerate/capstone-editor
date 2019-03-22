@@ -12,7 +12,9 @@ class GeneralLinks extends Component {
   }
   componentDidMount() {
     const noteId = this.props.noteId
-    this.props.selectNote(noteId)
+    if (noteId !== 'new') {
+      this.props.selectNote(noteId)
+    }
   }
   createAssociation = targetId => {
     this.props.makeAssociation(this.props.noteId, targetId)

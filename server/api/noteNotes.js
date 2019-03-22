@@ -106,7 +106,17 @@ router.post('/newAssociation', async (req, res, next) => {
   try {
     const sourceId = req.body.sourceId
     const targetId = req.body.targetId
+    const assocTry1 = await noteNotes.findOne({
+      where: {sourceId: sourceId, targetId: targetId}
+    })
+    const assocTry2 = await noteNotes.findOne({
+      where: {sourceId: targetId, targetId: sourceId}
+    })
 
+    const success = assocTry1 || assocTry2
+    if (success) {
+      res.status(409).send('Association already exists')
+    }
     await noteNotes.create({
       sourceId,
       targetId,

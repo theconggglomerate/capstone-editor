@@ -7,6 +7,7 @@ import 'brace/mode/markdown'
 import 'brace/snippets/markdown'
 import ReactMarkdown from 'react-markdown'
 import {Code} from './../components/'
+import CodeDisplay from './CodeDisplay'
 import {connect} from 'react-redux'
 import {
   selectNote,
@@ -43,6 +44,7 @@ export class Editor extends Component {
     if (noteId === 'new') {
       this.props.clearEditor()
       this.props.clearNote()
+      this.props.history.push('/editor')
     } else if (noteId) {
       this.props.getProject(noteId)
       this.props.selectNote(noteId)
@@ -206,7 +208,10 @@ export class Editor extends Component {
                           }
                           if (cell.type === 'code') {
                             return (
-                              <Code key={idx + 'cd'} source={cell.content} />
+                              <CodeDisplay
+                                key={idx + 'cd'}
+                                source={cell.content}
+                              />
                             )
                           }
                         })}
