@@ -86,6 +86,9 @@ export class Editor extends Component {
       )
     }
   }
+
+  autosave = debounce(this.save, 400, {trailing: true})
+
   handleTitle = event => {
     event.preventDefault()
     const title = event.target.value
@@ -95,6 +98,7 @@ export class Editor extends Component {
   handleChange = debounce(
     (newValue, idx) => {
       this.props.editBlock(newValue, idx)
+      this.autosave()
     },
     100,
     {trailing: true}
