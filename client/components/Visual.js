@@ -292,16 +292,11 @@ export class Visual extends React.Component {
                   cy.edgehandles({
                     snap: true,
                     complete: function(sourceNode, targetNode, addedEles) {
-                      //send id
-                      console.log('sourceNode', sourceNode._private.data.id)
-                      console.log('targetNode', targetNode._private.data.id)
                       const sourceNodeId = sourceNode._private.data.id
                       const targetNodeId = targetNode._private.data.id
                       addAssociation(sourceNodeId, targetNodeId)
                     }
                   })
-
-                  console.log('this.cy', cy)
 
                   cy
                     .layout({
@@ -321,6 +316,39 @@ export class Visual extends React.Component {
                       }
                     })
                     .run()
+
+                  cy.on('mouseover', 'node', function(event) {
+                    const id = event.target._private.data.id
+                    const node = cy.getElementById(`${id}`)
+
+                    node.style({
+                      'font-size': () => {
+                        const size = 5 * (1 / cy.zoom())
+                        return `${size}em`
+                      },
+                      'z-index': 2,
+                      color: 'white'
+                    })
+                  })
+
+                  cy.on('mouseout', 'node', function(event) {
+                    const id = event.target._private.data.id
+                    const node = cy.getElementById(`${id}`)
+                    node.style({
+                      'font-size': function() {
+                        if (node._private.edges.length === 0) return 40
+                        else {
+                          return 20 * node._private.edges.length
+                        }
+                      },
+                      color: function() {
+                        if (node._private.edges.length < 3) return '#4286f4'
+                        else {
+                          return 'white'
+                        }
+                      }
+                    })
+                  })
 
                   // } else if (
                   //   cy &&
