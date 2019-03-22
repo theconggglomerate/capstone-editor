@@ -22,6 +22,7 @@ import {
 } from './../store'
 import GeneralLinks from './GeneralLinks'
 import {Grid} from 'semantic-ui-react'
+import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 
 export class Editor extends Component {
   constructor(props) {
@@ -100,106 +101,127 @@ export class Editor extends Component {
 
   render() {
     return (
-      <div id="editorContainer">
-        <Grid divided="vertically">
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <div>
-                <button onClick={this.newCode}>New Code Block</button>
-                <button onClick={this.newMarkdown}> New Markdown Block </button>
-                <button onClick={this.save}> Save Note</button>
-                <button onClick={this.new}> New Note</button>
-                <input
-                  type="text"
-                  onChange={this.handleTitle}
-                  value={this.props.editor.title}
-                  placeholder="Enter title here"
-                />
-              </div>
-
-              {this.props.editor.cells
-                ? this.props.editor.cells.map((cell, idx) => {
-                    return cell.type === 'code' ? (
-                      <div className="code">
-                        <AceEditor
-                          mode="javascript"
-                          theme={this.state.theme}
-                          name="CodeEditor"
-                          onChange={value => this.handleChange(value, idx)}
-                          key={idx + 'edcd'}
-                          value={this.props.editor.cells[idx].content}
-                          fontSize={this.state.fontSize}
-                          showPrintMargin={true}
-                          showGutter={true}
-                          highlightActiveLine={true}
-                          width="100%"
-                          setOptions={{
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: this.state
-                              .enableLiveAutocompletion,
-                            enableSnippets: true,
-                            showLineNumbers: true,
-                            tabSize: 2,
-                            maxLines: 100,
-                            minLines: 3,
-                            wrap: true
-                          }}
-                        />
+      <ScrollSync>
+        <div id="editorContainer">
+          <Grid divided="vertically">
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <div>
+                  <button onClick={this.newCode}>New Code Block</button>
+                  <button onClick={this.newMarkdown}>
+                    {' '}
+                    New Markdown Block{' '}
+                  </button>
+                  <button onClick={this.save}> Save Note</button>
+                  <button onClick={this.new}> New Note</button>
+                  <input
+                    type="text"
+                    onChange={this.handleTitle}
+                    value={this.props.editor.title}
+                    placeholder="Enter title here"
+                  />
+                </div>
+                <ScrollSyncPane>
+                  <div className="scrollable">
+                    {this.props.editor.cells
+                      ? this.props.editor.cells.map((cell, idx) => {
+                          return cell.type === 'code' ? (
+                            <div className="code">
+                              <AceEditor
+                                mode="javascript"
+                                theme={this.state.theme}
+                                name="CodeEditor"
+                                onChange={value =>
+                                  this.handleChange(value, idx)
+                                }
+                                key={idx + 'edcd'}
+                                value={this.props.editor.cells[idx].content}
+                                fontSize={this.state.fontSize}
+                                showPrintMargin={true}
+                                showGutter={true}
+                                highlightActiveLine={true}
+                                width="100%"
+                                setOptions={{
+                                  enableBasicAutocompletion: true,
+                                  enableLiveAutocompletion: this.state
+                                    .enableLiveAutocompletion,
+                                  enableSnippets: true,
+                                  showLineNumbers: true,
+                                  tabSize: 2,
+                                  maxLines: 100,
+                                  minLines: 3,
+                                  wrap: true
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div className="markdown">
+                              <AceEditor
+                                mode="markdown"
+                                theme="tomorrow"
+                                name="MarkdownEditor"
+                                onChange={value =>
+                                  this.handleChange(value, idx)
+                                }
+                                key={idx + 'edmd'}
+                                value={this.props.editor.cells[idx].content}
+                                fontSize={this.state.fontSize}
+                                showPrintMargin={false}
+                                showGutter={false}
+                                highlightActiveLine={false}
+                                width="100%"
+                                setOptions={{
+                                  enableBasicAutocompletion: true,
+                                  enableLiveAutocompletion: this.state
+                                    .enableLiveAutocompletion,
+                                  enableSnippets: true,
+                                  showLineNumbers: true,
+                                  tabSize: 2,
+                                  maxLines: 100,
+                                  minLines: 3,
+                                  wrap: true
+                                }}
+                              />
+                            </div>
+                          )
+                        })
+                      : ''}
+                  </div>
+                </ScrollSyncPane>
+              </Grid.Column>
+              <Grid.Column>
+                <ScrollSyncPane>
+                  <div className="scrollable">
+                    {this.props.editor.cells ? (
+                      <div>
+                        <h1>{this.props.editor.title}</h1>
+                        {this.props.editor.cells.map((cell, idx) => {
+                          if (cell.type === 'markdown') {
+                            return (
+                              <ReactMarkdown
+                                key={idx + 'md'}
+                                source={cell.content}
+                              />
+                            )
+                          }
+                          if (cell.type === 'code') {
+                            return (
+                              <Code key={idx + 'cd'} source={cell.content} />
+                            )
+                          }
+                        })}
                       </div>
                     ) : (
-                      <div className="markdown">
-                        <AceEditor
-                          mode="markdown"
-                          theme="tomorrow"
-                          name="MarkdownEditor"
-                          onChange={value => this.handleChange(value, idx)}
-                          key={idx + 'edmd'}
-                          value={this.props.editor.cells[idx].content}
-                          fontSize={this.state.fontSize}
-                          showPrintMargin={false}
-                          showGutter={false}
-                          highlightActiveLine={false}
-                          width="100%"
-                          setOptions={{
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: this.state
-                              .enableLiveAutocompletion,
-                            enableSnippets: true,
-                            showLineNumbers: true,
-                            tabSize: 2,
-                            maxLines: 100,
-                            minLines: 3,
-                            wrap: true
-                          }}
-                        />
-                      </div>
-                    )
-                  })
-                : ''}
-            </Grid.Column>
-            <Grid.Column>
-              {this.props.editor.cells ? (
-                <div>
-                  <h1>{this.props.editor.title}</h1>
-                  {this.props.editor.cells.map((cell, idx) => {
-                    if (cell.type === 'markdown') {
-                      return (
-                        <ReactMarkdown key={idx + 'md'} source={cell.content} />
-                      )
-                    }
-                    if (cell.type === 'code') {
-                      return <Code key={idx + 'cd'} source={cell.content} />
-                    }
-                  })}
-                </div>
-              ) : (
-                ''
-              )}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <GeneralLinks noteId={this.props.match.params.noteId} />
-      </div>
+                      ''
+                    )}
+                  </div>
+                </ScrollSyncPane>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <GeneralLinks noteId={this.props.match.params.noteId} />
+        </div>
+      </ScrollSync>
     )
   }
 }
