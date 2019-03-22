@@ -25,6 +25,8 @@ import GeneralLinks from './GeneralLinks'
 import {Grid} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 
+import debounce from 'lodash.debounce'
+
 export class Editor extends Component {
   constructor(props) {
     super(props)
@@ -89,9 +91,14 @@ export class Editor extends Component {
     const title = event.target.value
     this.props.editTitle(title)
   }
-  handleChange = (newValue, idx) => {
-    this.props.editBlock(newValue, idx)
-  }
+
+  handleChange = debounce(
+    (newValue, idx) => {
+      this.props.editBlock(newValue, idx)
+    },
+    100,
+    {trailing: true}
+  )
 
   newCode = () => {
     this.props.makeNewCodeBlock()
