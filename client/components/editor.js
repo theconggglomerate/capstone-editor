@@ -128,7 +128,7 @@ export class Editor extends Component {
                     {this.props.editor.cells
                       ? this.props.editor.cells.map((cell, idx) => {
                           return cell.type === 'code' ? (
-                            <div className="code">
+                            <div className="code" key={idx + 'edcd'}>
                               <AceEditor
                                 mode="javascript"
                                 theme={this.state.theme}
@@ -136,7 +136,6 @@ export class Editor extends Component {
                                 onChange={value =>
                                   this.handleChange(value, idx)
                                 }
-                                key={idx + 'edcd'}
                                 value={this.props.editor.cells[idx].content}
                                 fontSize={this.state.fontSize}
                                 showPrintMargin={true}
@@ -157,7 +156,7 @@ export class Editor extends Component {
                               />
                             </div>
                           ) : (
-                            <div className="markdown">
+                            <div className="markdown" key={idx + 'edmd'}>
                               <AceEditor
                                 mode="markdown"
                                 theme="tomorrow"
@@ -165,7 +164,6 @@ export class Editor extends Component {
                                 onChange={value =>
                                   this.handleChange(value, idx)
                                 }
-                                key={idx + 'edmd'}
                                 value={this.props.editor.cells[idx].content}
                                 fontSize={this.state.fontSize}
                                 showPrintMargin={false}
@@ -210,6 +208,7 @@ export class Editor extends Component {
                             return (
                               <CodeDisplay
                                 key={idx + 'cd'}
+                                keyr={idx + 'cde'}
                                 source={cell.content}
                               />
                             )

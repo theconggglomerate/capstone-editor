@@ -58,6 +58,32 @@ form div {
   border-radius: 50%;
 }
 
+.runkit {
+  width: 90%;
+  overflow-y: hidden;
+  pointer-events: none;
+}
+
+.overlayInit {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+
+  z-index: 0;
+}
+.overlayRan {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  padding-bottom: 30px;
+  height: calc(100% - 98px);
+  z-index: 0;
+}
+
+.loading {
+  width: 95%;
+}
+
 .markdown,
 .code {
   margin: 1em;
@@ -68,6 +94,7 @@ form div {
 .scrollable {
   overflow-y: auto;
   max-height: 60vh;
+  max-width: 45vw;
 }
 
 .generalLinks {

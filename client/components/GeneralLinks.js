@@ -12,7 +12,7 @@ class GeneralLinks extends Component {
   }
   componentDidMount() {
     const noteId = this.props.noteId
-    if (noteId !== 'new') {
+    if (noteId && noteId !== 'new') {
       this.props.selectNote(noteId)
     }
   }
@@ -27,11 +27,12 @@ class GeneralLinks extends Component {
   }
   render() {
     const {selectedNote} = this.props
+    const noteId = this.props.noteId
     let associations = []
     if (selectedNote && selectedNote.id) {
       associations = selectedNote.source.concat(selectedNote.target)
     }
-    if (selectedNote) {
+    if (noteId && selectedNote) {
       console.log('ASSOCIATIONS', associations)
       return (
         <Grid>

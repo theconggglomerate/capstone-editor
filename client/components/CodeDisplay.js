@@ -10,12 +10,18 @@ class CodeDisplay extends Component {
     this.state = {
       runkit: false,
       theme: 'monokai',
-      fontSize: 14
+      fontSize: 14,
+      result: null
     }
   }
 
   toggleRunkitStatus = () => {
     this.setState({runkit: !this.state.runkit})
+  }
+
+  runCode = () => {
+    const result = eval(this.props.source)
+    this.setState({...this.state, result})
   }
 
   render() {
@@ -27,7 +33,7 @@ class CodeDisplay extends Component {
           theme={this.state.theme}
           name="CodeEditor"
           onChange={value => this.handleChange(value, idx)}
-          key={this.props.key}
+          key={this.props.keyr}
           value={this.props.source}
           fontSize={this.state.fontSize}
           showPrintMargin={true}
@@ -46,7 +52,8 @@ class CodeDisplay extends Component {
             readOnly: true
           }}
         />
-        <Button onClick={this.toggleRunkitStatus}> Make Runnable</Button>
+        <Button onClick={this.toggleRunkitStatus}>Make Runnable</Button>
+        {this.state.result ? <h3>{this.state.result}</h3> : ''}
       </>
     ) : (
       <Code key={this.props.key} source={this.props.source} />
