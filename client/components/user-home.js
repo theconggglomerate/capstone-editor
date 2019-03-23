@@ -7,9 +7,7 @@ import {ReactiveBase} from '@appbaseio/reactivesearch'
 /**
  * COMPONENT
  */
-export const UserHome = props => {
-  const {email} = props
-
+export const UserHome = () => {
   return (
     <div
       style={{
@@ -19,7 +17,6 @@ export const UserHome = props => {
         padding: '5em'
       }}
     >
-      <h3> Welcome, {email} </h3>
       <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
         <SearchBar />
       </ReactiveBase>

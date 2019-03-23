@@ -7,37 +7,51 @@ import {withRouter} from 'react-router'
 import {logout} from '../store/user'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <nav className="nav">
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Account</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/visual">Visual</Link>
-          <Link to="/editor/new">New Note</Link>
-          <div className="search-container">
-            <ReactiveBase
-              app="notes"
-              url={process.env.BONSAI_URL || 'http://localhost:9200'}
-            >
-              <SearchBar />
-            </ReactiveBase>
+const Navbar = ({handleClick, isLoggedIn}) => {
+  const url = window.location.pathname
+  return (
+    <div className="nav">
+      <nav>
+        {isLoggedIn ? (
+          <div>
+            {/* The navbar will show these links after you log in */}
+            <a className="buttonMarg" href="#" onClick={handleClick}>
+              Logout
+            </a>
+
+            <Link className="buttonMarg" to="/visual">
+              Visual
+            </Link>
+            <Link className="buttonMarg" to="/editor/new">
+              New Note
+            </Link>
+            {/* <Link className="buttonMarg" to="/home">
+            Search
+          </Link> */}
+            {url !== '/search' ? (
+              <div className="search-container">
+                <ReactiveBase
+                  app="notes"
+                  url={process.env.BONSAI_URL || 'http://localhost:9200'}
+                >
+                  <SearchBar />
+                </ReactiveBase>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-  </div>
-)
+        ) : (
+          <div>
+            {/* The navbar will show these links before you log in */}
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </div>
+        )}
+      </nav>
+    </div>
+  )
+}
 
 /**
  * CONTAINER
