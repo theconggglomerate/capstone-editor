@@ -51,25 +51,31 @@ class GeneralLinks extends Component {
               <h3>Associated Notes</h3>
               <List>
                 {associations.length
-                  ? associations.map(link => (
-                      <List.Item key={link.id}>
-                        {' '}
-                        <Link to={`/notes/${link.id}`}>{link.title}</Link>{' '}
-                        <Button.Group>
-                          <Button
-                            negative
-                            onClick={() => this.deleteAssociation(link.id)}
-                          >
-                            {' '}
-                            Delete association
-                          </Button>{' '}
-                          <Button.Or />{' '}
-                          <Button positive as="a" href={`/editor/${link.id}`}>
-                            Edit this note
-                          </Button>
-                        </Button.Group>
-                      </List.Item>
-                    ))
+                  ? associations.map(link => {
+                      if (link.noteNotes.type === 'general') {
+                        return (
+                          <List.Item key={link.id}>
+                            <Link to={`/notes/${link.id}`}>{link.title}</Link>
+                            <Button.Group>
+                              <Button
+                                negative
+                                onClick={() => this.deleteAssociation(link.id)}
+                              >
+                                Delete association
+                              </Button>
+                              <Button.Or />
+                              <Button
+                                positive
+                                as="a"
+                                href={`/editor/${link.id}`}
+                              >
+                                Edit this note
+                              </Button>
+                            </Button.Group>
+                          </List.Item>
+                        )
+                      }
+                    })
                   : ''}
               </List>
             </Grid.Column>
