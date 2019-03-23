@@ -13,7 +13,20 @@ const Notes = db.define('notes', {
   }
 })
 
-const indexForES = async instances => {
+// Elastic Search Operations
+const singleIndexForES = async instance => {
+  try {
+    const body = instance.dataValues
+    await es.index({
+      index: 'notes',
+      body
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const bulkIndexForES = async instances => {
   try {
     const indexArr = []
     instances.forEach(instance => {
@@ -35,38 +48,51 @@ const indexForES = async instances => {
   }
 }
 
-const parseAndUpdateRefs = instances => {
-  instances.forEach(instance => {
-    const findNoteURLs = new RegExp(`${process.env.HOST_URL}/notes\/\\d+`)
-    const replaceURLsWithIds = new RegExp(/.*\/notes\/(\d+).*/)
+// Association Parsing Operations
+const parseAndUpdateRefs = instance => {
+  const findNoteURLs = new RegExp(`${process.env.HOST_URL}/notes\/\\d+`)
+  const replaceURLsWithIds = new RegExp(/.*\/notes\/(\d+).*/)
 
-    const noteIds = new Set(
-      instance.dataValues.content.cells
-        .filter(cell => cell.type === 'markdown')
-        .map(cell => parseMarkdown(cell.content))
-        .flat()
-        .filter(el => findNoteURLs.test(el))
-        .map(el => parseInt(el.replace(replaceURLsWithIds, '$1'), 10))
-    )
+  const noteIds = new Set(
+    instance.dataValues.content.cells
+      .filter(cell => cell.type === 'markdown')
+      .map(cell => parseMarkdown(cell.content))
+      .flat()
+      .filter(el => findNoteURLs.test(el))
+      .map(el => parseInt(el.replace(replaceURLsWithIds, '$1'), 10))
+  )
 
-    if (noteIds.size)
-      noteIds.forEach(async el => {
-        try {
-          await noteNotes.create({
-            sourceId: instance.dataValues.id,
-            targetId: el,
-            type: 'inline'
-          })
-        } catch (error) {
-          console.log(error)
-        }
-      })
-  })
+  if (noteIds.size)
+    noteIds.forEach(async el => {
+      try {
+        await noteNotes.create({
+          sourceId: instance.dataValues.id,
+          targetId: el,
+          type: 'inline'
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    })
 }
 
-Notes.afterBulkCreate(instances => {
-  parseAndUpdateRefs(instances)
-  indexForES(instances)
+// Creation Hooks
+Notes.afterCreate(instance => {
+  singleIndexForES(instance)
+  parseAndUpdateRefs(instance)
 })
+
+Notes.afterBulkCreate(instances => {
+  bulkIndexForES(instances)
+  instances.forEach(instance => {
+    parseAndUpdateRefs(instance)
+  })
+})
+
+// Update Hooks
+// Notes.afterUpdate();
+
+// Delete Hooks
+// Notes.afterDelete();
 
 module.exports = Notes
