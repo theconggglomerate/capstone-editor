@@ -48,6 +48,35 @@ const bulkIndexForES = async instances => {
   }
 }
 
+const updateForES = async instance => {
+  try {
+    const dbId = instance.dataValues.id
+    const esResult = await es.search({
+      index: 'notes',
+      body: {
+        query: {
+          term: {
+            id: dbId
+          }
+        }
+      }
+    })
+
+    const esId = esResult.body.hits.hits[0]._id
+    const sourceIdFromES = esResult.body.hits.hits[0]._source.id
+
+    if (dbId === sourceIdFromES) {
+      await es.index({
+        index: 'notes',
+        id: esId,
+        body: instance.dataValues
+      })
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // Association Parsing Operations
 
 const extractNoteIds = (cells, sourceId) => {
@@ -132,6 +161,7 @@ Notes.afterBulkCreate(instances => {
 // Update Hooks
 Notes.afterUpdate(instance => {
   parseAndUpdateRefsAfterUpdate(instance)
+  updateForES(instance)
 })
 
 // Delete Hooks
