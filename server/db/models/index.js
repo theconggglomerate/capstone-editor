@@ -5,12 +5,18 @@ const noteNotes = require('./noteNote')
 Notes.belongsToMany(Notes, {
   as: 'source',
   foreignKey: 'sourceId',
-  through: noteNotes
+  through: {
+    model: noteNotes,
+    unique: false
+  }
 })
 Notes.belongsToMany(Notes, {
   as: 'target',
   foreignKey: 'targetId',
-  through: noteNotes
+  through: {
+    model: noteNotes,
+    unique: false
+  }
 })
 
 Notes.belongsTo(User)
