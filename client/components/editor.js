@@ -97,6 +97,7 @@ export class Editor extends Component {
     event.preventDefault()
     const title = event.target.value
     this.props.editTitle(title)
+    this.autosave()
   }
 
   handleChange = debounce(
@@ -145,6 +146,22 @@ export class Editor extends Component {
                         {' '}
                         Create a New Note
                       </Button>
+                      {this.props.match.params.noteId ? (
+                        <Button
+                          style={{marginBottom: '2em'}}
+                          inverted={true}
+                          onClick={() => {
+                            const id = this.props.match.params.noteId
+
+                            this.props.history.push(`/notes/${id}`)
+                          }}
+                        >
+                          {' '}
+                          Set to Render View
+                        </Button>
+                      ) : (
+                        ''
+                      )}
                     </div>
                     <ScrollSyncPane>
                       <div className="scrollable">
@@ -212,8 +229,9 @@ export class Editor extends Component {
                               )
                             })
                           : ''}
-                        <div style={{margin: '2em 2em 8em 2em'}}>
+                        <div style={{margin: '3em 2em 8em 2em'}}>
                           <Button
+                            style={{marginRight: '1em'}}
                             className="button"
                             inverted={true}
                             onClick={this.newCode}
@@ -221,6 +239,7 @@ export class Editor extends Component {
                             New Code Block
                           </Button>
                           <Button
+                            style={{marginRight: '1em'}}
                             className="button"
                             inverted={true}
                             onClick={this.newMarkdown}
@@ -230,6 +249,7 @@ export class Editor extends Component {
                           </Button>
 
                           <GeneralLinks
+                            style={{marginRight: '1em'}}
                             noteId={this.props.match.params.noteId}
                           />
                         </div>

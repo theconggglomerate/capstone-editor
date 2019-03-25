@@ -55,8 +55,9 @@ class CodeDisplay extends Component {
           }}
         />
         <Button
-          style={{margin: '2em', alignSelf: 'right'}}
+          style={{margin: '1em 1em 1em 80%'}}
           onClick={this.toggleRunkitStatus}
+          inverted={true}
         >
           Make Runnable
         </Button>
