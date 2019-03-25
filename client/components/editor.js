@@ -120,51 +120,51 @@ export class Editor extends Component {
   render() {
     return (
       <div className="editorcontainer">
-        <Input
-          style={{margin: '1em 1em 1em 27em', height: '3em', width: '27em'}}
-          type="text"
-          onChange={this.handleTitle}
-          value={this.props.editor.title}
-          placeholder="Enter a title..."
-        />
         <ScrollSync>
           <div style={{paddingLeft: '3em'}}>
             <ScrollLock>
-              <Grid divided="vertically">
-                <Grid.Row columns={2}>
-                  <Grid.Column>
-                    <div>
-                      {/* <Button inverted={true} color="white" onClick={this.save}>
+              <div style={{padding: '1.5em', marginRight: '1em'}}>
+                {' '}
+                {/* <Button inverted={true} color="white" onClick={this.save}>
                       {' '}
                       Save Note
                     </Button> */}
-                      <Button
-                        style={{marginBottom: '2em'}}
-                        inverted={true}
-                        onClick={this.new}
-                      >
-                        {' '}
-                        Create a New Note
-                      </Button>
-                      {this.props.match.params.noteId ? (
-                        <Button
-                          style={{marginBottom: '2em'}}
-                          inverted={true}
-                          onClick={() => {
-                            const id = this.props.match.params.noteId
+                <Button inverted={true} onClick={this.new}>
+                  {' '}
+                  Create a New Note
+                </Button>
+                {this.props.match.params.noteId ? (
+                  <Button
+                    inverted={true}
+                    onClick={() => {
+                      const id = this.props.match.params.noteId
 
-                            this.props.history.push(`/notes/${id}`)
-                          }}
-                        >
-                          {' '}
-                          Set to Render View
-                        </Button>
-                      ) : (
-                        ''
-                      )}
-                    </div>
+                      this.props.history.push(`/notes/${id}`)
+                    }}
+                  >
+                    {' '}
+                    Set to Render View
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </div>
+              <Grid divided="vertically">
+                <Grid.Row columns={2}>
+                  <Grid.Column>
                     <ScrollSyncPane>
                       <div className="scrollable">
+                        <Input
+                          style={{
+                            margin: '3em 1em 2em 1em',
+                            height: '3em',
+                            width: '95%'
+                          }}
+                          type="text"
+                          onChange={this.handleTitle}
+                          value={this.props.editor.title}
+                          placeholder="Enter a title..."
+                        />
                         {this.props.editor.cells
                           ? this.props.editor.cells.map((cell, idx) => {
                               return cell.type === 'code' ? (
