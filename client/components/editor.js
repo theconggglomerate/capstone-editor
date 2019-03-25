@@ -68,6 +68,7 @@ export class Editor extends Component {
         i !== 'render-scroll' &&
         i !== 'editor-scroll'
       ) {
+        const this_ref = this.refs[i]
         const editor = this.refs[i].editor
 
         let nextEditor = undefined
@@ -105,7 +106,6 @@ export class Editor extends Component {
           ) {
             nextEditor.moveCursorTo(0, 0)
             nextEditor.focus()
-            editorScroll.scrollTop = nextRef.editor.container.offsetTop - 100
           } else if (
             editor.getCursorPosition().row === 0 &&
             prevEditor &&
@@ -113,11 +113,21 @@ export class Editor extends Component {
           ) {
             prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
             prevEditor.focus()
+          }
 
-            editorScroll.scrollTop =
-              prevRef.editor.container.offsetTop +
-              prevEditor.container.offsetHeight -
-              100
+          if (
+            editorScroll.scrollTop >
+            editor.container.offsetTop +
+              editor.getCursorPosition().row * 14.54545
+          ) {
+            editorScroll.scrollTop -= 40
+          }
+          if (
+            editor.container.offsetTop +
+              editor.getCursorPosition().row * 14.54545 >
+            editorScroll.scrollTop + 0.85 * window.innerHeight - 10
+          ) {
+            editorScroll.scrollTop += 40
           }
         })
         console.log(i, this.refs[i].editor.keyBinding)
@@ -162,6 +172,7 @@ export class Editor extends Component {
     event.preventDefault()
     const title = event.target.value
     this.props.editTitle(title)
+    this.autosave()
   }
 
   handleChange = debounce(
