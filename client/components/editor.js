@@ -54,6 +54,75 @@ export class Editor extends Component {
   }
 
   componentDidMount = () => {
+    if (
+      this.refs[0] &&
+      this.refs[0].editor &&
+      !this.refs[0].editor.keyBinding.$handlers[1]
+    )
+      console.log('refs', this.refs)
+    const editorScroll = this.refs['editor-scroll']
+    const renderScroll = this.refs['render-scroll']
+    for (let i in this.refs) {
+      if (
+        this.refs.hasOwnProperty(i) &&
+        i !== 'render-scroll' &&
+        i !== 'editor-scroll'
+      ) {
+        const editor = this.refs[i].editor
+
+        let nextEditor = undefined
+        let prevEditor = undefined
+        let nextNum = parseInt(i, 10)
+        let prevNum = nextNum - 1
+        nextNum++
+        let nextRef = undefined
+        let prevRef = undefined
+
+        if (this.refs.hasOwnProperty(nextNum)) {
+          nextRef = this.refs[nextNum]
+          nextEditor = this.refs[nextNum].editor
+        }
+        if (this.refs.hasOwnProperty(prevNum)) {
+          prevEditor = this.refs[prevNum].editor
+          prevRef = this.refs[prevNum]
+        }
+
+        this.refs[i].editor.keyBinding.addKeyboardHandler(function(
+          data,
+          hash,
+          keyString,
+          keyCode,
+          event
+        ) {
+          console.log('keystring', keyString)
+          console.log('editor position', editor.getCursorPosition())
+          console.log('editor height', editor.getLastVisibleRow())
+          console.log('next Editor', nextEditor)
+          if (
+            editor.getCursorPosition().row === editor.getLastVisibleRow() &&
+            nextEditor &&
+            keyString === 'down'
+          ) {
+            nextEditor.moveCursorTo(0, 0)
+            nextEditor.focus()
+            editorScroll.scrollTop = nextRef.editor.container.offsetTop - 100
+          } else if (
+            editor.getCursorPosition().row === 0 &&
+            prevEditor &&
+            keyString === 'up'
+          ) {
+            prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
+            prevEditor.focus()
+
+            editorScroll.scrollTop =
+              prevRef.editor.container.offsetTop +
+              prevEditor.container.offsetHeight -
+              100
+          }
+        })
+        console.log(i, this.refs[i].editor.keyBinding)
+      }
+    }
     this.refresh()
   }
 
@@ -135,12 +204,13 @@ export class Editor extends Component {
                   />
                 </div>
                 <ScrollSyncPane>
-                  <div className="scrollable">
+                  <div className="scrollable" ref="editor-scroll">
                     {this.props.editor.cells
                       ? this.props.editor.cells.map((cell, idx) => {
                           return cell.type === 'code' ? (
                             <div className="code" key={idx + 'edcd'}>
                               <AceEditor
+                                ref={idx}
                                 mode="javascript"
                                 theme={this.state.theme}
                                 name="CodeEditor"
@@ -170,6 +240,7 @@ export class Editor extends Component {
                           ) : (
                             <div className="markdown" key={idx + 'edmd'}>
                               <AceEditor
+                                ref={idx}
                                 mode="markdown"
                                 theme="tomorrow"
                                 name="MarkdownEditor"
@@ -182,6 +253,7 @@ export class Editor extends Component {
                                 showGutter={false}
                                 highlightActiveLine={false}
                                 highlightActiveWord={true}
+                                onInput={() => console.log('input received')}
                                 width="100%"
                                 editorProps={{$blockScrolling: Infinity}}
                                 setOptions={{
@@ -205,7 +277,7 @@ export class Editor extends Component {
               </Grid.Column>
               <Grid.Column>
                 <ScrollSyncPane>
-                  <div className="scrollable">
+                  <div className="scrollable" ref="render-scroll">
                     {this.props.editor.cells ? (
                       <div>
                         <h1>{this.props.editor.title}</h1>
