@@ -58,6 +58,7 @@ export class SingleWeb extends React.Component {
             closeModal={this.props.closeModal}
             loadPage={this.props.loadPage}
             getElements={this.props.getSingleWeb}
+            centerId={this.props.match.params.id}
           />
         </React.Fragment>
       )

@@ -56,6 +56,34 @@ export class Visual extends React.Component {
     this.props.deletePopup(id)
   }
 
+  expandNodes = async (id, cy) => {
+    const centerId = this.props.match.params.id
+    console.log(centerId)
+    const expanded = await Axios.get(`/api/noteNotes/expand/${id}`, {
+      data: {centerId}
+    })
+    console.log('expanded', expanded.data)
+    cy.add(expanded.data)
+    cy
+      .layout({
+        name: 'cola',
+        maxSimulationTime: 3000,
+        nodeSpacing: function(node) {
+          if (node._private.edges.length === 0) return 175
+          else {
+            return node._private.edges.length * 15
+          }
+        },
+        nodeDimensionsIncludeLabels: false,
+        nodeRepulsion: 100000,
+        fit: true,
+        edgeLength: function(edge) {
+          return edge._private.source.edges.length * 650
+        }
+      })
+      .run()
+  }
+
   componentDidMount() {
     if (this.props.loadPage) {
       this.props.loadPage()
@@ -182,6 +210,7 @@ export class Visual extends React.Component {
                   const addAssociation = this.addAssociation
                   const deletePopup = this.deletePopup
                   const deleteAssociation = this.deleteAssociation
+                  const expandNodes = this.expandNodes
                   cy.cxtmenu({
                     selector: 'node',
                     commands: [
@@ -196,7 +225,7 @@ export class Visual extends React.Component {
                         content: 'Expand',
                         select: function(ele) {
                           const id = ele.id()
-
+                          expandNodes(id, cy)
                           const outgoers = cy.getElementById(`${id}`)
                           console.log(outgoers)
                         }
