@@ -4,12 +4,13 @@ import AceEditor from 'react-ace'
 import LoadingOverlay from 'react-loading-overlay'
 import Code from './Code'
 import {Button} from 'semantic-ui-react'
+import 'brace/theme/cobalt'
 class CodeDisplay extends Component {
   constructor(props) {
     super(props)
     this.state = {
       runkit: false,
-      theme: 'monokai',
+      theme: 'cobalt',
       fontSize: 14,
       result: null
     }

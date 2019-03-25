@@ -24,6 +24,10 @@ import {
 import GeneralLinks from './GeneralLinks'
 import {Grid} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
+import {Button} from 'semantic-ui-react'
+import brace from 'brace'
+import 'brace/theme/katzenmilch'
+import 'brace/theme/cobalt'
 
 import debounce from 'lodash.debounce'
 
@@ -33,7 +37,7 @@ export class Editor extends Component {
     this.state = {
       title: '',
       cells: [],
-      theme: 'monokai',
+      theme: 'cobalt',
       enableLiveAutocompletion: true,
       fontSize: 14,
       currentIdx: 0
@@ -114,132 +118,152 @@ export class Editor extends Component {
 
   render() {
     return (
-      <ScrollSync>
-        <div id="editorContainer">
-          <Grid divided="vertically">
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <div>
-                  <button onClick={this.newCode}>New Code Block</button>
-                  <button onClick={this.newMarkdown}>
-                    {' '}
-                    New Markdown Block{' '}
-                  </button>
-                  <button onClick={this.save}> Save Note</button>
-                  <button onClick={this.new}> New Note</button>
-                  <input
-                    type="text"
-                    onChange={this.handleTitle}
-                    value={this.props.editor.title}
-                    placeholder="Enter title here"
-                  />
-                </div>
-                <ScrollSyncPane>
-                  <div className="scrollable">
-                    {this.props.editor.cells
-                      ? this.props.editor.cells.map((cell, idx) => {
-                          return cell.type === 'code' ? (
-                            <div className="code" key={idx + 'edcd'}>
-                              <AceEditor
-                                mode="javascript"
-                                theme={this.state.theme}
-                                name="CodeEditor"
-                                onChange={value =>
-                                  this.handleChange(value, idx)
-                                }
-                                value={this.props.editor.cells[idx].content}
-                                fontSize={this.state.fontSize}
-                                showPrintMargin={true}
-                                showGutter={true}
-                                highlightActiveLine={true}
-                                width="100%"
-                                editorProps={{$blockScrolling: Infinity}}
-                                setOptions={{
-                                  enableBasicAutocompletion: true,
-                                  enableLiveAutocompletion: this.state
-                                    .enableLiveAutocompletion,
-                                  enableSnippets: true,
-                                  showLineNumbers: true,
-                                  tabSize: 2,
-                                  maxLines: 100,
-                                  minLines: 3,
-                                  wrap: true
-                                }}
-                              />
-                            </div>
-                          ) : (
-                            <div className="markdown" key={idx + 'edmd'}>
-                              <AceEditor
-                                mode="markdown"
-                                theme="tomorrow"
-                                name="MarkdownEditor"
-                                onChange={value =>
-                                  this.handleChange(value, idx)
-                                }
-                                value={this.props.editor.cells[idx].content}
-                                fontSize={this.state.fontSize}
-                                showPrintMargin={false}
-                                showGutter={false}
-                                highlightActiveLine={false}
-                                highlightActiveWord={true}
-                                width="100%"
-                                editorProps={{$blockScrolling: Infinity}}
-                                setOptions={{
-                                  enableBasicAutocompletion: true,
-                                  enableLiveAutocompletion: this.state
-                                    .enableLiveAutocompletion,
-                                  enableSnippets: true,
-                                  showLineNumbers: true,
-                                  tabSize: 2,
-                                  maxLines: 100,
-                                  minLines: 3,
-                                  wrap: true
-                                }}
-                              />
-                            </div>
-                          )
-                        })
-                      : ''}
+      <div className="editorcontainer">
+        <ScrollSync>
+          <div id="editorContainer">
+            <Grid divided="vertically">
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <div>
+                    {/* <Button inverted={true} color="white" onClick={this.save}>
+                      {' '}
+                      Save Note
+                    </Button> */}
+                    <Button inverted={true} onClick={this.new}>
+                      {' '}
+                      New Note
+                    </Button>
                   </div>
-                </ScrollSyncPane>
-              </Grid.Column>
-              <Grid.Column>
-                <ScrollSyncPane>
-                  <div className="scrollable">
-                    {this.props.editor.cells ? (
-                      <div>
-                        <h1>{this.props.editor.title}</h1>
-                        {this.props.editor.cells.map((cell, idx) => {
-                          if (cell.type === 'markdown') {
-                            return (
-                              <ReactMarkdown
-                                key={idx + 'md'}
-                                source={cell.content}
-                              />
+                  <ScrollSyncPane>
+                    <div className="scrollable">
+                      {this.props.editor.cells
+                        ? this.props.editor.cells.map((cell, idx) => {
+                            return cell.type === 'code' ? (
+                              <div className="code" key={idx + 'edcd'}>
+                                <AceEditor
+                                  mode="javascript"
+                                  theme={this.state.theme}
+                                  name="CodeEditor"
+                                  onChange={value =>
+                                    this.handleChange(value, idx)
+                                  }
+                                  value={this.props.editor.cells[idx].content}
+                                  fontSize={this.state.fontSize}
+                                  showPrintMargin={true}
+                                  showGutter={true}
+                                  highlightActiveLine={true}
+                                  width="100%"
+                                  editorProps={{$blockScrolling: Infinity}}
+                                  setOptions={{
+                                    enableBasicAutocompletion: true,
+                                    enableLiveAutocompletion: this.state
+                                      .enableLiveAutocompletion,
+                                    enableSnippets: true,
+                                    showLineNumbers: true,
+                                    tabSize: 2,
+                                    maxLines: 100,
+                                    minLines: 3,
+                                    wrap: true
+                                  }}
+                                />
+                              </div>
+                            ) : (
+                              <div className="markdown" key={idx + 'edmd'}>
+                                <AceEditor
+                                  mode="markdown"
+                                  theme="katzenmilch"
+                                  name="MarkdownEditor"
+                                  onChange={value =>
+                                    this.handleChange(value, idx)
+                                  }
+                                  value={this.props.editor.cells[idx].content}
+                                  fontSize={this.state.fontSize}
+                                  showPrintMargin={true}
+                                  showGutter={true}
+                                  highlightActiveLine={false}
+                                  highlightActiveWord={true}
+                                  width="100%"
+                                  editorProps={{$blockScrolling: Infinity}}
+                                  setOptions={{
+                                    enableBasicAutocompletion: true,
+                                    enableLiveAutocompletion: this.state
+                                      .enableLiveAutocompletion,
+                                    enableSnippets: true,
+                                    showLineNumbers: true,
+                                    tabSize: 2,
+                                    maxLines: 100,
+                                    minLines: 3,
+                                    wrap: true
+                                  }}
+                                />
+                              </div>
                             )
-                          }
-                          if (cell.type === 'code') {
-                            return (
-                              <CodeDisplay
-                                key={idx + 'cd'}
-                                keyr={idx + 'cde'}
-                                source={cell.content}
-                              />
-                            )
-                          }
-                        })}
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                </ScrollSyncPane>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <GeneralLinks noteId={this.props.match.params.noteId} />
-        </div>
-      </ScrollSync>
+                          })
+                        : ''}
+
+                      <Button
+                        className="button"
+                        inverted={true}
+                        onClick={this.newCode}
+                      >
+                        New Code Block
+                      </Button>
+                      <Button
+                        className="button"
+                        inverted={true}
+                        onClick={this.newMarkdown}
+                      >
+                        {' '}
+                        New Markdown Block{' '}
+                      </Button>
+                    </div>
+                  </ScrollSyncPane>
+                </Grid.Column>
+                <Grid.Column>
+                  <ScrollSyncPane>
+                    <div className="scrollable">
+                      <input
+                        type="text"
+                        onChange={this.handleTitle}
+                        value={this.props.editor.title}
+                        placeholder="Enter title here"
+                      />
+
+                      {this.props.editor.cells ? (
+                        <div>
+                          <h1>{this.props.editor.title}</h1>
+                          {this.props.editor.cells.map((cell, idx) => {
+                            if (cell.type === 'markdown') {
+                              return (
+                                <ReactMarkdown
+                                  key={idx + 'md'}
+                                  source={cell.content}
+                                />
+                              )
+                            }
+                            if (cell.type === 'code') {
+                              return (
+                                <CodeDisplay
+                                  key={idx + 'cd'}
+                                  keyr={idx + 'cde'}
+                                  source={cell.content}
+                                />
+                              )
+                            }
+                          })}
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </ScrollSyncPane>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <GeneralLinks noteId={this.props.match.params.noteId} />
+          </div>
+        </ScrollSync>
+      </div>
     )
   }
 }

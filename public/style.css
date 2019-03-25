@@ -136,3 +136,14 @@ form div {
   background-color: #0f2027;
   cursor: grab;
 }
+
+.editorcontainer {
+  background-color: #0f2027;
+  height: 100vh;
+  padding: 3em;
+  color: white;
+}
+
+.button {
+  padding: 2em;
+}
