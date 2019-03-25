@@ -5,7 +5,7 @@ class AssocSearch extends Component {
   render() {
     return (
       <DataSearch
-        style={{width: '40%'}}
+        style={{width: '60%'}}
         componentId="q"
         dataField={['title', 'content.cells.content']}
         highlight={true}
