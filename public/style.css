@@ -103,7 +103,7 @@ form div {
 
 .search-container {
   position: absolute;
-  right: 4%;
+  right: -20%;
   top: 1.25em;
   width: 50em;
 }
@@ -129,7 +129,7 @@ form div {
   color: white;
   background-color: rgba(103, 128, 159, 0.3);
   margin: 1em;
-  padding: 1em;
+  padding: 5em;
 }
 
 .reactivelist:hover {
@@ -139,11 +139,6 @@ form div {
 
 .editorcontainer {
   background-color: #0f2027;
-  height: 100vh;
-  padding: 3em;
+  height: 93vh;
   color: white;
-}
-
-.button {
-  padding: 2em;
 }

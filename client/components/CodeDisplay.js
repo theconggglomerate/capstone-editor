@@ -54,7 +54,12 @@ class CodeDisplay extends Component {
             readOnly: true
           }}
         />
-        <Button onClick={this.toggleRunkitStatus}>Make Runnable</Button>
+        <Button
+          style={{margin: '2em', alignSelf: 'right'}}
+          onClick={this.toggleRunkitStatus}
+        >
+          Make Runnable
+        </Button>
         {this.state.result ? <h3>{this.state.result}</h3> : ''}
       </>
     ) : (
