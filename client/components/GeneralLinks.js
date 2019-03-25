@@ -51,7 +51,9 @@ class GeneralLinks extends Component {
       console.log('ASSOCIATIONS', associations)
       return (
         <>
-          <Button onClick={this.toggleVisible}>Show Associated Notes</Button>
+          <Button onClick={this.toggleVisible} primary>
+            Show Associated Notes
+          </Button>
           <Sidebar
             as={Menu}
             animation="push"
@@ -61,7 +63,7 @@ class GeneralLinks extends Component {
             width="thin"
           >
             <Grid>
-              <Grid.Row columns="1">
+              <Grid.Row columns="2">
                 <Grid.Column>
                   <h3> Add Associations</h3>
                   <ReactiveBase
@@ -74,11 +76,16 @@ class GeneralLinks extends Component {
                     />
                   </ReactiveBase>
                   <h3>Associated Notes</h3>
-                  <Button onClick={this.toggleVisible}>
+                </Grid.Column>
+                <Grid.Column>
+                  <Button onClick={this.toggleVisible} primary>
                     {' '}
                     Close Associations
                   </Button>
-
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns="1">
+                <Grid.Column>
                   <List>
                     {associations.length
                       ? associations.map(link => (
