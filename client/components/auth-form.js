@@ -13,14 +13,14 @@ const AuthForm = props => {
   return (
     <div style={{backgroundColor: '#0F2027', padding: '5em', height: '100vh'}}>
       <Form onSubmit={handleSubmit} name={name}>
-        <Form.Field style={{margin: '0.5em'}}>
+        <Form.Field>
           <div>
             <label htmlFor="email" />
             <input placeholder="email" required name="email" type="text" />
           </div>
         </Form.Field>
 
-        <Form.Field style={{margin: '0.5em'}}>
+        <Form.Field>
           <div>
             <label htmlFor="password" />
             <input
@@ -31,15 +31,15 @@ const AuthForm = props => {
             />
           </div>
         </Form.Field>
+        <Form.Field>
+          <Form.Button type="submit" style={{marginRight: '1em'}}>
+            {displayName}
+          </Form.Button>
 
-        <Form.Button type="submit" style={{margin: '1em'}}>
-          {displayName}
-        </Form.Button>
+          <Button to="/auth/google">{displayName} with Google</Button>
+        </Form.Field>
         {error && error.response && <div>{error.response.data}</div>}
       </Form>
-      <a href="/auth/google" style={{marginLeft: '1.5em'}}>
-        {displayName} with Google
-      </a>
     </div>
   )
 }
