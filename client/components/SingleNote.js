@@ -5,10 +5,12 @@ import ReactMarkdown from 'react-markdown'
 import {Code} from './../components/'
 import CodeDisplay from './CodeDisplay'
 import GeneralLinks from './GeneralLinks'
+
 class SingleNote extends Component {
   componentDidMount() {
     this.props.selectNote()
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.match) {
       if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
@@ -35,7 +37,10 @@ class SingleNote extends Component {
             return <CodeDisplay key={idx} source={cell.content} />
           }
         })}
-        <GeneralLinks noteId={noteId} />
+
+        <div>
+          <GeneralLinks noteId={noteId} />
+        </div>
       </div>
     ) : (
       ''

@@ -75,6 +75,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-ace": "^6.4.0",
+    "react-add-space": "^1.0.7",
     "react-cytoscape": "^1.0.6",
     "react-cytoscapejs": "^1.1.0",
     "react-dom": "^16.8.4",
