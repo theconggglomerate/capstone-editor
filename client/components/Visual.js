@@ -35,12 +35,10 @@ export class Visual extends React.Component {
     cy.remove(`edge[id="${edgeId}"]`)
   }
   closeModal = () => {
-    console.log('closing modal')
     this.props.closeModal()
   }
   toggleModal = (event, cy) => {
     const id = event.target._private.data.id
-    console.log('modal open', id)
     if (id.length < 10) this.props.getModal(id)
     else {
       cy.one('tap', 'node', event => this.toggleModal(event, cy))
@@ -68,13 +66,11 @@ export class Visual extends React.Component {
   countRender = () => {
     let renders = this.state.renders
     renders++
-    console.log(renders)
     this.setState({...this.state, renders})
   }
   render() {
     var cyObj
     if (this.props.elements.nodes) {
-      console.log('elements', this.props.elements)
       return (
         <React.Fragment>
           <div className="visual">
@@ -156,7 +152,6 @@ export class Visual extends React.Component {
                 this.cy = cy
                 this.cyto = cy
                 let render
-                console.log('loaded?', this.props.modal.loaded)
                 if (cy && cy._private.emitter.listeners) {
                   render = cy._private.emitter.listeners.reduce(
                     (accum, element) => {
@@ -172,7 +167,6 @@ export class Visual extends React.Component {
                     },
                     false
                   )
-                  console.log('render', render)
                 }
 
                 if (cy && !render && !this.props.modal.loaded) {
@@ -222,7 +216,6 @@ export class Visual extends React.Component {
                       {
                         content: 'delete association',
                         select: function(ele) {
-                          console.log(ele)
                           deleteAssociation(
                             ele._private.data.source,
                             ele._private.data.target,
