@@ -6,7 +6,7 @@ import 'brace/ext/searchbox'
 import 'brace/mode/markdown'
 import 'brace/snippets/markdown'
 import ReactMarkdown from 'react-markdown'
-import {Code} from './../components/'
+import {LinkPreview} from './../components/'
 import CodeDisplay from './CodeDisplay'
 import {connect} from 'react-redux'
 import {
@@ -22,7 +22,8 @@ import {
   clearNote
 } from './../store'
 import GeneralLinks from './GeneralLinks'
-import {Grid} from 'semantic-ui-react'
+import {Grid, Popup} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 
 import debounce from 'lodash.debounce'
@@ -215,6 +216,33 @@ export class Editor extends Component {
                               <ReactMarkdown
                                 key={idx + 'md'}
                                 source={cell.content}
+                                renderers={{
+                                  link: link => {
+                                    const replaceURLsWithIds = new RegExp(
+                                      /.*(\/notes\/\d+).*/
+                                    )
+                                    const findNoteURL = new RegExp(
+                                      `${window.location.origin}/notes\/\\d+`
+                                    )
+                                    if (findNoteURL.test(link.href)) {
+                                      return (
+                                        <LinkPreview
+                                          title={link.children[0].props.value}
+                                          previewedNote={
+                                            link.href
+                                              .replace(replaceURLsWithIds, '$1')
+                                              .split('/')[2]
+                                          }
+                                        />
+                                      )
+                                    } else
+                                      return (
+                                        <a href={link.href}>
+                                          {link.children[0].props.value}
+                                        </a>
+                                      )
+                                  }
+                                }}
                               />
                             )
                           }
