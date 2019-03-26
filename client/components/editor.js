@@ -61,6 +61,13 @@ export class Editor extends Component {
   }
 
   componentDidMount = () => {
+    if (
+      this.refs[0] &&
+      this.refs[0].editor &&
+      !this.refs[0].editor.keyBinding.$handlers[1]
+    ) {
+      let xander = 0
+    }
     const editorScroll = this.refs['editor-scroll']
     const renderScroll = this.refs['render-scroll']
     for (let i in this.refs) {
