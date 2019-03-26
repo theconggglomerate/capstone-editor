@@ -32,7 +32,7 @@ class AssocSearch extends Component {
                 ? `: ${suggestion.highlight['content.cells.content']}`
                 : ''
             }`,
-            value: suggestion._source.title,
+            value: '',
             source: suggestion._source
           }
         }}

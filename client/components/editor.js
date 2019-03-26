@@ -54,6 +54,9 @@ export class Editor extends Component {
     } else if (noteId) {
       this.props.getProject(noteId)
       this.props.selectNote(noteId)
+    } else {
+      const id = this.props.editor.id
+      this.props.history.push(`/editor/${id}`)
     }
   }
 
@@ -118,6 +121,7 @@ export class Editor extends Component {
   }
 
   render() {
+    const id = this.props.match.params.noteId
     return (
       <div className="editorcontainer">
         <ScrollSync>
@@ -137,8 +141,6 @@ export class Editor extends Component {
                   <Button
                     inverted={true}
                     onClick={() => {
-                      const id = this.props.match.params.noteId
-
                       this.props.history.push(`/notes/${id}`)
                     }}
                   >
@@ -148,6 +150,15 @@ export class Editor extends Component {
                 ) : (
                   ''
                 )}
+                <Button
+                  inverted={true}
+                  onClick={() => {
+                    this.props.history.push(`/visual/${id}`)
+                  }}
+                >
+                  {' '}
+                  Visualize
+                </Button>
               </div>
               <Grid divided="vertically">
                 <Grid.Row columns={2}>
@@ -304,7 +315,8 @@ export class Editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    editor: state.editor
+    editor: state.editor,
+    selectedNote: state.notes
   }
 }
 

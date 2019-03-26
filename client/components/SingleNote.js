@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import {Code} from './../components/'
 import CodeDisplay from './CodeDisplay'
 import GeneralLinks from './GeneralLinks'
+import {Button} from 'semantic-ui-react'
 
 class SingleNote extends Component {
   componentDidMount() {
@@ -27,7 +28,12 @@ class SingleNote extends Component {
     const {selectedNote} = this.props
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
-      <div>
+      <div style={{margin: '3em 25em 3em 25em'}}>
+        <Button
+          onClick={() => this.props.history.push(`/editor/${selectedNote.id}`)}
+        >
+          Set to Edit View
+        </Button>
         <h1>{selectedNote.title}</h1>
         {selectedNote.content.cells.map((cell, idx) => {
           if (cell.type === 'markdown') {

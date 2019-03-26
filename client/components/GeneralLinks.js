@@ -48,10 +48,9 @@ class GeneralLinks extends Component {
       associations = selectedNote.source.concat(selectedNote.target)
     }
     if (noteId && selectedNote) {
-      console.log('ASSOCIATIONS', associations)
       return (
         <>
-          <Button onClick={this.toggleVisible} primary>
+          <Button inverted={true} onClick={this.toggleVisible}>
             Show Associated Notes
           </Button>
           <Sidebar
@@ -62,69 +61,72 @@ class GeneralLinks extends Component {
             visible={this.state.visible}
             width="thin"
           >
-            <Grid>
-              <Grid.Row columns="2">
-                <Grid.Column>
-                  <h3> Add Associations</h3>
-                  <ReactiveBase
-                    app="notes"
-                    url={`${window.location.origin}/api/es`}
-                  >
-                    <AssocSearch
-                      noteId={this.props.noteId}
-                      makeAssociation={this.createAssociation}
-                    />
-                  </ReactiveBase>
-                  <h3>Associated Notes</h3>
-                </Grid.Column>
-                <Grid.Column>
-                  <Button onClick={this.toggleVisible} primary>
-                    {' '}
-                    Close Associations
-                  </Button>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row columns="1">
-                <Grid.Column>
-                  <List>
-                    {associations.length
-                      ? associations.map(link => (
-                          <List.Item key={link.id}>
-                            <Grid columns={2}>
-                              <Grid.Column textAlign="left">
-                                <Link to={`/notes/${link.id}`}>
-                                  {link.title}
-                                </Link>{' '}
-                              </Grid.Column>
-                              <Grid.Column>
-                                <Button.Group floated="left">
-                                  <Button
-                                    negative
-                                    onClick={() =>
-                                      this.deleteAssociation(link.id)
-                                    }
-                                  >
-                                    {' '}
-                                    Delete association
-                                  </Button>{' '}
-                                  <Button.Or />{' '}
-                                  <Button
-                                    positive
-                                    as="a"
-                                    href={`/editor/${link.id}`}
-                                  >
-                                    Edit this note
-                                  </Button>
-                                </Button.Group>
-                              </Grid.Column>
-                            </Grid>
-                          </List.Item>
-                        ))
-                      : ''}
-                  </List>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+            <h3 style={{color: '#4286f4', padding: '2em 2em 3em 7em'}}>
+              Search to Add Associations
+            </h3>
+            <div className="generalAssociations">
+              <Grid>
+                <Grid.Row columns="1">
+                  <Grid.Column>
+                    <ReactiveBase
+                      app="notes"
+                      url={`${window.location.origin}/api/es`}
+                    >
+                      <AssocSearch
+                        noteId={this.props.noteId}
+                        makeAssociation={this.createAssociation}
+                      />
+                    </ReactiveBase>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns="1">
+                  <Grid.Column>
+                    <List>
+                      {associations.length
+                        ? associations.map(link => (
+                            <List.Item key={link.id}>
+                              <Grid columns={2}>
+                                <Grid.Column textAlign="left">
+                                  <Link to={`/notes/${link.id}`}>
+                                    {link.title}
+                                  </Link>{' '}
+                                </Grid.Column>
+                                <Grid.Column>
+                                  <Button.Group floated="left">
+                                    <Button
+                                      negative
+                                      onClick={() =>
+                                        this.deleteAssociation(link.id)
+                                      }
+                                    >
+                                      {' '}
+                                      Delete association
+                                    </Button>{' '}
+                                    <Button.Or />{' '}
+                                    <Button
+                                      positive
+                                      as="a"
+                                      href={`/editor/${link.id}`}
+                                    >
+                                      Edit this note
+                                    </Button>
+                                  </Button.Group>
+                                </Grid.Column>
+                              </Grid>
+                            </List.Item>
+                          ))
+                        : ''}
+                    </List>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </div>
+            <Button
+              style={{alignSelf: 'right', height: '3em', marginTop: '2%'}}
+              onClick={this.toggleVisible}
+            >
+              Close Associations
+            </Button>
           </Sidebar>
         </>
       )
