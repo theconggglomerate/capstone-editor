@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
-import Embed from 'react-runkit'
 import AceEditor from 'react-ace'
-import LoadingOverlay from 'react-loading-overlay'
 import Code from './Code'
 import {Button} from 'semantic-ui-react'
 import 'brace/theme/cobalt'
@@ -54,13 +52,23 @@ class CodeDisplay extends Component {
             readOnly: true
           }}
         />
-        <Button
-          style={{margin: '1em 1em 1em 80%'}}
-          onClick={this.toggleRunkitStatus}
-          inverted={true}
-        >
-          Make Runnable
-        </Button>
+        {window.location.pathname.includes('/visual') ? (
+          <Button
+            style={{margin: '1em 1em 1em 80%'}}
+            onClick={this.toggleRunkitStatus}
+            color="facebook"
+          >
+            Make Runnable
+          </Button>
+        ) : (
+          <Button
+            style={{margin: '1em 1em 1em 80%'}}
+            onClick={this.toggleRunkitStatus}
+            inverted={true}
+          >
+            Make Runnable
+          </Button>
+        )}
         {this.state.result ? <h3>{this.state.result}</h3> : ''}
       </>
     ) : (
