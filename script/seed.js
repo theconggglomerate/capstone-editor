@@ -69,7 +69,7 @@ async function seed() {
   generator()
 
   const seedData = seedNotes
-  console.log('faker test', seedData)
+
   const notes = await Notes.bulkCreate(seedData, {
     returning: true
   })
