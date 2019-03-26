@@ -46,7 +46,7 @@ export class Editor extends Component {
 
   refresh = () => {
     const noteId = this.props.match.params.noteId
-
+    this.allowNavigate()
     if (noteId === 'new') {
       this.props.clearEditor()
       this.props.clearNote()
@@ -60,7 +60,7 @@ export class Editor extends Component {
     }
   }
 
-  componentDidMount = () => {
+  allowNavigate = () => {
     if (
       this.refs[0] &&
       this.refs[0].editor &&
@@ -95,7 +95,15 @@ export class Editor extends Component {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
         }
-
+        if (this.refs[i].editor.keyBinding.$handlers[1]) {
+          this.refs[i].editor.keyBinding.removeKeyboardHandler(function(
+            data,
+            hash,
+            keyString,
+            keyCode,
+            event
+          ) {})
+        }
         this.refs[i].editor.keyBinding.addKeyboardHandler(function(
           data,
           hash,
@@ -136,6 +144,9 @@ export class Editor extends Component {
         })
       }
     }
+  }
+
+  componentDidMount = () => {
     this.refresh()
   }
 
@@ -152,7 +163,8 @@ export class Editor extends Component {
   save = () => {
     if (
       (this.props.match.params.noteId &&
-        this.props.match.params.noteId !== 'new') ||
+        this.props.match.params.noteId !== 'new' &&
+        this.props.match.params.noteId !== 'null') ||
       this.props.editor.id
     ) {
       this.props.saveProject(
@@ -167,6 +179,7 @@ export class Editor extends Component {
         this.props.history
       )
     }
+    this.refresh()
   }
 
   autosave = debounce(this.save, 1000, {trailing: true})
