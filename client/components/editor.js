@@ -61,12 +61,6 @@ export class Editor extends Component {
   }
 
   componentDidMount = () => {
-    if (
-      this.refs[0] &&
-      this.refs[0].editor &&
-      !this.refs[0].editor.keyBinding.$handlers[1]
-    )
-      console.log('refs', this.refs)
     const editorScroll = this.refs['editor-scroll']
     const renderScroll = this.refs['render-scroll']
     for (let i in this.refs) {
@@ -102,10 +96,6 @@ export class Editor extends Component {
           keyCode,
           event
         ) {
-          console.log('keystring', keyString)
-          console.log('editor position', editor.getCursorPosition())
-          console.log('editor height', editor.getLastVisibleRow())
-          console.log('next Editor', nextEditor)
           if (
             editor.getCursorPosition().row === editor.getLastVisibleRow() &&
             nextEditor &&
@@ -137,7 +127,6 @@ export class Editor extends Component {
             editorScroll.scrollTop += 40
           }
         })
-        console.log(i, this.refs[i].editor.keyBinding)
       }
     }
     this.refresh()

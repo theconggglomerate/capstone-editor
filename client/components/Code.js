@@ -17,12 +17,10 @@ class Code extends Component {
     const lines = this.props.source.split(/\r\n|\r|\n/).length
 
     const height = lines * 21 + 'px'
-    console.log('embed reference', embed)
+
     this.setState({...this.state, loaded: true, height})
   }
-  runCode = () => {
-    console.log(this.refs.embed)
-  }
+  runCode = () => {}
   toggleOverlay() {
     this.setState({...this.state, overlay: 'overlayRan'})
   }

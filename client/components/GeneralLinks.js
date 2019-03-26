@@ -37,7 +37,7 @@ class GeneralLinks extends Component {
 
   deleteAssociation(targetId) {
     const noteId = this.props.noteId
-    console.log(noteId)
+
     this.props.deleteAssociation(noteId, targetId)
   }
   render() {

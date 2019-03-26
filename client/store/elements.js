@@ -21,7 +21,7 @@ export const fetchElements = () => async dispatch => {
     const {data: elements} = await Axios.get('/api/noteNotes')
     dispatch(getElements(elements))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -30,10 +30,9 @@ export const fetchSingleWeb = id => async dispatch => {
     const {data: elements} = await Axios.get(`/api/noteNotes/${id}`)
     dispatch(getSingleWeb(elements))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
-
 
 const initialState = {
   allElements: {},
