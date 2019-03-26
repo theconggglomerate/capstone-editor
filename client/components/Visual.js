@@ -293,7 +293,8 @@ export class Visual extends React.Component {
                   cy
                     .layout({
                       name: 'cola',
-                      maxSimulationTime: 3000,
+                      maxSimulationTime: 2500,
+                      refresh: 2,
                       nodeSpacing: function(node) {
                         if (node._private.edges.length === 0) return 175
                         else {
@@ -349,7 +350,8 @@ export class Visual extends React.Component {
                   //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
                   //
                   cy.on('layoutstop', () => {
-                    cy.zoom(0.05)
+                    let nextZoom = cy.zoom() * 0.86
+                    cy.zoom(nextZoom)
                   })
                 } else if (cy && render && !this.props.modal.loaded) {
                   console.log(
