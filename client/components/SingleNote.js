@@ -25,10 +25,13 @@ class SingleNote extends Component {
   }
 
   render() {
+    let divStyle = window.location.pathname.includes('/visual')
+      ? {margin: '3em 3em 3em 3em'}
+      : {margin: '3em 25em 3em 25em'}
     const {selectedNote} = this.props
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
-      <div style={{margin: '3em 3em 3em 3em'}}>
+      <div style={divStyle}>
         <Button
           onClick={() => this.props.history.push(`/editor/${selectedNote.id}`)}
         >
