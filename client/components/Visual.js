@@ -197,8 +197,7 @@ export class Visual extends React.Component {
                         select: function(ele) {
                           const id = ele.id()
 
-                          const outgoers = cy.getElementById(`${id}`)
-                          console.log(outgoers)
+                          console.log(id)
                         }
                       },
                       {
@@ -308,8 +307,8 @@ export class Visual extends React.Component {
                           return node._private.edges.length * 15
                         }
                       },
-                      nodeDimensionsIncludeLabels: false,
-                      nodeRepulsion: 100000,
+                      nodeDimensionsIncludeLabels: true,
+                      nodeRepulsion: 10000000000,
                       fit: true,
                       edgeLength: function(edge) {
                         return edge._private.source.edges.length * 650
@@ -356,6 +355,9 @@ export class Visual extends React.Component {
                   // ) {
                   //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
                   //
+                  cy.on('layoutstop', () => {
+                    cy.zoom(0.05)
+                  })
                 } else if (cy && render && !this.props.modal.loaded) {
                   console.log(
                     'second render type',
