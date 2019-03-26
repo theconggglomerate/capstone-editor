@@ -28,7 +28,7 @@ class SingleNote extends Component {
     const {selectedNote} = this.props
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
-      <div style={{margin: '3em 5em 3em 5em'}}>
+      <div style={{margin: '3em 3em 3em 3em'}}>
         <Button
           onClick={() => this.props.history.push(`/editor/${selectedNote.id}`)}
         >

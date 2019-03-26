@@ -444,6 +444,15 @@ export class Visual extends React.Component {
                 <Button color="red" onClick={this.closeModal}>
                   Close Preview
                 </Button>
+                <Button
+                  onClick={() =>
+                    this.props.history.push(
+                      `/editor/${this.props.selectedNote.id}`
+                    )
+                  }
+                >
+                  Set to Edit View
+                </Button>
               </div>
 
               <SingleNote noteId={this.props.modal.id} />
@@ -462,6 +471,12 @@ export class Visual extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    selectedNote: state.notes.selectedNote
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
   deletePopup: id => {
     dispatch(deletePopup(id))
@@ -471,4 +486,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(null, mapDispatchToProps)(withRouter(Visual))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Visual))
