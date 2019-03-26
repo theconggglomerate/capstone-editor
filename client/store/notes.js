@@ -27,7 +27,7 @@ export const fetchNotes = () => async dispatch => {
     const {data: notes} = await Axios.get('/api/notes')
     dispatch(getNotes(notes))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -36,7 +36,7 @@ export const selectNote = noteId => async dispatch => {
     const {data: note} = await Axios.get(`/api/notes/${noteId}`)
     dispatch(pickNote(note))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -48,7 +48,7 @@ export const makeAssociation = (sourceId, targetId) => async dispatch => {
     })
     dispatch(pickNote(note.data))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -59,7 +59,7 @@ export const deleteAssociation = (sourceId, targetId) => async dispatch => {
     })
     dispatch(pickNote(note.data))
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }
 

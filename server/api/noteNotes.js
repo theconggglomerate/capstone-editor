@@ -179,7 +179,7 @@ router.delete('/association', async (req, res, next) => {
     const success = assocTry1 || assocTry2
 
     if (success) {
-      ;(await assocTry1.destroy()) || (await assocTry2.destroy())
+      await success.destroy()
       const updated = await Notes.findByPk(sourceId, {
         include: [
           {

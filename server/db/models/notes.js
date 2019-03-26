@@ -22,7 +22,7 @@ const singleIndexForES = async instance => {
       body
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -44,7 +44,7 @@ const bulkIndexForES = async instances => {
       body: indexArr
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -73,7 +73,7 @@ const updateForES = async instance => {
       })
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -101,7 +101,7 @@ const deleteForES = async instance => {
       })
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -134,7 +134,7 @@ const parseAndUpdateRefsAfterCreation = instance => {
           type: 'inline'
         })
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     })
 }
@@ -155,7 +155,7 @@ const parseAndUpdateRefsAfterUpdate = async instance => {
       }
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
   if (noteIds.size)
     noteIds.forEach(async el => {
@@ -168,7 +168,7 @@ const parseAndUpdateRefsAfterUpdate = async instance => {
           }
         })
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     })
 }

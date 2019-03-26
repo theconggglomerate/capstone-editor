@@ -13,17 +13,14 @@ class Code extends Component {
     this.toggleLoadedStatus = this.toggleLoadedStatus.bind(this)
   }
 
-  toggleLoadedStatus() {
+  toggleLoadedStatus(embed) {
     const lines = this.props.source.split(/\r\n|\r|\n/).length
-    console.log('source', lines)
+
     const height = lines * 21 + 'px'
-    console.log('refs', this.refs.embed)
+
     this.setState({...this.state, loaded: true, height})
   }
-  runCode = () => {
-    console.log(this.refs.embed)
-    this.refs.embed.evaluate()
-  }
+  runCode = () => {}
   toggleOverlay() {
     this.setState({...this.state, overlay: 'overlayRan'})
   }
@@ -39,8 +36,8 @@ class Code extends Component {
 
         <Embed
           source={this.props.source}
-          onLoad={() => this.toggleLoadedStatus()}
-          onEvaluate={() => this.toggleOverlay()}
+          onLoad={embed => this.toggleLoadedStatus(embed)}
+          onEvaluate={() => this.runCode()}
           ref="embed"
         />
       </LoadingOverlay>
