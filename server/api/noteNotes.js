@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
       return {
         data: {
           id: note.id,
-          label: note.title.slice(0, 10)
+          label: note.title
         }
       }
     })
@@ -74,7 +74,7 @@ router.get('/:id', async (req, res, next) => {
       {
         data: {
           id: noteId,
-          label: note.title.slice(0, 10)
+          label: note.title
         }
       }
     ]
@@ -82,7 +82,7 @@ router.get('/:id', async (req, res, next) => {
       noteArray.push({
         data: {
           id: target.id,
-          label: target.title.slice(0, 10)
+          label: target.title
         }
       })
       return {
