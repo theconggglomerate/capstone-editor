@@ -41,7 +41,7 @@ async function seed() {
 
   async function generator() {
     for (let i = 0; i < 101; i++) {
-      const title = faker.lorem.word() + '-' + faker.lorem.word()
+      const title = faker.hacker.verb()
       const cells = []
       for (let j = 0; j < faker.random.number({min: 0, max: 60}); j++) {
         if (faker.random.number({min: 0, max: 1}) >= 1) {
