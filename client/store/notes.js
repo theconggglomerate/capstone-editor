@@ -55,7 +55,10 @@ export const makeAssociation = (sourceId, targetId) => async dispatch => {
 export const deleteAssociation = (sourceId, targetId) => async dispatch => {
   try {
     const note = await Axios.delete('/api/noteNotes/association', {
-      data: {sourceId, targetId}
+      data: {
+        sourceId,
+        targetId
+      }
     })
     dispatch(pickNote(note.data))
   } catch (err) {
