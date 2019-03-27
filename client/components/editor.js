@@ -19,10 +19,15 @@ import {
   saveProject,
   editTitle,
   clearEditor,
-  clearNote
+  clearNote,
+  deletePopup,
+  turnOffModal,
+  deleteNote
 } from './../store'
+import AssocSearch from './AssocSearch'
+import {ReactiveBase} from '@appbaseio/reactivesearch'
 import GeneralLinks from './GeneralLinks'
-import {Grid, Button, Input} from 'semantic-ui-react'
+import {Grid, Button, Input, Modal} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 import brace from 'brace'
 import 'brace/theme/katzenmilch'
@@ -40,13 +45,15 @@ export class Editor extends Component {
       theme: 'cobalt',
       enableLiveAutocompletion: true,
       fontSize: 14,
-      currentIdx: 0
+      currentIdx: 0,
+      currentEditor: false,
+      searchVisible: false
     }
   }
 
   refresh = () => {
     const noteId = this.props.match.params.noteId
-
+    this.allowNavigate()
     if (noteId === 'new') {
       this.props.clearEditor()
       this.props.clearNote()
@@ -54,13 +61,13 @@ export class Editor extends Component {
     } else if (noteId) {
       this.props.getProject(noteId)
       this.props.selectNote(noteId)
-    } else {
+    } else if (this.props.editor.id) {
       const id = this.props.editor.id
       this.props.history.push(`/editor/${id}`)
     }
   }
 
-  componentDidMount = () => {
+  allowNavigate = () => {
     if (
       this.refs[0] &&
       this.refs[0].editor &&
@@ -68,6 +75,7 @@ export class Editor extends Component {
     ) {
       let xander = 0
     }
+
     const editorScroll = this.refs['editor-scroll']
     const renderScroll = this.refs['render-scroll']
     for (let i in this.refs) {
@@ -95,47 +103,50 @@ export class Editor extends Component {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
         }
+        this.refs[i].editor.on('click', () =>
+          this.setState({...this.state, currentEditor: editor})
+        )
+        this.refs[i].editor.keyBinding.addKeyboardHandler(
+          (data, hash, keyString, keyCode, event) => {
+            if (
+              editor.getCursorPosition().row === editor.getLastVisibleRow() &&
+              nextEditor &&
+              keyString === 'down'
+            ) {
+              nextEditor.moveCursorTo(0, 0)
+              nextEditor.focus()
+              this.setState({...this.state, currentEditor: nextEditor})
+            } else if (
+              editor.getCursorPosition().row === 0 &&
+              prevEditor &&
+              keyString === 'up'
+            ) {
+              prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
+              prevEditor.focus()
+              this.setState({...this.state, currentEditor: prevEditor})
+            }
 
-        this.refs[i].editor.keyBinding.addKeyboardHandler(function(
-          data,
-          hash,
-          keyString,
-          keyCode,
-          event
-        ) {
-          if (
-            editor.getCursorPosition().row === editor.getLastVisibleRow() &&
-            nextEditor &&
-            keyString === 'down'
-          ) {
-            nextEditor.moveCursorTo(0, 0)
-            nextEditor.focus()
-          } else if (
-            editor.getCursorPosition().row === 0 &&
-            prevEditor &&
-            keyString === 'up'
-          ) {
-            prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
-            prevEditor.focus()
+            if (
+              editorScroll.scrollTop >
+              editor.container.offsetTop +
+                editor.getCursorPosition().row * 14.54545
+            ) {
+              editorScroll.scrollTop -= 40
+            }
+            if (
+              editor.container.offsetTop +
+                editor.getCursorPosition().row * 14.54545 >
+              editorScroll.scrollTop + 0.85 * window.innerHeight - 70
+            ) {
+              editorScroll.scrollTop += 40
+            }
           }
-
-          if (
-            editorScroll.scrollTop >
-            editor.container.offsetTop +
-              editor.getCursorPosition().row * 14.54545
-          ) {
-            editorScroll.scrollTop -= 40
-          }
-          if (
-            editor.container.offsetTop +
-              editor.getCursorPosition().row * 14.54545 >
-            editorScroll.scrollTop + 0.85 * window.innerHeight - 10
-          ) {
-            editorScroll.scrollTop += 40
-          }
-        })
+        )
       }
     }
+  }
+
+  componentDidMount = () => {
     this.refresh()
   }
 
@@ -152,7 +163,8 @@ export class Editor extends Component {
   save = () => {
     if (
       (this.props.match.params.noteId &&
-        this.props.match.params.noteId !== 'new') ||
+        this.props.match.params.noteId !== 'new' &&
+        this.props.match.params.noteId !== 'null') ||
       this.props.editor.id
     ) {
       this.props.saveProject(
@@ -167,6 +179,44 @@ export class Editor extends Component {
         this.props.history
       )
     }
+    this.refresh()
+  }
+
+  deletePopup = () => {
+    this.props.deleteConfirm()
+  }
+
+  closeModal = () => {
+    this.props.closeModal()
+  }
+
+  deleteNote = () => {
+    const id = this.props.editor.id || this.props.match.params.noteId
+    this.props.deleteNote(id)
+    this.new()
+  }
+
+  insertText = text => {
+    if (!this.state.currentEditor) {
+      this.refs[0].editor.insert(text)
+    } else {
+      this.state.currentEditor.insert(text)
+    }
+  }
+
+  createAssociation = (id, title) => {
+    const origin = window.location.origin
+    const link = `[${title}](${origin}/notes/${id})`
+    this.insertText(link)
+    this.setState({...this.state, searchVisible: false})
+  }
+
+  searchPopup = () => {
+    this.setState({...this.state, searchVisible: true})
+  }
+
+  closeSearchPopup = () => {
+    this.setState({...this.state, searchVisible: false})
   }
 
   autosave = debounce(this.save, 1000, {trailing: true})
@@ -212,28 +262,36 @@ export class Editor extends Component {
                   {' '}
                   Create a New Note
                 </Button>
+                <Button inverted={true} onClick={this.searchPopup}>
+                  Insert Link
+                </Button>
                 {this.props.match.params.noteId ? (
-                  <Button
-                    inverted={true}
-                    onClick={() => {
-                      this.props.history.push(`/notes/${id}`)
-                    }}
-                  >
-                    {' '}
-                    Set to Render View
-                  </Button>
+                  <>
+                    <Button
+                      inverted={true}
+                      onClick={() => {
+                        this.props.history.push(`/notes/${id}`)
+                      }}
+                    >
+                      {' '}
+                      Set to Render View
+                    </Button>
+                    <Button
+                      inverted={true}
+                      onClick={() => {
+                        this.props.history.push(`/visual/${id}`)
+                      }}
+                    >
+                      {' '}
+                      Visualize
+                    </Button>
+                    <Button negative onClick={this.deletePopup}>
+                      Delete note
+                    </Button>
+                  </>
                 ) : (
                   ''
                 )}
-                <Button
-                  inverted={true}
-                  onClick={() => {
-                    this.props.history.push(`/visual/${id}`)
-                  }}
-                >
-                  {' '}
-                  Visualize
-                </Button>
               </div>
               <Grid divided="vertically">
                 <Grid.Row columns={2}>
@@ -422,6 +480,33 @@ export class Editor extends Component {
             </ScrollLock>
           </div>
         </ScrollSync>
+        <Modal open={this.props.modal.warning} style={{padding: '3em'}}>
+          <h1>Are you sure you want to delete this note?</h1>
+          <Button onClick={this.closeModal} style={{marginRight: '1em'}}>
+            {' '}
+            Cancel{' '}
+          </Button>
+          <Button
+            negative
+            onClick={this.deleteNote}
+            style={{marginRight: '1em'}}
+          >
+            {' '}
+            Delete{' '}
+          </Button>
+        </Modal>
+        <Modal
+          open={this.state.searchVisible}
+          closeOnDimmerClick={true}
+          onClose={this.closeSearchPopup}
+        >
+          <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
+            <AssocSearch
+              noteId={this.props.noteId}
+              makeAssociation={this.createAssociation}
+            />
+          </ReactiveBase>
+        </Modal>
       </div>
     )
   }
@@ -429,7 +514,9 @@ export class Editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    editor: state.editor
+    editor: state.editor,
+
+    modal: state.modal
   }
 }
 
@@ -464,6 +551,15 @@ const mapDispatchToProps = dispatch => {
     },
     clearNote: () => {
       dispatch(clearNote())
+    },
+    deleteConfirm: () => {
+      dispatch(deletePopup())
+    },
+    deleteNote: id => {
+      dispatch(deleteNote(id))
+    },
+    closeModal: () => {
+      dispatch(turnOffModal())
     }
   }
 }

@@ -289,26 +289,29 @@ export class Visual extends React.Component {
                       addAssociation(sourceNodeId, targetNodeId)
                     }
                   })
-
-                  cy
-                    .layout({
-                      name: 'cola',
-                      maxSimulationTime: 2500,
-                      refresh: 2,
-                      nodeSpacing: function(node) {
-                        if (node._private.edges.length === 0) return 175
-                        else {
-                          return node._private.edges.length * 15
+                  if (cy.nodes().length === 1) {
+                    cy.center()
+                  } else {
+                    cy
+                      .layout({
+                        name: 'cola',
+                        maxSimulationTime: 2500,
+                        refresh: 2,
+                        nodeSpacing: function(node) {
+                          if (node._private.edges.length === 0) return 175
+                          else {
+                            return node._private.edges.length * 15
+                          }
+                        },
+                        nodeDimensionsIncludeLabels: true,
+                        nodeRepulsion: 10000000000,
+                        fit: true,
+                        edgeLength: function(edge) {
+                          return edge._private.source.edges.length * 650
                         }
-                      },
-                      nodeDimensionsIncludeLabels: true,
-                      nodeRepulsion: 10000000000,
-                      fit: true,
-                      edgeLength: function(edge) {
-                        return edge._private.source.edges.length * 650
-                      }
-                    })
-                    .run()
+                      })
+                      .run()
+                  }
 
                   cy.on('mouseover', 'node', function(event) {
                     const id = event.target._private.data.id
@@ -350,7 +353,7 @@ export class Visual extends React.Component {
                   //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
                   //
                   cy.on('layoutstop', () => {
-                    let nextZoom = cy.zoom() * 0.86
+                    let nextZoom = cy.zoom() * 0.75
                     cy.zoom(nextZoom)
                   })
                 } else if (cy && render && !this.props.modal.loaded) {
@@ -457,10 +460,20 @@ export class Visual extends React.Component {
 
               <SingleNote noteId={this.props.modal.id} />
             </Modal>
-            <Modal open={this.props.modal.warning}>
-              <h1>WARNING: Do you want to delete this note?</h1>
-              <Button onClick={this.closeModal}> Cancel </Button>
-              <Button onClick={() => this.deleteNote(cyObj)}> Delete </Button>
+            <Modal open={this.props.modal.warning} style={{padding: '3em'}}>
+              <h1>Are you sure you want to delete this note?</h1>
+              <Button onClick={this.closeModal} style={{marginRight: '1em'}}>
+                {' '}
+                Cancel{' '}
+              </Button>
+              <Button
+                negative
+                onClick={() => this.deleteNote(cyObj)}
+                style={{marginRight: '1em'}}
+              >
+                {' '}
+                Delete{' '}
+              </Button>
             </Modal>
           </div>
         </React.Fragment>
