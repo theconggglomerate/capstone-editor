@@ -457,10 +457,20 @@ export class Visual extends React.Component {
 
               <SingleNote noteId={this.props.modal.id} />
             </Modal>
-            <Modal open={this.props.modal.warning}>
-              <h1>WARNING: Do you want to delete this note?</h1>
-              <Button onClick={this.closeModal}> Cancel </Button>
-              <Button onClick={() => this.deleteNote(cyObj)}> Delete </Button>
+            <Modal open={this.props.modal.warning} style={{padding: '3em'}}>
+              <h1>Are you sure you want to delete this note?</h1>
+              <Button onClick={this.closeModal} style={{marginRight: '1em'}}>
+                {' '}
+                Cancel{' '}
+              </Button>
+              <Button
+                negative
+                onClick={() => this.deleteNote(cyObj)}
+                style={{marginRight: '1em'}}
+              >
+                {' '}
+                Delete{' '}
+              </Button>
             </Modal>
           </div>
         </React.Fragment>
