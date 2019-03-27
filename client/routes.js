@@ -42,8 +42,7 @@ class Routes extends Component {
               <Container fluid style={{height: '50vh'}}>
                 <Image
                   verticalAlign="middle"
-                  centered
-                  style={{height: '100px'}}
+                  style={{height: '100px', marginLeft: '23%', marginTop: '10%'}}
                   src="/logo.png"
                 />
               </Container>
