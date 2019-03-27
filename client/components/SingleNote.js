@@ -26,8 +26,8 @@ class SingleNote extends Component {
 
   render() {
     let divStyle = window.location.pathname.includes('/visual')
-      ? {margin: '3em 3em 3em 3em'}
-      : {margin: '3em 25em 3em 25em'}
+      ? {margin: '3em 3em 3em 3em', backgroundColor: 'white', padding: '2em'}
+      : {margin: '3em 25em 3em 25em', backgroundColor: 'white', padding: '2em'}
     const {selectedNote} = this.props
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (

@@ -7,13 +7,13 @@ import GeneralLinks from './GeneralLinks'
 class LinkPreviewNote extends Component {
   componentDidMount() {
     this.props.selectNote()
-    setTimeout(() => {
-      this.props.toggleLoader()
-    }, 400)
+    this.props.toggleLoader()
+    console.log('componentdidmount')
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedNote.id !== prevProps.selectedNote.id) {
+      console.log('componentdidupdate')
       this.props.toggleLoader()
     }
   }

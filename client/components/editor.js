@@ -429,8 +429,7 @@ export class Editor extends Component {
 
 const mapStateToProps = state => {
   return {
-    editor: state.editor,
-    selectedNote: state.notes
+    editor: state.editor
   }
 }
 
