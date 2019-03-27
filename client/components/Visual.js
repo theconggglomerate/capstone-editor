@@ -178,7 +178,6 @@ export class Visual extends React.Component {
                   const deleteAssociation = this.deleteAssociation
                   cy.cxtmenu({
                     selector: 'node',
-                    activeFillColor: '#4286f4',
                     commands: [
                       {
                         content: 'Edit',
@@ -187,14 +186,14 @@ export class Visual extends React.Component {
                           editClick(id)
                         }
                       },
-                      // {
-                      //   content: 'Expand',
-                      //   select: function(ele) {
-                      //     const id = ele.id()
+                      {
+                        content: 'Expand',
+                        select: function(ele) {
+                          const id = ele.id()
 
-                      //     console.log(id)
-                      //   }
-                      // },
+                          console.log(id)
+                        }
+                      },
                       {
                         content: 'View Web',
                         select: function(ele) {
@@ -213,7 +212,6 @@ export class Visual extends React.Component {
                   })
                   cy.cxtmenu({
                     selector: 'edge',
-                    activeFillColor: '#4286f4',
                     commands: [
                       {
                         content: 'delete association',
