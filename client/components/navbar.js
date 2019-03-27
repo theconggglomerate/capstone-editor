@@ -6,8 +6,9 @@ import {SearchBar} from './../components'
 import {withRouter} from 'react-router'
 import {logout} from '../store/user'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
+import {Button} from 'semantic-ui-react'
 
-const Navbar = ({handleClick, isLoggedIn}) => {
+const Navbar = ({handleClick, isLoggedIn, history}) => {
   const url = window.location.pathname
   return (
     <div className="nav">
@@ -15,16 +16,36 @@ const Navbar = ({handleClick, isLoggedIn}) => {
         {isLoggedIn ? (
           <div>
             {/* The navbar will show these links after you log in */}
-            <a className="buttonMarg" href="#" onClick={handleClick}>
+            <Button
+              style={{margin: '1.5em 1em 1.5em 2.5em'}}
+              inverted={true}
+              className="buttonMarg"
+              href="#"
+              onClick={handleClick}
+            >
               Logout
-            </a>
+            </Button>
 
-            <Link className="buttonMarg" to="/visual">
+            <Button
+              style={{margin: '1.5em 1em 1.5em 1em'}}
+              inverted={true}
+              className="buttonMarg"
+              onClick={() => {
+                history.push('/visual')
+              }}
+            >
               Visual
-            </Link>
-            <Link className="buttonMarg" to="/editor/new">
-              New Note
-            </Link>
+            </Button>
+            <Button
+              style={{margin: '1.5em 1em 1.5em 1em'}}
+              inverted={true}
+              className="buttonMarg"
+              onClick={() => {
+                history.push('/editor')
+              }}
+            >
+              Current Note
+            </Button>
             {/* <Link className="buttonMarg" to="/home">
             Search
           </Link> */}
@@ -44,8 +65,26 @@ const Navbar = ({handleClick, isLoggedIn}) => {
         ) : (
           <div>
             {/* The navbar will show these links before you log in */}
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Button
+              style={{margin: '1.5em 1em 1.5em 1em'}}
+              className="buttonMarg"
+              inverted={true}
+              onClick={() => {
+                history.push('/login')
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              style={{margin: '1.5em 1em 1.5em 1em'}}
+              className="buttonMarg"
+              inverted={true}
+              onClick={() => {
+                history.push('/signup')
+              }}
+            >
+              Sign Up
+            </Button>
           </div>
         )}
       </nav>

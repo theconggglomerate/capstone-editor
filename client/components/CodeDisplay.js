@@ -4,12 +4,13 @@ import AceEditor from 'react-ace'
 import LoadingOverlay from 'react-loading-overlay'
 import Code from './Code'
 import {Button} from 'semantic-ui-react'
+import 'brace/theme/cobalt'
 class CodeDisplay extends Component {
   constructor(props) {
     super(props)
     this.state = {
       runkit: false,
-      theme: 'monokai',
+      theme: 'cobalt',
       fontSize: 14,
       result: null
     }
@@ -53,7 +54,13 @@ class CodeDisplay extends Component {
             readOnly: true
           }}
         />
-        <Button onClick={this.toggleRunkitStatus}>Make Runnable</Button>
+        <Button
+          style={{margin: '1em 1em 1em 80%'}}
+          onClick={this.toggleRunkitStatus}
+          inverted={true}
+        >
+          Make Runnable
+        </Button>
         {this.state.result ? <h3>{this.state.result}</h3> : ''}
       </>
     ) : (

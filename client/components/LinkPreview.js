@@ -1,74 +1,74 @@
 import React, {Component} from 'react'
 import LoadingOverlay from 'react-loading-overlay'
-import {Modal, Popup, Sidebar} from 'semantic-ui-react'
+import {Sidebar, Container} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import {SingleNote} from './../components/'
+import {LinkPreviewNote} from './../components/'
 
 class LinkPreview extends Component {
   constructor() {
     super()
     this.state = {
-      modalOpen: false
+      sidebarOpen: false,
+      noteShouldLoad: false,
+      noteLoaded: false
     }
-    this.openModal = this.openModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
+    this.openSidebar = this.openSidebar.bind(this)
+    this.closeSidebar = this.closeSidebar.bind(this)
+    this.toggleLoader = this.toggleLoader.bind(this)
   }
-
-  openModal() {
-    console.log('Open!')
-    this.setState({modalOpen: true})
-    console.log('State equals: ', this.state.modalOpen)
+  openSidebar() {
+    this.setState({sidebarOpen: true})
   }
-
-  closeModal() {
-    console.log('Closed!')
+  closeSidebar() {
     this.setState({
-      modalOpen: false
+      sidebarOpen: false
     })
-    console.log('State equals: ', this.state.modalOpen)
+  }
+
+  toggleLoader() {
+    this.setState({
+      noteLoaded: true
+    })
   }
   render() {
     const {previewedNote, title} = this.props
     return (
-      // <div>
-      //   <Modal open={this.state.modalOpen} style={{padding: '3em'}}>
-
-      //     <LoadingOverlay active={true} spinner={true} className="loading" />
-      //     This is a test
-      //   </Modal>
-
-      // </div>
-      <div>
+      <React.Fragment>
         <Sidebar
-          // as={Menu}
           direction="left"
           animation="overlay"
-          // icon="labeled"
-          // inverted
-          // onHide={this.handleSidebarHide}
-          vertical
-          visible={this.state.modalOpen}
-          width="very wide"
+          visible={this.state.sidebarOpen}
+          onShow={() => this.setState({noteShouldLoad: true})}
+          onHide={() =>
+            this.setState({
+              noteShouldLoad: false,
+              noteLoaded: false
+            })
+          }
         >
-          <SingleNote noteId={previewedNote} />
+          {!this.state.noteLoaded && (
+            <Container className="loaderContainer">
+              <LoadingOverlay
+                active={true}
+                spinner={<img src="/loader.png" className="cosmonoteLoader" />}
+              />
+            </Container>
+          )}
+          {this.state.noteShouldLoad && (
+            <LinkPreviewNote
+              noteId={previewedNote}
+              toggleLoader={this.toggleLoader}
+            />
+          )}
         </Sidebar>
         <Link
-          onMouseEnter={() => this.openModal()}
-          onMouseLeave={() => this.closeModal()}
+          onMouseEnter={() => this.openSidebar()}
+          onMouseLeave={() => this.closeSidebar()}
           to={`/notes/${previewedNote}`}
         >
           {title}
         </Link>
-      </div>
-
-      // <Popup
-      //   on={['hover', 'click']}
-      //   // flowing={true}
-      //   keepInViewPort={true}
-      //   positon="bottom center"
-      //   content={<SingleNote noteId={previewedNote} />}
-      //   trigger={<Link to={`/notes/${previewedNote}`}>{title}</Link>}
-      // />
+      </React.Fragment>
     )
   }
 }

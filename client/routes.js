@@ -13,7 +13,7 @@ import {
   SingleWeb
 } from './components'
 import {fetchNotes, me} from './store'
-
+import {Container, Image} from 'semantic-ui-react'
 import MyApp from './components/d3Base'
 import SearchResults from './components/SearchResults'
 
@@ -31,6 +31,20 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <Container fluid style={{height: '50vh'}}>
+              <Image
+                verticalAlign="middle"
+                centered
+                style={{height: '100px'}}
+                src="/logo.png"
+              />
+            </Container>
+          )}
+        />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/visual" component={MyApp} />
@@ -50,8 +64,6 @@ class Routes extends Component {
             <Route exact path="/markdown-editor" component={MarkdownEditor} />
           </Switch>
         )}
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
       </Switch>
     )
   }
