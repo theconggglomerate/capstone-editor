@@ -35,12 +35,10 @@ export class Visual extends React.Component {
     cy.remove(`edge[id="${edgeId}"]`)
   }
   closeModal = () => {
-    console.log('closing modal')
     this.props.closeModal()
   }
   toggleModal = (event, cy) => {
     const id = event.target._private.data.id
-    console.log('modal open', id)
     if (id.length < 10) this.props.getModal(id)
     else {
       cy.one('tap', 'node', event => this.toggleModal(event, cy))
@@ -68,13 +66,11 @@ export class Visual extends React.Component {
   countRender = () => {
     let renders = this.state.renders
     renders++
-    console.log(renders)
     this.setState({...this.state, renders})
   }
   render() {
     var cyObj
     if (this.props.elements.nodes) {
-      console.log('elements', this.props.elements)
       return (
         <React.Fragment>
           <div className="visual">
@@ -156,7 +152,6 @@ export class Visual extends React.Component {
                 this.cy = cy
                 this.cyto = cy
                 let render
-                console.log('loaded?', this.props.modal.loaded)
                 if (cy && cy._private.emitter.listeners) {
                   render = cy._private.emitter.listeners.reduce(
                     (accum, element) => {
@@ -172,7 +167,6 @@ export class Visual extends React.Component {
                     },
                     false
                   )
-                  console.log('render', render)
                 }
 
                 if (cy && !render && !this.props.modal.loaded) {
@@ -197,8 +191,7 @@ export class Visual extends React.Component {
                         select: function(ele) {
                           const id = ele.id()
 
-                          const outgoers = cy.getElementById(`${id}`)
-                          console.log(outgoers)
+                          console.log(id)
                         }
                       },
                       {
@@ -223,7 +216,6 @@ export class Visual extends React.Component {
                       {
                         content: 'delete association',
                         select: function(ele) {
-                          console.log(ele)
                           deleteAssociation(
                             ele._private.data.source,
                             ele._private.data.target,
@@ -301,15 +293,16 @@ export class Visual extends React.Component {
                   cy
                     .layout({
                       name: 'cola',
-                      maxSimulationTime: 3000,
+                      maxSimulationTime: 2500,
+                      refresh: 2,
                       nodeSpacing: function(node) {
                         if (node._private.edges.length === 0) return 175
                         else {
                           return node._private.edges.length * 15
                         }
                       },
-                      nodeDimensionsIncludeLabels: false,
-                      nodeRepulsion: 100000,
+                      nodeDimensionsIncludeLabels: true,
+                      nodeRepulsion: 10000000000,
                       fit: true,
                       edgeLength: function(edge) {
                         return edge._private.source.edges.length * 650
@@ -356,6 +349,10 @@ export class Visual extends React.Component {
                   // ) {
                   //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
                   //
+                  cy.on('layoutstop', () => {
+                    let nextZoom = cy.zoom() * 0.86
+                    cy.zoom(nextZoom)
+                  })
                 } else if (cy && render && !this.props.modal.loaded) {
                   console.log(
                     'second render type',
@@ -447,6 +444,15 @@ export class Visual extends React.Component {
                 <Button color="red" onClick={this.closeModal}>
                   Close Preview
                 </Button>
+                <Button
+                  onClick={() =>
+                    this.props.history.push(
+                      `/editor/${this.props.selectedNote.id}`
+                    )
+                  }
+                >
+                  Set to Edit View
+                </Button>
               </div>
 
               <SingleNote noteId={this.props.modal.id} />
@@ -465,6 +471,12 @@ export class Visual extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    selectedNote: state.notes.selectedNote
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
   deletePopup: id => {
     dispatch(deletePopup(id))
@@ -474,4 +486,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(null, mapDispatchToProps)(withRouter(Visual))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Visual))

@@ -5,6 +5,11 @@ body {
 
 a {
   text-decoration: none;
+  color: #4286f4;
+}
+
+a:hover {
+  color: #e65600;
 }
 
 label {
@@ -105,9 +110,9 @@ form div {
 
 .search-container {
   position: absolute;
-  right: -20%;
+  right: -25%;
   top: 1.25em;
-  width: 50em;
+  width: 55em;
 }
 
 .ace_content {
@@ -120,7 +125,7 @@ form div {
 }
 
 .nav {
-  height: 5em;
+  height: 7em;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -143,6 +148,11 @@ form div {
   background-color: #0f2027;
   height: 93vh;
   color: white;
+}
+
+.generalAssociations {
+  margin: 5em 5em 5em 0em;
+  text-align: center;
 }
 
 .ui.sidebar {

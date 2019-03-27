@@ -35,9 +35,6 @@ export class SingleWeb extends React.Component {
   }
 
   expandClick = id => {
-    // console.log('NODE LIST', this.props.singleWebElements.nodes)
-    // this.props.getSingleWeb(id)
-
     this.props.singleWebElements.nodes.push()
     this.props.singleWebElements.edges.push()
   }

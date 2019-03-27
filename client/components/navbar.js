@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {SearchBar} from './../components'
 import {withRouter} from 'react-router'
 import {logout} from '../store/user'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
-import {Button} from 'semantic-ui-react'
+import {Button, Image} from 'semantic-ui-react'
 
 const Navbar = ({handleClick, isLoggedIn, history}) => {
   const url = window.location.pathname
@@ -25,17 +24,6 @@ const Navbar = ({handleClick, isLoggedIn, history}) => {
             >
               Logout
             </Button>
-
-            <Button
-              style={{margin: '1.5em 1em 1.5em 1em'}}
-              inverted={true}
-              className="buttonMarg"
-              onClick={() => {
-                history.push('/visual')
-              }}
-            >
-              Visual
-            </Button>
             <Button
               style={{margin: '1.5em 1em 1.5em 1em'}}
               inverted={true}
@@ -46,9 +34,15 @@ const Navbar = ({handleClick, isLoggedIn, history}) => {
             >
               Current Note
             </Button>
-            {/* <Link className="buttonMarg" to="/home">
-            Search
-          </Link> */}
+
+            <Image
+              style={{marginTop: '1em', marginLeft: '21em'}}
+              verticalAlign="top"
+              src="/imgs/cosomnote.png"
+              size="large"
+              href="/visual"
+            />
+
             {url !== '/search' ? (
               <div className="search-container">
                 <ReactiveBase
