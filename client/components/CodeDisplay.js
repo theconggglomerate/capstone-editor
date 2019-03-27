@@ -27,31 +27,33 @@ class CodeDisplay extends Component {
     return !this.state.runkit ? (
       <>
         {' '}
-        <AceEditor
-          mode="javascript"
-          theme={this.state.theme}
-          name="CodeEditor"
-          onChange={value => this.handleChange(value, idx)}
-          key={this.props.keyr}
-          value={this.props.source}
-          fontSize={this.state.fontSize}
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          editorProps={{$blockScrolling: Infinity}}
-          width="100%"
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: this.state.enableLiveAutocompletion,
-            enableSnippets: true,
-            showLineNumbers: true,
-            tabSize: 2,
-            maxLines: 100,
-            minLines: 3,
-            wrap: true,
-            readOnly: true
-          }}
-        />
+        <div className="code" key={this.props.keyr}>
+          <AceEditor
+            mode="javascript"
+            theme={this.state.theme}
+            name="CodeEditor"
+            onChange={value => this.handleChange(value, idx)}
+            key={this.props.keyr}
+            value={this.props.source}
+            fontSize={this.state.fontSize}
+            showPrintMargin={true}
+            showGutter={true}
+            highlightActiveLine={true}
+            editorProps={{$blockScrolling: Infinity}}
+            width="100%"
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: this.state.enableLiveAutocompletion,
+              enableSnippets: true,
+              showLineNumbers: true,
+              tabSize: 2,
+              maxLines: 100,
+              minLines: 3,
+              wrap: true,
+              readOnly: true
+            }}
+          />
+        </div>
         {window.location.pathname.includes('/visual') ? (
           <Button
             style={{margin: '1em 1em 1em 80%'}}

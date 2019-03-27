@@ -10,11 +10,16 @@ class SearchResults extends Component {
   render() {
     return (
       <React.Fragment>
-        <div style={{padding: '3em', backgroundColor: '#0f2027'}}>
+        <div
+          style={{
+            backgroundColor: '#0f2027',
+            padding: '4em'
+          }}
+        >
           <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
             <SearchBar />
             <ReactiveList
-              style={{margin: '2em'}}
+              style={{margin: '1em', fontSize: '20px'}}
               componentId="searchResults"
               dataField="title"
               URLParams={true}
