@@ -19,10 +19,13 @@ import {
   saveProject,
   editTitle,
   clearEditor,
-  clearNote
+  clearNote,
+  deletePopup,
+  turnOffModal,
+  deleteNote
 } from './../store'
 import GeneralLinks from './GeneralLinks'
-import {Grid, Button, Input} from 'semantic-ui-react'
+import {Grid, Button, Input, Modal} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 import brace from 'brace'
 import 'brace/theme/katzenmilch'
@@ -54,7 +57,7 @@ export class Editor extends Component {
     } else if (noteId) {
       this.props.getProject(noteId)
       this.props.selectNote(noteId)
-    } else {
+    } else if (this.props.editor.id) {
       const id = this.props.editor.id
       this.props.history.push(`/editor/${id}`)
     }
@@ -182,6 +185,20 @@ export class Editor extends Component {
     this.refresh()
   }
 
+  deletePopup = () => {
+    this.props.deleteConfirm()
+  }
+
+  closeModal = () => {
+    this.props.closeModal()
+  }
+
+  deleteNote = () => {
+    const id = this.props.editor.id || this.props.match.params.noteId
+    this.props.deleteNote(id)
+    this.new()
+  }
+
   autosave = debounce(this.save, 1000, {trailing: true})
 
   handleTitle = event => {
@@ -226,27 +243,32 @@ export class Editor extends Component {
                   Create a New Note
                 </Button>
                 {this.props.match.params.noteId ? (
-                  <Button
-                    inverted={true}
-                    onClick={() => {
-                      this.props.history.push(`/notes/${id}`)
-                    }}
-                  >
-                    {' '}
-                    Set to Render View
-                  </Button>
+                  <>
+                    <Button
+                      inverted={true}
+                      onClick={() => {
+                        this.props.history.push(`/notes/${id}`)
+                      }}
+                    >
+                      {' '}
+                      Set to Render View
+                    </Button>
+                    <Button
+                      inverted={true}
+                      onClick={() => {
+                        this.props.history.push(`/visual/${id}`)
+                      }}
+                    >
+                      {' '}
+                      Visualize
+                    </Button>
+                    <Button negative onClick={this.deletePopup}>
+                      Delete note
+                    </Button>
+                  </>
                 ) : (
                   ''
                 )}
-                <Button
-                  inverted={true}
-                  onClick={() => {
-                    this.props.history.push(`/visual/${id}`)
-                  }}
-                >
-                  {' '}
-                  Visualize
-                </Button>
               </div>
               <Grid divided="vertically">
                 <Grid.Row columns={2}>
@@ -398,6 +420,21 @@ export class Editor extends Component {
             </ScrollLock>
           </div>
         </ScrollSync>
+        <Modal open={this.props.modal.warning} style={{padding: '3em'}}>
+          <h1>Are you sure you want to delete this note?</h1>
+          <Button onClick={this.closeModal} style={{marginRight: '1em'}}>
+            {' '}
+            Cancel{' '}
+          </Button>
+          <Button
+            negative
+            onClick={this.deleteNote}
+            style={{marginRight: '1em'}}
+          >
+            {' '}
+            Delete{' '}
+          </Button>
+        </Modal>
       </div>
     )
   }
@@ -406,7 +443,8 @@ export class Editor extends Component {
 const mapStateToProps = state => {
   return {
     editor: state.editor,
-    selectedNote: state.notes
+    selectedNote: state.notes,
+    modal: state.modal
   }
 }
 
@@ -441,6 +479,15 @@ const mapDispatchToProps = dispatch => {
     },
     clearNote: () => {
       dispatch(clearNote())
+    },
+    deleteConfirm: () => {
+      dispatch(deletePopup())
+    },
+    deleteNote: id => {
+      dispatch(deleteNote(id))
+    },
+    closeModal: () => {
+      dispatch(turnOffModal())
     }
   }
 }

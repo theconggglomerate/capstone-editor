@@ -350,7 +350,7 @@ export class Visual extends React.Component {
                   //   cy.one('click', 'node', ((event) => this.toggleModal(event,cy)))
                   //
                   cy.on('layoutstop', () => {
-                    let nextZoom = cy.zoom() * 0.86
+                    let nextZoom = cy.zoom() * 0.75
                     cy.zoom(nextZoom)
                   })
                 } else if (cy && render && !this.props.modal.loaded) {
