@@ -6,7 +6,7 @@ import {withRouter} from 'react-router'
 import {logout} from '../store/user'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
 import {Button, Image} from 'semantic-ui-react'
-import Sidebar from './Sidebar'
+
 
 const Navbar = ({handleClick, isLoggedIn, history}) => {
   const url = window.location.pathname
