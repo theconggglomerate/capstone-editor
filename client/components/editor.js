@@ -53,7 +53,7 @@ export class Editor extends Component {
 
   refresh = () => {
     const noteId = this.props.match.params.noteId
-    this.allowNavigate()
+
     if (noteId === 'new') {
       this.props.clearEditor()
       this.props.clearNote()
@@ -65,6 +65,7 @@ export class Editor extends Component {
       const id = this.props.editor.id
       this.props.history.push(`/editor/${id}`)
     }
+    this.allowNavigate()
   }
 
   allowNavigate = () => {
@@ -94,14 +95,18 @@ export class Editor extends Component {
         nextNum++
         let nextRef = undefined
         let prevRef = undefined
+        console.log('nextNum', nextNum)
+        console.log('prevNum', prevNum)
 
         if (this.refs.hasOwnProperty(nextNum)) {
           nextRef = this.refs[nextNum]
           nextEditor = this.refs[nextNum].editor
+          console.log('nextEditor', nextEditor)
         }
         if (this.refs.hasOwnProperty(prevNum)) {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
+          console.log('prevEditor', prevEditor)
         }
         this.refs[i].editor.on('click', () =>
           this.setState({...this.state, currentEditor: editor})
@@ -113,6 +118,7 @@ export class Editor extends Component {
               nextEditor &&
               keyString === 'down'
             ) {
+              console.log('move to next', nextEditor)
               nextEditor.moveCursorTo(0, 0)
               nextEditor.focus()
               this.setState({...this.state, currentEditor: nextEditor})
@@ -121,6 +127,7 @@ export class Editor extends Component {
               prevEditor &&
               keyString === 'up'
             ) {
+              console.log('move to prev', prevEditor)
               prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
               prevEditor.focus()
               this.setState({...this.state, currentEditor: prevEditor})
@@ -144,6 +151,7 @@ export class Editor extends Component {
         )
       }
     }
+    console.log(this.refs)
   }
 
   componentDidMount = () => {
@@ -152,6 +160,9 @@ export class Editor extends Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps.match.params.noteId !== this.props.match.params.noteId) {
+      this.refresh()
+    }
+    if (prevProps.editor.id !== this.props.editor.id) {
       this.refresh()
     }
   }
