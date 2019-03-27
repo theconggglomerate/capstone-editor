@@ -93,7 +93,10 @@ class GeneralLinks extends Component {
                         ? associations.map(link => (
                             <List.Item key={link.id}>
                               <Grid columns={2}>
-                                <Grid.Column textAlign="left">
+                                <Grid.Column
+                                  textAlign="left"
+                                  className="generalLinkTitle"
+                                >
                                   <Link to={`/notes/${link.id}`}>
                                     {link.title}
                                   </Link>{' '}

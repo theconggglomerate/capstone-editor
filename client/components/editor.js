@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, {Component} from 'react'
 import AceEditor from 'react-ace'
 import 'brace/mode/jsx'
@@ -95,18 +96,14 @@ export class Editor extends Component {
         nextNum++
         let nextRef = undefined
         let prevRef = undefined
-        console.log('nextNum', nextNum)
-        console.log('prevNum', prevNum)
 
         if (this.refs.hasOwnProperty(nextNum)) {
           nextRef = this.refs[nextNum]
           nextEditor = this.refs[nextNum].editor
-          console.log('nextEditor', nextEditor)
         }
         if (this.refs.hasOwnProperty(prevNum)) {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
-          console.log('prevEditor', prevEditor)
         }
         this.refs[i].editor.on('click', () =>
           this.setState({...this.state, currentEditor: editor})
@@ -118,7 +115,6 @@ export class Editor extends Component {
               nextEditor &&
               keyString === 'down'
             ) {
-              console.log('move to next', nextEditor)
               nextEditor.moveCursorTo(0, 0)
               nextEditor.focus()
               this.setState({...this.state, currentEditor: nextEditor})
@@ -127,7 +123,6 @@ export class Editor extends Component {
               prevEditor &&
               keyString === 'up'
             ) {
-              console.log('move to prev', prevEditor)
               prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
               prevEditor.focus()
               this.setState({...this.state, currentEditor: prevEditor})
@@ -151,7 +146,6 @@ export class Editor extends Component {
         )
       }
     }
-    console.log(this.refs)
   }
 
   componentDidMount = () => {
@@ -313,7 +307,7 @@ export class Editor extends Component {
                           style={{
                             margin: '3em 1em 2em 1em',
                             height: '3em',
-                            width: '95%'
+                            width: '96%'
                           }}
                           type="text"
                           onChange={this.handleTitle}

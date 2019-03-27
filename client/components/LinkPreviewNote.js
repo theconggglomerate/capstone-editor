@@ -8,12 +8,10 @@ class LinkPreviewNote extends Component {
   componentDidMount() {
     this.props.selectNote()
     this.props.toggleLoader()
-    console.log('componentdidmount')
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedNote.id !== prevProps.selectedNote.id) {
-      console.log('componentdidupdate')
       this.props.toggleLoader()
     }
   }

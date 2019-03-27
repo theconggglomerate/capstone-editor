@@ -359,10 +359,6 @@ export class Visual extends React.Component {
                     cy.zoom(nextZoom)
                   })
                 } else if (cy && render && !this.props.modal.loaded) {
-                  console.log(
-                    'second render type',
-                    cy._private.emitter.listeners
-                  )
                   cy
                     .layout({
                       name: 'cola',
@@ -435,7 +431,6 @@ export class Visual extends React.Component {
                     'line-color': 'white'
                   })
                 } else if (cy && !render && this.props.modal.loaded) {
-                  console.log('just adding the listener')
                   cy.one('click', 'node', event => this.toggleModal(event, cy))
                 }
               }}

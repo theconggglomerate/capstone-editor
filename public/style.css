@@ -98,6 +98,10 @@ form div {
   height: 100% */
 }
 
+.code {
+  outline: lightgray solid 1px;
+}
+
 .scrollable {
   overflow-y: auto;
   max-height: 85vh;
@@ -137,7 +141,7 @@ form div {
   color: white;
   background-color: rgba(103, 128, 159, 0.3);
   margin: 1em;
-  padding: 5em;
+  padding: 1em;
 }
 
 .reactivelist:hover {
@@ -201,4 +205,8 @@ form div {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.generalLinkTitle {
+  font-size: 18px;
 }
