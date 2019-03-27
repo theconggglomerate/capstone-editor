@@ -140,7 +140,7 @@ export class Editor extends Component {
           if (
             editor.container.offsetTop +
               editor.getCursorPosition().row * 14.54545 >
-            editorScroll.scrollTop + 0.85 * window.innerHeight - 10
+            editorScroll.scrollTop + 0.85 * window.innerHeight - 70
           ) {
             editorScroll.scrollTop += 40
           }
