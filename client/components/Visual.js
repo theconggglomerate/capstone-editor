@@ -289,26 +289,29 @@ export class Visual extends React.Component {
                       addAssociation(sourceNodeId, targetNodeId)
                     }
                   })
-
-                  cy
-                    .layout({
-                      name: 'cola',
-                      maxSimulationTime: 2500,
-                      refresh: 2,
-                      nodeSpacing: function(node) {
-                        if (node._private.edges.length === 0) return 175
-                        else {
-                          return node._private.edges.length * 15
+                  if (cy.nodes().length === 1) {
+                    cy.center()
+                  } else {
+                    cy
+                      .layout({
+                        name: 'cola',
+                        maxSimulationTime: 2500,
+                        refresh: 2,
+                        nodeSpacing: function(node) {
+                          if (node._private.edges.length === 0) return 175
+                          else {
+                            return node._private.edges.length * 15
+                          }
+                        },
+                        nodeDimensionsIncludeLabels: true,
+                        nodeRepulsion: 10000000000,
+                        fit: true,
+                        edgeLength: function(edge) {
+                          return edge._private.source.edges.length * 650
                         }
-                      },
-                      nodeDimensionsIncludeLabels: true,
-                      nodeRepulsion: 10000000000,
-                      fit: true,
-                      edgeLength: function(edge) {
-                        return edge._private.source.edges.length * 650
-                      }
-                    })
-                    .run()
+                      })
+                      .run()
+                  }
 
                   cy.on('mouseover', 'node', function(event) {
                     const id = event.target._private.data.id
