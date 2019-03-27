@@ -7,7 +7,6 @@ import {logout} from '../store/user'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
 import {Button, Image} from 'semantic-ui-react'
 
-
 const Navbar = ({handleClick, isLoggedIn, history}) => {
   const url = window.location.pathname
   return (
@@ -38,7 +37,7 @@ const Navbar = ({handleClick, isLoggedIn, history}) => {
             {/* <Sidebar /> */}
 
             <Image
-              style={{marginTop: '1em', marginLeft: '21em'}}
+              style={{marginTop: '1em', marginLeft: '17em'}}
               verticalAlign="top"
               src="/imgs/cosomnote.png"
               size="large"
