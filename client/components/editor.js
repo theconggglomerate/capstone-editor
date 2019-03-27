@@ -46,7 +46,7 @@ export class Editor extends Component {
       enableLiveAutocompletion: true,
       fontSize: 14,
       currentIdx: 0,
-      currentEditor: {},
+      currentEditor: false,
       searchVisible: false
     }
   }
@@ -76,9 +76,6 @@ export class Editor extends Component {
       let xander = 0
     }
 
-    if (this.refs[0] && this.refs[0].editor) {
-      this.setState({...this.state, currentEditor: this.refs[0].editor})
-    }
     const editorScroll = this.refs['editor-scroll']
     const renderScroll = this.refs['render-scroll']
     for (let i in this.refs) {
@@ -106,7 +103,9 @@ export class Editor extends Component {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
         }
-
+        this.refs[i].editor.on('click', () =>
+          this.setState({...this.state, currentEditor: editor})
+        )
         this.refs[i].editor.keyBinding.addKeyboardHandler(
           (data, hash, keyString, keyCode, event) => {
             if (
@@ -198,7 +197,11 @@ export class Editor extends Component {
   }
 
   insertText = text => {
-    this.state.currentEditor.insert(text)
+    if (!this.state.currentEditor) {
+      this.refs[0].editor.insert(text)
+    } else {
+      this.state.currentEditor.insert(text)
+    }
   }
 
   createAssociation = (id, title) => {
