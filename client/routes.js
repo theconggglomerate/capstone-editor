@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
+import {Redirect} from 'react-router'
 import PropTypes from 'prop-types'
 import {
   Login,
@@ -34,16 +35,20 @@ class Routes extends Component {
         <Route
           exact
           path="/"
-          render={() => (
-            <Container fluid style={{height: '50vh'}}>
-              <Image
-                verticalAlign="middle"
-                centered
-                style={{height: '100px'}}
-                src="/logo.png"
-              />
-            </Container>
-          )}
+          render={() =>
+            isLoggedIn ? (
+              <Redirect to="/visual" />
+            ) : (
+              <Container fluid style={{height: '50vh'}}>
+                <Image
+                  verticalAlign="middle"
+                  centered
+                  style={{height: '100px'}}
+                  src="/logo.png"
+                />
+              </Container>
+            )
+          }
         />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
