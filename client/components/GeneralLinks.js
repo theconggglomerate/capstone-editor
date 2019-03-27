@@ -50,9 +50,16 @@ class GeneralLinks extends Component {
     if (noteId && selectedNote) {
       return (
         <>
-          <Button inverted={true} onClick={this.toggleVisible}>
-            Show Associated Notes
-          </Button>
+          {window.location.pathname.includes('/visual') ? (
+            <Button color="facebook" onClick={this.toggleVisible}>
+              Show Associated Notes
+            </Button>
+          ) : (
+            <Button inverted={true} onClick={this.toggleVisible}>
+              Show Associated Notes
+            </Button>
+          )}
+
           <Sidebar
             as={Menu}
             animation="push"
