@@ -32,11 +32,17 @@ class SingleNote extends Component {
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
       <div style={divStyle}>
-        <Button
-          onClick={() => this.props.history.push(`/editor/${selectedNote.id}`)}
-        >
-          Set to Edit View
-        </Button>
+        {window.location.pathname.includes('/notes') ? (
+          <Button
+            onClick={() =>
+              this.props.history.push(`/editor/${selectedNote.id}`)
+            }
+          >
+            Set to Edit View
+          </Button>
+        ) : (
+          ''
+        )}
         <h1>{selectedNote.title}</h1>
         {selectedNote.content.cells.map((cell, idx) => {
           if (cell.type === 'markdown') {
