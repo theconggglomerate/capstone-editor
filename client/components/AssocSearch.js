@@ -38,7 +38,7 @@ class AssocSearch extends Component {
         }}
         onValueSelected={(value, cause, source) => {
           if (cause === 'SUGGESTION_SELECT')
-            this.props.makeAssociation(source.id)
+            this.props.makeAssociation(source.id, source.title)
           //   if (cause === 'ENTER_PRESS')
           //     return;
         }}

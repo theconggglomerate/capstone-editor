@@ -24,6 +24,8 @@ import {
   turnOffModal,
   deleteNote
 } from './../store'
+import AssocSearch from './AssocSearch'
+import {ReactiveBase} from '@appbaseio/reactivesearch'
 import GeneralLinks from './GeneralLinks'
 import {Grid, Button, Input, Modal} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
@@ -43,7 +45,9 @@ export class Editor extends Component {
       theme: 'cobalt',
       enableLiveAutocompletion: true,
       fontSize: 14,
-      currentIdx: 0
+      currentIdx: 0,
+      currentEditor: {},
+      searchVisible: false
     }
   }
 
@@ -70,6 +74,10 @@ export class Editor extends Component {
       !this.refs[0].editor.keyBinding.$handlers[1]
     ) {
       let xander = 0
+    }
+
+    if (this.refs[0] && this.refs[0].editor) {
+      this.setState({...this.state, currentEditor: this.refs[0].editor})
     }
     const editorScroll = this.refs['editor-scroll']
     const renderScroll = this.refs['render-scroll']
@@ -98,53 +106,43 @@ export class Editor extends Component {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
         }
-        if (this.refs[i].editor.keyBinding.$handlers[1]) {
-          this.refs[i].editor.keyBinding.removeKeyboardHandler(function(
-            data,
-            hash,
-            keyString,
-            keyCode,
-            event
-          ) {})
-        }
-        this.refs[i].editor.keyBinding.addKeyboardHandler(function(
-          data,
-          hash,
-          keyString,
-          keyCode,
-          event
-        ) {
-          if (
-            editor.getCursorPosition().row === editor.getLastVisibleRow() &&
-            nextEditor &&
-            keyString === 'down'
-          ) {
-            nextEditor.moveCursorTo(0, 0)
-            nextEditor.focus()
-          } else if (
-            editor.getCursorPosition().row === 0 &&
-            prevEditor &&
-            keyString === 'up'
-          ) {
-            prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
-            prevEditor.focus()
-          }
 
-          if (
-            editorScroll.scrollTop >
-            editor.container.offsetTop +
-              editor.getCursorPosition().row * 14.54545
-          ) {
-            editorScroll.scrollTop -= 40
+        this.refs[i].editor.keyBinding.addKeyboardHandler(
+          (data, hash, keyString, keyCode, event) => {
+            if (
+              editor.getCursorPosition().row === editor.getLastVisibleRow() &&
+              nextEditor &&
+              keyString === 'down'
+            ) {
+              nextEditor.moveCursorTo(0, 0)
+              nextEditor.focus()
+              this.setState({...this.state, currentEditor: nextEditor})
+            } else if (
+              editor.getCursorPosition().row === 0 &&
+              prevEditor &&
+              keyString === 'up'
+            ) {
+              prevEditor.moveCursorTo(prevEditor.getLastVisibleRow(), 0)
+              prevEditor.focus()
+              this.setState({...this.state, currentEditor: prevEditor})
+            }
+
+            if (
+              editorScroll.scrollTop >
+              editor.container.offsetTop +
+                editor.getCursorPosition().row * 14.54545
+            ) {
+              editorScroll.scrollTop -= 40
+            }
+            if (
+              editor.container.offsetTop +
+                editor.getCursorPosition().row * 14.54545 >
+              editorScroll.scrollTop + 0.85 * window.innerHeight - 70
+            ) {
+              editorScroll.scrollTop += 40
+            }
           }
-          if (
-            editor.container.offsetTop +
-              editor.getCursorPosition().row * 14.54545 >
-            editorScroll.scrollTop + 0.85 * window.innerHeight - 70
-          ) {
-            editorScroll.scrollTop += 40
-          }
-        })
+        )
       }
     }
   }
@@ -199,6 +197,25 @@ export class Editor extends Component {
     this.new()
   }
 
+  insertText = text => {
+    this.state.currentEditor.insert(text)
+  }
+
+  createAssociation = (id, title) => {
+    const origin = window.location.origin
+    const link = `[${title}](${origin}/notes/${id})`
+    this.insertText(link)
+    this.setState({...this.state, searchVisible: false})
+  }
+
+  searchPopup = () => {
+    this.setState({...this.state, searchVisible: true})
+  }
+
+  closeSearchPopup = () => {
+    this.setState({...this.state, searchVisible: false})
+  }
+
   autosave = debounce(this.save, 1000, {trailing: true})
 
   handleTitle = event => {
@@ -241,6 +258,9 @@ export class Editor extends Component {
                 <Button inverted={true} onClick={this.new}>
                   {' '}
                   Create a New Note
+                </Button>
+                <Button inverted={true} onClick={this.searchPopup}>
+                  Insert Link
                 </Button>
                 {this.props.match.params.noteId ? (
                   <>
@@ -471,6 +491,18 @@ export class Editor extends Component {
             {' '}
             Delete{' '}
           </Button>
+        </Modal>
+        <Modal
+          open={this.state.searchVisible}
+          closeOnDimmerClick={true}
+          onClose={this.closeSearchPopup}
+        >
+          <ReactiveBase app="notes" url={`${window.location.origin}/api/es`}>
+            <AssocSearch
+              noteId={this.props.noteId}
+              makeAssociation={this.createAssociation}
+            />
+          </ReactiveBase>
         </Modal>
       </div>
     )
