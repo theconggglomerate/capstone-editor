@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
 import {ReactiveBase, ReactiveList} from '@appbaseio/reactivesearch'
 import {withRouter} from 'react-router'
-import {Link} from 'react-router-dom'
 import {SearchBar} from './../components'
 import ReactHtmlParser from 'react-html-parser'
-import {Search} from 'brace/ext/searchbox'
-
+import LoadingOverlay from 'react-loading-overlay'
 class SearchResults extends Component {
   render() {
     return (
@@ -18,31 +16,36 @@ class SearchResults extends Component {
               componentId="searchResults"
               dataField="title"
               URLParams={true}
-              loader="Loading Results.."
+              loader={
+                <LoadingOverlay
+                  active={true}
+                  spinner={
+                    <img src="/loader.png" className="cosmonoteLoader" />
+                  }
+                />
+              }
               onData={res => {
                 return (
-                  <React.Fragment>
-                    <div
-                      className="reactivelist"
-                      key={res.id}
-                      onClick={() =>
-                        this.props.history.push(`/notes/${res.id}`)
-                      }
-                    >
-                      {res.highlight && res.highlight.title
-                        ? ReactHtmlParser(res.highlight.title)
-                        : res.title}:
-                      <br />
-                      <br />
-                      <div>
-                        {res.highlight && res.highlight['content.cells.content']
-                          ? ReactHtmlParser(
-                              res.highlight['content.cells.content']
-                            )
-                          : res.content.cells[0].content}
-                      </div>
+                  <div
+                    className="reactivelist"
+                    key={res.id}
+                    onClick={() => this.props.history.push(`/notes/${res.id}`)}
+                  >
+                    {res.highlight && res.highlight.title
+                      ? ReactHtmlParser(res.highlight.title)
+                      : res.title}:
+                    <br />
+                    <br />
+                    <div>
+                      {res.highlight && res.highlight['content.cells.content']
+                        ? ReactHtmlParser(
+                            res.highlight['content.cells.content']
+                          )
+                        : res.content.cells[0]
+                          ? res.content.cells[0].content
+                          : ''}
                     </div>
-                  </React.Fragment>
+                  </div>
                 )
               }}
               react={{
