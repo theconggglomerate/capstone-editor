@@ -6,7 +6,7 @@ import 'brace/ext/searchbox'
 import 'brace/mode/markdown'
 import 'brace/snippets/markdown'
 import ReactMarkdown from 'react-markdown'
-import {Code} from './../components/'
+import {LinkPreview} from './../components/'
 import CodeDisplay from './CodeDisplay'
 import {connect} from 'react-redux'
 import {
@@ -383,7 +383,7 @@ export class Editor extends Component {
                     <ScrollSyncPane>
                       <div className="scrollable">
                         {this.props.editor.cells ? (
-                          <div>
+                          <React.Fragment>
                             <h1>{this.props.editor.title}</h1>
                             {this.props.editor.cells.map((cell, idx) => {
                               if (cell.type === 'markdown') {
@@ -391,6 +391,43 @@ export class Editor extends Component {
                                   <ReactMarkdown
                                     key={idx + 'md'}
                                     source={cell.content}
+                                    renderers={{
+                                      link: link => {
+                                        const replaceURLsWithIds = new RegExp(
+                                          /.*(\/notes\/\d+).*/
+                                        )
+                                        const findNoteURL = new RegExp(
+                                          `${
+                                            window.location.origin
+                                          }/notes\/\\d+`
+                                        )
+                                        if (findNoteURL.test(link.href)) {
+                                          return (
+                                            <LinkPreview
+                                              title={
+                                                link.children[0].props.value
+                                              }
+                                              previewedNote={
+                                                link.href
+                                                  .replace(
+                                                    replaceURLsWithIds,
+                                                    '$1'
+                                                  )
+                                                  .split('/')[2]
+                                              }
+                                            />
+                                          )
+                                        } else
+                                          return (
+                                            <a href={link.href}>
+                                              {link.children[0].props.value}
+                                            </a>
+                                          )
+                                      },
+                                      paragraph: ({children}) => (
+                                        <div>{children}</div>
+                                      )
+                                    }}
                                   />
                                 )
                               }
@@ -404,7 +441,7 @@ export class Editor extends Component {
                                 )
                               }
                             })}
-                          </div>
+                          </React.Fragment>
                         ) : (
                           ''
                         )}
@@ -443,7 +480,7 @@ export class Editor extends Component {
 const mapStateToProps = state => {
   return {
     editor: state.editor,
-    selectedNote: state.notes,
+
     modal: state.modal
   }
 }
