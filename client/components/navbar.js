@@ -37,7 +37,7 @@ const Navbar = ({handleClick, isLoggedIn, history}) => {
             {/* <Sidebar /> */}
 
             <Image
-              style={{marginTop: '1em', marginLeft: '17em'}}
+              style={{marginTop: '1em', marginLeft: '7.5em'}}
               verticalAlign="top"
               src="/imgs/cosomnote.png"
               size="large"

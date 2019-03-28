@@ -103,7 +103,7 @@ form div {
 }
 
 .scrollable {
-  overflow-y: auto;
+  overflow-y: scroll;
   max-height: 85vh;
   max-width: 45vw;
 }
@@ -115,7 +115,7 @@ form div {
 .search-container {
   position: absolute;
 
-  right: -25%;
+  right: -33%;
   top: 1.25em;
   width: 55em;
 }
