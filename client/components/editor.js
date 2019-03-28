@@ -105,9 +105,9 @@ export class Editor extends Component {
           prevEditor = this.refs[prevNum].editor
           prevRef = this.refs[prevNum]
         }
-        this.refs[i].editor.on('click', () =>
+        this.refs[i].editor.on('click', () => {
           this.setState({...this.state, currentEditor: editor})
-        )
+        })
         this.refs[i].editor.keyBinding.addKeyboardHandler(
           (data, hash, keyString, keyCode, event) => {
             if (
@@ -158,6 +158,12 @@ export class Editor extends Component {
     }
     if (prevProps.editor.id !== this.props.editor.id) {
       this.refresh()
+    }
+    if (
+      prevProps.editor.id === this.props.editor.id &&
+      prevProps.editor.cells.length !== this.props.editor.cells.length
+    ) {
+      this.autosave()
     }
   }
 
