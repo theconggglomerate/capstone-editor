@@ -28,7 +28,7 @@ const AuthForm = props => {
         </Form.Field>
         <Container>
           <Form.Field>
-            <Form.Button type="submit" style={{marginRight: '1em'}}>
+            <Form.Button type="submit" style={{marginLeft: '2em'}}>
               {displayName}
             </Form.Button>
 

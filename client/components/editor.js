@@ -28,12 +28,13 @@ import {
 import AssocSearch from './AssocSearch'
 import {ReactiveBase} from '@appbaseio/reactivesearch'
 import GeneralLinks from './GeneralLinks'
-import {Grid, Button, Input, Modal} from 'semantic-ui-react'
+import {Grid, Button, Input, Modal, Icon, Popup} from 'semantic-ui-react'
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync'
 import brace from 'brace'
 import 'brace/theme/katzenmilch'
 import 'brace/theme/cobalt'
 import ScrollLock from 'react-scrolllock'
+import {FaMarkdown, FaCode, FaCodeBranch} from 'react-icons/fa'
 
 import debounce from 'lodash.debounce'
 
@@ -264,45 +265,89 @@ export class Editor extends Component {
           <div style={{paddingLeft: '3em'}}>
             <ScrollLock>
               <div style={{padding: '1.5em', marginRight: '1em'}}>
-                {' '}
-                {/* <Button inverted={true} color="white" onClick={this.save}>
+                <Button.Group>
+                  {' '}
+                  {/* <Button inverted={true} color="white" onClick={this.save}>
                       {' '}
                       Save Note
                     </Button> */}
-                <Button inverted={true} onClick={this.new}>
-                  {' '}
-                  Create a New Note
-                </Button>
-                <Button inverted={true} onClick={this.searchPopup}>
-                  Insert Link
-                </Button>
-                {this.props.match.params.noteId ? (
-                  <>
-                    <Button
-                      inverted={true}
-                      onClick={() => {
-                        this.props.history.push(`/notes/${id}`)
-                      }}
-                    >
-                      {' '}
-                      Set to Render View
-                    </Button>
-                    <Button
-                      inverted={true}
-                      onClick={() => {
-                        this.props.history.push(`/visual/${id}`)
-                      }}
-                    >
-                      {' '}
-                      Visualize
-                    </Button>
-                    <Button negative onClick={this.deletePopup}>
-                      Delete note
-                    </Button>
-                  </>
-                ) : (
-                  ''
-                )}
+                  <Popup
+                    trigger={
+                      <Button inverted={true} onClick={this.new}>
+                        {' '}
+                        <Button.Content>
+                          <Icon name="plus" />
+                        </Button.Content>
+                      </Button>
+                    }
+                    basic
+                    style={{backgroundColor: '#0f2027'}}
+                    inverted
+                    content="Create New Note"
+                  />
+                  <Popup
+                    trigger={
+                      <Button inverted={true} onClick={this.searchPopup}>
+                        <Button.Content>
+                          <Icon name="linkify" />
+                        </Button.Content>
+                      </Button>
+                    }
+                    basic
+                    style={{backgroundColor: '#0f2027'}}
+                    inverted
+                    content="Insert Link"
+                  />
+                  <Popup
+                    trigger={
+                      <Button
+                        inverted={true}
+                        onClick={() => {
+                          this.props.history.push(`/notes/${id}`)
+                        }}
+                      >
+                        <Button.Content>
+                          <Icon name="file alternate" />
+                        </Button.Content>
+                      </Button>
+                    }
+                    basic
+                    style={{backgroundColor: '#0f2027'}}
+                    inverted
+                    content="Rendered View"
+                  />
+                  <Popup
+                    trigger={
+                      <Button
+                        inverted={true}
+                        onClick={() => {
+                          this.props.history.push(`/visual/${id}`)
+                        }}
+                      >
+                        <Button.Content>
+                          <FaCodeBranch />
+                        </Button.Content>
+                      </Button>
+                    }
+                    basic
+                    style={{backgroundColor: '#0f2027'}}
+                    inverted
+                    content="Visualize"
+                  />
+                  <Popup
+                    trigger={
+                      <Button negative onClick={this.deletePopup} inverted>
+                        <Button.Content>
+                          <Icon name="trash alternate" />
+                        </Button.Content>
+                      </Button>
+                    }
+                    basic
+                    style={{backgroundColor: '#0f2027'}}
+                    inverted
+                    content="Delete Note"
+                  />
+                </Button.Group>
               </div>
               <Grid divided="vertically">
                 <Grid.Row columns={2}>
@@ -387,26 +432,15 @@ export class Editor extends Component {
                             })
                           : ''}
                         <div style={{margin: '3em 2em 8em 2em'}}>
-                          <Button
-                            style={{marginRight: '1em'}}
-                            className="button"
-                            inverted={true}
-                            onClick={this.newCode}
-                          >
-                            New Code Block
-                          </Button>
-                          <Button
-                            style={{marginRight: '1em'}}
-                            className="button"
-                            inverted={true}
-                            onClick={this.newMarkdown}
-                          >
-                            {' '}
-                            New Markdown Block{' '}
-                          </Button>
-
+                          <Button.Group>
+                            <Button inverted={true} onClick={this.newCode}>
+                              <FaCode />
+                            </Button>
+                            <Button inverted={true} onClick={this.newMarkdown}>
+                              <FaMarkdown />
+                            </Button>
+                          </Button.Group>
                           <GeneralLinks
-                            style={{marginRight: '1em'}}
                             noteId={this.props.match.params.noteId}
                           />
                         </div>
@@ -479,7 +513,7 @@ export class Editor extends Component {
                         ) : (
                           ''
                         )}
-
+                        <br />
                         <br />
                         <br />
                         <br />

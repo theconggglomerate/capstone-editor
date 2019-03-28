@@ -50,13 +50,21 @@ class GeneralLinks extends Component {
     if (noteId && selectedNote) {
       return (
         <>
-          {window.location.pathname.includes('/visual') ? (
-            <Button color="facebook" onClick={this.toggleVisible}>
-              Show Associated Notes
+          {window.location.pathname.includes('/notes') ? (
+            <Button
+              style={{margin: '1em'}}
+              color="facebook"
+              onClick={this.toggleVisible}
+            >
+              General Associations
             </Button>
           ) : (
-            <Button inverted={true} onClick={this.toggleVisible}>
-              Show Associated Notes
+            <Button
+              style={{margin: '1em'}}
+              inverted={true}
+              onClick={this.toggleVisible}
+            >
+              General Associations
             </Button>
           )}
 

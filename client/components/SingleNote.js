@@ -2,10 +2,9 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {selectNote} from './../store'
 import ReactMarkdown from 'react-markdown'
-import {Code} from './../components/'
 import CodeDisplay from './CodeDisplay'
 import GeneralLinks from './GeneralLinks'
-import {Button} from 'semantic-ui-react'
+import {Button, Icon} from 'semantic-ui-react'
 
 class SingleNote extends Component {
   componentDidMount() {
@@ -26,8 +25,18 @@ class SingleNote extends Component {
 
   render() {
     let divStyle = window.location.pathname.includes('/visual')
-      ? {margin: '3em 3em 3em 3em', backgroundColor: 'white', padding: '2em'}
-      : {margin: '3em 25em 3em 25em', backgroundColor: 'white', padding: '2em'}
+      ? {
+          margin: '3em 3em 3em 3em',
+          backgroundColor: 'white',
+          padding: '2em',
+          width: '60%'
+        }
+      : {
+          margin: '3em 25em 3em 17.5em',
+          backgroundColor: 'white',
+          padding: '2em',
+          width: '60%'
+        }
     const {selectedNote} = this.props
     const noteId = this.props.noteId || this.props.match.params.noteId
     return selectedNote.id ? (
@@ -38,7 +47,9 @@ class SingleNote extends Component {
               this.props.history.push(`/editor/${selectedNote.id}`)
             }
           >
-            Set to Edit View
+            <Button.Content>
+              <Icon name="pencil" />
+            </Button.Content>
           </Button>
         ) : (
           ''
