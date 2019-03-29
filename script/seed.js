@@ -37,31 +37,46 @@ async function seed() {
   const snippets = require('./snippets.json')
   const seedNotes = []
 
+  const wordList = [
+    'Databases',
+    'Queries',
+    'JavaScript',
+    'GraphQL',
+    'Node.js',
+    'Express',
+    'Git Workflow',
+    'Algorithms & Analysis',
+    'Time Complexity',
+    'Event Loop',
+    'SQL',
+    'Sequelize',
+    'Async/Await',
+    'Try/Catch Blocks',
+    'REST',
+    'App Main Page Requirements',
+    'Eager Loading',
+    'Postico',
+    'Postgres',
+    'd3',
+    'React',
+    'Redux',
+    'Redux-Persist',
+    'Reducers',
+    'Testing with Mocha',
+    'Web Sockets',
+    'Incomplete Workshops',
+    'React Router',
+    'Checkpoints',
+    'Promises',
+    'Node Shell'
+  ]
+
   faker.random.number({min: 0, max: 10})
 
   async function generator() {
-    for (let i = 0; i < 101; i++) {
-      const title = faker.hacker.verb()
+    for (let i = 0; i < 20; i++) {
+      const title = wordList[i]
       const cells = []
-      for (let j = 0; j < faker.random.number({min: 0, max: 60}); j++) {
-        if (faker.random.number({min: 0, max: 1}) >= 1) {
-          cells.push({
-            type: 'markdown',
-            content:
-              '# Markdown: Syntax\n- [Markdown: Syntax](#markdown-syntax)\n\t- [Overview](#overview)\n\t\t- [Philosophy](#philosophy)\n\t\t- [Code](#code)\n----\n## Overview\n### Philosophy\nMarkdown is intended to be as easy-to-read and easy-to-write as is feasible.\n> Lorem ipsum dolor sit amet,\n> consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.\n> Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.\n*   Red\n*   Green\n*   Blue\n-   Red\n-   Green\n-   Blue\n1.  Bird\n2.  McHale\n3.  Parish\n```\ntell application "Foo"\n    beep\nend tell\n```\nThis is [an example](http://example.com/) inline link.\n[This link](http://example.net/) has no title attribute.\n*single asterisks*\n_single underscores_\n**double asterisks**\n__double underscores__\n### Code \n`printf()`\n'
-          })
-        } else {
-          cells.push({
-            type: 'code',
-            content:
-              snippets.snippets[
-                Math.floor(
-                  faker.random.number({min: 0, max: snippets.snippets.length})
-                )
-              ]
-          })
-        }
-      }
       seedNotes.push({title, content: {cells}, user: 1})
     }
   }
@@ -74,28 +89,28 @@ async function seed() {
     returning: true
   })
 
-  const noteNoteData = require('./noteNoteData.json')
+  // const noteNoteData = require('./noteNoteData.json')
 
-  const filterFunc = function(dataArr) {
-    let tracker = {}
-    let returnArr = []
-    for (let i in dataArr) {
-      if (dataArr[i].sourceId === dataArr[i].targetId) continue
-      else if (!tracker[dataArr[i].sourceId]) {
-        tracker[dataArr[i].sourceId] = [dataArr[i].targetId]
-      } else if (tracker[dataArr[i].sourceId].includes(dataArr[i].targetId)) {
-        continue
-      } else {
-        tracker[dataArr[i].sourceId].push(dataArr[i].targetId)
-        returnArr.push(dataArr[i])
-      }
-    }
-    return returnArr
-  }
+  // const filterFunc = function(dataArr) {
+  //   let tracker = {}
+  //   let returnArr = []
+  //   for (let i in dataArr) {
+  //     if (dataArr[i].sourceId === dataArr[i].targetId) continue
+  //     else if (!tracker[dataArr[i].sourceId]) {
+  //       tracker[dataArr[i].sourceId] = [dataArr[i].targetId]
+  //     } else if (tracker[dataArr[i].sourceId].includes(dataArr[i].targetId)) {
+  //       continue
+  //     } else {
+  //       tracker[dataArr[i].sourceId].push(dataArr[i].targetId)
+  //       returnArr.push(dataArr[i])
+  //     }
+  //   }
+  //   return returnArr
+  // }
 
-  const associations = await noteNotes.bulkCreate(filterFunc(noteNoteData))
+  // const associations = await noteNotes.bulkCreate(filterFunc(noteNoteData))
 
-  console.log(`seeded ${associations.length} associations between notes`)
+  // console.log(`seeded ${associations.length} associations between notes`)
   console.log(`seeded ${notes.length} notes`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
