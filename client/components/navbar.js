@@ -52,7 +52,7 @@ const Navbar = ({handleClick, isLoggedIn, history}) => {
                   // <div className="search-Grid">
                   <ReactiveBase
                     app="notes"
-                    url={process.env.BONSAI_URL || 'http://localhost:9200'}
+                    url={`${window.location.origin}/api/es`}
                   >
                     <SearchBar />
                   </ReactiveBase>
