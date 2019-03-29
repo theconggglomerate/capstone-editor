@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
 import {Form, Button, Container, Label} from 'semantic-ui-react'
+import ScrollLock from 'react-scrolllock'
 
 /**
  * COMPONENT
@@ -11,33 +12,37 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div style={{backgroundColor: '#0F2027', padding: '1em', height: '100vh'}}>
-      <Form onSubmit={handleSubmit} name={name}>
-        <Form.Field style={{marginLeft: '6%'}}>
-          <div>
-            <label htmlFor="email" />
-            <input required name="email" type="text" value="cody@email.com" />
-          </div>
-        </Form.Field>
-
-        <Form.Field>
-          <div>
-            <label htmlFor="password" />
-            <input value="123" required name="password" type="password" />
-          </div>
-        </Form.Field>
-        <Container>
-          <Form.Field>
-            <Form.Button type="submit" style={{marginLeft: '2em'}}>
-              {displayName}
-            </Form.Button>
-
-            <Label pointing="left"> To demo our app, just click login!</Label>
+    <ScrollLock>
+      <div
+        style={{backgroundColor: '#0F2027', padding: '1em', height: '100vh'}}
+      >
+        <Form onSubmit={handleSubmit} name={name}>
+          <Form.Field style={{marginLeft: '6%'}}>
+            <div>
+              <label htmlFor="email" />
+              <input required name="email" type="text" value="cody@email.com" />
+            </div>
           </Form.Field>
-        </Container>
-        {error && error.response && <div>{error.response.data}</div>}
-      </Form>
-    </div>
+
+          <Form.Field>
+            <div>
+              <label htmlFor="password" />
+              <input value="123" required name="password" type="password" />
+            </div>
+          </Form.Field>
+          <Container>
+            <Form.Field>
+              <Form.Button type="submit" style={{marginLeft: '2em'}}>
+                {displayName}
+              </Form.Button>
+
+              <Label pointing="left"> To demo our app, just click login!</Label>
+            </Form.Field>
+          </Container>
+          {error && error.response && <div>{error.response.data}</div>}
+        </Form>
+      </div>
+    </ScrollLock>
   )
 }
 
