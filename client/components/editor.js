@@ -281,8 +281,9 @@ export class Editor extends Component {
                       </Button>
                     }
                     basic
-                    style={{backgroundColor: '#0f2027'}}
+                    style={{backgroundColor: '#4286f4'}}
                     inverted
+                    position="bottom left"
                     content="Create New Note"
                   />
                   <Popup
@@ -294,8 +295,9 @@ export class Editor extends Component {
                       </Button>
                     }
                     basic
-                    style={{backgroundColor: '#0f2027'}}
+                    style={{backgroundColor: '#4286f4'}}
                     inverted
+                    position="bottom left"
                     content="Insert Link"
                   />
                   <Popup
@@ -312,8 +314,9 @@ export class Editor extends Component {
                       </Button>
                     }
                     basic
-                    style={{backgroundColor: '#0f2027'}}
+                    style={{backgroundColor: '#4286f4'}}
                     inverted
+                    position="bottom left"
                     content="Rendered View"
                   />
                   <Popup
@@ -330,8 +333,9 @@ export class Editor extends Component {
                       </Button>
                     }
                     basic
-                    style={{backgroundColor: '#0f2027'}}
+                    style={{backgroundColor: '#4286f4'}}
                     inverted
+                    position="bottom left"
                     content="Visualize"
                   />
                   <Popup
@@ -343,8 +347,9 @@ export class Editor extends Component {
                       </Button>
                     }
                     basic
-                    style={{backgroundColor: '#0f2027'}}
+                    style={{backgroundColor: '#4286f4'}}
                     inverted
+                    position="bottom left"
                     content="Delete Note"
                   />
                 </Button.Group>
