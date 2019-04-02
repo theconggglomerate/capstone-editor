@@ -7,6 +7,6 @@ _Cosmonote defies the classic digital note taking structure by allowing each ind
 Server 1: npm run start-dev <br />
 Server 2: elasticsearch
 
-# Play
+# Demo
 
 www.cosmonote.app
