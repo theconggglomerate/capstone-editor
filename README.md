@@ -4,7 +4,7 @@ _Cosmonote defies the classic digital note taking structure by allowing each ind
 
 # Execute
 
-Server 1: npm run start-dev
+Server 1: npm run start-dev <br />
 Server 2: elasticsearch
 
 # Play
