@@ -7,7 +7,9 @@ _Cosmonote defies the classic digital note taking structure by allowing each ind
 # Execute
 
 PreReqs: Elastic Search. Postgres. Node.
-- elastic search
+
+Run these commands:
+- elasticsearch
 - npm run seed
 - npm run start-dev
 - localhost:8080
